@@ -1,7 +1,14 @@
 import uuid
 
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, PointStruct, VectorParams
+from qdrant_client.models import (
+    Distance,
+    FieldCondition,
+    Filter,
+    MatchValue,
+    PointStruct,
+    VectorParams,
+)
 
 
 DEFAULT_COLLECTION = "code_chunks"
@@ -25,7 +32,8 @@ class QdrantStore:
         collections = self.client.get_collections()
 
         existing_names = {
-            collection.name for collection in collections.collections
+            collection.name
+            for collection in collections.collections
         }
 
         if self.collection_name not in existing_names:
@@ -72,3 +80,52 @@ class QdrantStore:
             collection_name=self.collection_name,
             points=points,
         )
+
+    def search(
+        self,
+        query_vector: list[float],
+        top_k: int = 20,
+        language: str | None = None,
+        file_path: str | None = None,
+    ) -> list[dict]:
+        """
+        Search for the most similar code chunks.
+        """
+        conditions = []
+
+        if language is not None:
+            conditions.append(
+                FieldCondition(
+                    key="language",
+                    match=MatchValue(value=language),
+                )
+            )
+
+        if file_path is not None:
+            conditions.append(
+                FieldCondition(
+                    key="file_path",
+                    match=MatchValue(value=file_path),
+                )
+            )
+
+        query_filter = None
+
+        if conditions:
+            query_filter = Filter(must=conditions)
+
+        results = self.client.query_points(
+            collection_name=self.collection_name,
+            query=query_vector,
+            query_filter=query_filter,
+            limit=top_k,
+            with_payload=True,
+        )
+
+        return [
+            {
+                "score": result.score,
+                "payload": result.payload,
+            }
+            for result in results.points
+        ]
