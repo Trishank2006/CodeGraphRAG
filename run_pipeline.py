@@ -3,6 +3,7 @@ import shutil
 import stat
 
 from embeddings.embedder import CodeEmbedder
+from graph.builder import GraphBuilder
 from ingestion.main import ingest_repository
 from parser.core_parser import parse_source_code
 from vector_store.repository_indexer import index_repository_files
@@ -41,7 +42,7 @@ def main():
     print("\nStep 2: AST parsing")
 
     entities_by_file = {}
-
+    parsed_files_list = []
     total_entities = 0
 
     for file_record in files_data:
@@ -51,6 +52,7 @@ def main():
             language=file_record["language"],
         )
 
+        parsed_files_list.append(parsed)
         entities_by_file[file_record["file_path"]] = parsed.entities
 
         if parsed.entities:
@@ -72,7 +74,25 @@ def main():
         f"Extracted {total_entities} entities."
     )
 
-    print("\nStep 3: Semantic indexing")
+    print("\nStep 2.5: Building Code Knowledge Graph (Phase 2 - Person 2)")
+
+    builder = GraphBuilder(repository_name="meeting_summarizer")
+    graph_nodes, graph_edges = builder.build_from_parsed_files(parsed_files_list)
+
+    print(
+        f"Graph construction complete. "
+        f"Generated {len(graph_nodes)} nodes and {len(graph_edges)} edges."
+    )
+
+    # Breakdown by edge types
+    edge_counts = {}
+    for edge in graph_edges:
+        edge_counts[edge.type] = edge_counts.get(edge.type, 0) + 1
+
+    for rel_type, count in edge_counts.items():
+        print(f"  - {rel_type}: {count} relationships")
+
+    print("\nStep 3: Semantic indexing (Phase 2 - Person 1)")
 
     embedder = CodeEmbedder()
 
@@ -86,8 +106,6 @@ def main():
 
     print("\nStep 4: Semantic search")
 
-    # The repository_indexer above uses the default Qdrant store.
-    # Search the same collection using a new store instance.
     from retrieval.search import search_code
     from vector_store.qdrant_store import QdrantStore
 
