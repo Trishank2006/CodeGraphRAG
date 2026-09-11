@@ -1,3 +1,5 @@
+from parser.models import CodeEntity
+
 from vector_store.repository_indexer import index_repository_files
 
 
@@ -46,20 +48,24 @@ def test_index_repository_files():
 
     entities_by_file = {
         "src/payment.py": [
-            {
-                "name": "process_payment",
-                "type": "function",
-                "start_line": 1,
-                "end_line": 2,
-            }
+            CodeEntity(
+                id="src/payment.py:function:process_payment",
+                type="function",
+                name="process_payment",
+                file_path="src/payment.py",
+                start_line=0,
+                end_line=1,
+            )
         ],
         "src/user.py": [
-            {
-                "name": "create_user",
-                "type": "function",
-                "start_line": 1,
-                "end_line": 2,
-            }
+            CodeEntity(
+                id="src/user.py:function:create_user",
+                type="function",
+                name="create_user",
+                file_path="src/user.py",
+                start_line=0,
+                end_line=1,
+            )
         ],
     }
 
@@ -78,6 +84,12 @@ def test_index_repository_files():
 
     assert store.received_chunks[0]["symbol"] == "process_payment"
     assert store.received_chunks[1]["symbol"] == "create_user"
+
+    assert store.received_chunks[0]["start_line"] == 1
+    assert store.received_chunks[0]["end_line"] == 2
+
+    assert store.received_chunks[1]["start_line"] == 1
+    assert store.received_chunks[1]["end_line"] == 2
 
     assert store.received_embeddings == [
         [1.0, 0.0, 0.0],

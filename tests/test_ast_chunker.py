@@ -1,3 +1,5 @@
+from parser.models import CodeEntity
+
 from chunking.ast_chunker import chunk_entities
 from chunking.code_chunker import CodeChunk
 
@@ -13,18 +15,22 @@ def calculate_fee(amount):
 """
 
     entities = [
-        {
-            "name": "PaymentService",
-            "type": "class",
-            "start_line": 1,
-            "end_line": 4,
-        },
-        {
-            "name": "calculate_fee",
-            "type": "function",
-            "start_line": 6,
-            "end_line": 7,
-        },
+        CodeEntity(
+            id="src/payment.py:class:PaymentService",
+            type="class",
+            name="PaymentService",
+            file_path="src/payment.py",
+            start_line=0,
+            end_line=3,
+        ),
+        CodeEntity(
+            id="src/payment.py:function:calculate_fee",
+            type="function",
+            name="calculate_fee",
+            file_path="src/payment.py",
+            start_line=5,
+            end_line=6,
+        ),
     ]
 
     chunks = chunk_entities(
