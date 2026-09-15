@@ -87,10 +87,17 @@ class QdrantStore:
         top_k: int = 20,
         language: str | None = None,
         file_path: str | None = None,
+        path_prefix: str | None = None,
     ) -> list[dict]:
         """
         Search for the most similar code chunks.
+
+        Supports:
+        - exact language filtering
+        - exact file-path filtering
+        - path-prefix filtering
         """
+
         conditions = []
 
         if language is not None:
@@ -114,18 +121,40 @@ class QdrantStore:
         if conditions:
             query_filter = Filter(must=conditions)
 
+        # Path-prefix filtering is applied after Qdrant similarity
+        # retrieval because file_path filtering above is exact-match only.
+        candidate_limit = top_k
+
+        if path_prefix is not None:
+            candidate_limit = max(top_k * 10, 100)
+
         results = self.client.query_points(
             collection_name=self.collection_name,
             query=query_vector,
             query_filter=query_filter,
-            limit=top_k,
+            limit=candidate_limit,
             with_payload=True,
         )
 
-        return [
-            {
-                "score": result.score,
-                "payload": result.payload,
-            }
-            for result in results.points
-        ]
+        filtered_results = []
+
+        for result in results.points:
+            payload = result.payload
+
+            if (
+                path_prefix is not None
+                and not payload["file_path"].startswith(path_prefix)
+            ):
+                continue
+
+            filtered_results.append(
+                {
+                    "score": result.score,
+                    "payload": payload,
+                }
+            )
+
+            if len(filtered_results) == top_k:
+                break
+
+        return filtered_results

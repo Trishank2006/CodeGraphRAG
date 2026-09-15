@@ -41,12 +41,23 @@ def create_test_store(tmp_path):
             "end_line": 5,
             "content": "function processPayment() {}",
         },
+        {
+            "chunk_id": "chunk-4",
+            "repository": "test-repository",
+            "file_path": "src/payment/service.py",
+            "language": "python",
+            "symbol": "validate_payment",
+            "start_line": 1,
+            "end_line": 6,
+            "content": "def validate_payment():\n    pass",
+        },
     ]
 
     embeddings = [
         [1.0, 0.0, 0.0],
         [0.0, 1.0, 0.0],
         [0.8, 0.2, 0.0],
+        [0.9, 0.1, 0.0],
     ]
 
     store.upsert_chunks(chunks, embeddings)
@@ -93,3 +104,17 @@ def test_search_filters_by_file_path(tmp_path):
     assert len(results) == 1
     assert results[0]["payload"]["chunk_id"] == "chunk-2"
     assert results[0]["payload"]["file_path"] == "src/user.py"
+
+
+def test_search_filters_by_path_prefix(tmp_path):
+    store = create_test_store(tmp_path)
+
+    results = store.search(
+        query_vector=[1.0, 0.0, 0.0],
+        top_k=10,
+        path_prefix="src/payment/",
+    )
+
+    assert len(results) == 1
+    assert results[0]["payload"]["chunk_id"] == "chunk-4"
+    assert results[0]["payload"]["file_path"] == "src/payment/service.py"
