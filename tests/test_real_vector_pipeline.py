@@ -60,4 +60,4 @@ def create_user(name, email):
     )
 
     assert len(results) == 1
-    assert results[0]["payload"]["symbol"] == "process_payment"
+    assert results[0].symbol == "process_payment"
