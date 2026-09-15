@@ -60,5 +60,5 @@ def test_end_to_end_search(tmp_path):
     )
 
     assert len(results) == 1
-    assert results[0]["payload"]["chunk_id"] == "chunk-1"
-    assert results[0]["payload"]["symbol"] == "process_payment"
+    assert results[0].id == "chunk-1"
+    assert results[0].symbol == "process_payment"
