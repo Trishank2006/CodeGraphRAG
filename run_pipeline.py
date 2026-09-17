@@ -60,7 +60,7 @@ def main():
 
             for entity in parsed.entities:
                 print(
-                    f"  [{entity.type}] "
+                    f"   [{entity.type}] "
                     f"{entity.name} "
                     f"(Lines "
                     f"{entity.start_line + 1}-"
@@ -90,7 +90,7 @@ def main():
         edge_counts[edge.type] = edge_counts.get(edge.type, 0) + 1
 
     for rel_type, count in edge_counts.items():
-        print(f"  - {rel_type}: {count} relationships")
+        print(f"   - {rel_type}: {count} relationships")
 
     print("\nStep 3: Semantic indexing (Phase 2 - Person 1)")
 
@@ -104,7 +104,7 @@ def main():
 
     print("Semantic indexing complete.")
 
-    print("\nStep 4: Semantic search")
+    print("\nStep 4: Semantic search (Dense Vector - Person 1)")
 
     from retrieval.search import search_code
     from vector_store.qdrant_store import QdrantStore
@@ -119,17 +119,18 @@ def main():
     )
 
     for index, result in enumerate(results, start=1):
-        payload = result["payload"]
+        print(f"\n{index}. {result.symbol} (source: {result.source})")
+        print(f"   File: {result.file_path}")
+        print(f"   Language: {result.language}")
+        print(f"   Lines: {result.start_line}-{result.end_line}")
+        print(f"   Score: {result.score:.4f}")
 
-        print(f"\n{index}. {payload['symbol']}")
-        print(f"   File: {payload['file_path']}")
-        print(f"   Language: {payload['language']}")
-        print(
-            f"   Lines: "
-            f"{payload['start_line']}-"
-            f"{payload['end_line']}"
-        )
-        print(f"   Score: {result['score']:.4f}")
+    print("\nStep 5: Structural retrieval (Graph - Person 2)")
+    # Demonstrate resolving relationships from in-memory graph elements
+    callee_samples = [e for e in graph_edges if e.type.value == "CALLS"][:5]
+    print(f"Discovered {len(callee_samples)} sample invocation links from graph:")
+    for edge in callee_samples:
+        print(f"   - {edge.source_id} --CALLS--> {edge.target_id}")
 
     print("\nPipeline complete.")
 
