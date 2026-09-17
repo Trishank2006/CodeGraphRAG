@@ -8,6 +8,8 @@ from graph.retrieval import GraphRetriever, graph_search
 from graph.ranking import calculate_graph_score, RELATION_WEIGHTS
 from graph.context import GraphContextExtractor
 from graph.path import GraphPathFinder
+from graph.evidence import EntityMetadata, GraphEvidence, PathStep, GraphPath
+from graph.grounding import GraphGroundingService
 
 __all__ = [
     "NodeType",
@@ -24,4 +26,9 @@ __all__ = [
     "RELATION_WEIGHTS",
     "GraphContextExtractor",
     "GraphPathFinder",
+    "EntityMetadata",
+    "GraphEvidence",
+    "PathStep",
+    "GraphPath",
+    "GraphGroundingService",
 ]
