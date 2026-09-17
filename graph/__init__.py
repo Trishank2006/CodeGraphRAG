@@ -4,6 +4,7 @@ from graph.builder import GraphBuilder
 from graph.neo4j_store import Neo4jStore
 from graph.queries import GraphQueries
 from graph.traversal import GraphTraversal
+from graph.retrieval import GraphRetriever, graph_search
 
 __all__ = [
     "NodeType",
@@ -14,4 +15,6 @@ __all__ = [
     "Neo4jStore",
     "GraphQueries",
     "GraphTraversal",
+    "GraphRetriever",
+    "graph_search",
 ]
