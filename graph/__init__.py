@@ -10,6 +10,8 @@ from graph.context import GraphContextExtractor
 from graph.path import GraphPathFinder
 from graph.evidence import EntityMetadata, GraphEvidence, PathStep, GraphPath
 from graph.grounding import GraphGroundingService
+from graph.health import check_graph_health
+from graph.repository import GraphRepositoryManager
 
 __all__ = [
     "NodeType",
@@ -31,4 +33,6 @@ __all__ = [
     "PathStep",
     "GraphPath",
     "GraphGroundingService",
+    "check_graph_health",
+    "GraphRepositoryManager",
 ]
