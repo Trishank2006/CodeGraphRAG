@@ -34,28 +34,38 @@ class GraphRetriever:
             content=content,
         )
 
-    def get_callers(self, entity_id_or_name: str) -> List[RetrievalResult]:
-        raw_nodes = self.queries.get_function_callers(entity_id_or_name)
+    def get_callers(
+        self, entity_id_or_name: str, repository: Optional[str] = None
+    ) -> List[RetrievalResult]:
+        raw_nodes = self.queries.get_function_callers(entity_id_or_name, repository=repository)
         score = calculate_graph_score("CALLS", distance=1)
         return [self._node_to_retrieval_result(n, score=score) for n in raw_nodes]
 
-    def get_callees(self, entity_id_or_name: str) -> List[RetrievalResult]:
-        raw_nodes = self.queries.get_function_callees(entity_id_or_name)
+    def get_callees(
+        self, entity_id_or_name: str, repository: Optional[str] = None
+    ) -> List[RetrievalResult]:
+        raw_nodes = self.queries.get_function_callees(entity_id_or_name, repository=repository)
         score = calculate_graph_score("CALLS", distance=1)
         return [self._node_to_retrieval_result(n, score=score) for n in raw_nodes]
 
-    def get_dependencies(self, file_path_or_symbol: str) -> List[RetrievalResult]:
-        raw_nodes = self.queries.get_dependencies(file_path_or_symbol)
+    def get_dependencies(
+        self, file_path_or_symbol: str, repository: Optional[str] = None
+    ) -> List[RetrievalResult]:
+        raw_nodes = self.queries.get_dependencies(file_path_or_symbol, repository=repository)
         score = calculate_graph_score("IMPORTS", distance=1)
         return [self._node_to_retrieval_result(n, score=score) for n in raw_nodes]
 
-    def get_parent_classes(self, class_name_or_id: str) -> List[RetrievalResult]:
-        raw_nodes = self.queries.get_parent_classes(class_name_or_id)
+    def get_parent_classes(
+        self, class_name_or_id: str, repository: Optional[str] = None
+    ) -> List[RetrievalResult]:
+        raw_nodes = self.queries.get_parent_classes(class_name_or_id, repository=repository)
         score = calculate_graph_score("INHERITS", distance=1)
         return [self._node_to_retrieval_result(n, score=score) for n in raw_nodes]
 
-    def get_file_symbols(self, file_path: str) -> List[RetrievalResult]:
-        raw_nodes = self.queries.get_file_symbols(file_path)
+    def get_file_symbols(
+        self, file_path: str, repository: Optional[str] = None
+    ) -> List[RetrievalResult]:
+        raw_nodes = self.queries.get_file_symbols(file_path, repository=repository)
         score = calculate_graph_score("CONTAINS", distance=1)
         return [self._node_to_retrieval_result(n, score=score) for n in raw_nodes]
 
@@ -64,11 +74,15 @@ class GraphRetriever:
         entity_id_or_name: str,
         hops: int = 1,
         relationship_types: Optional[List[str]] = None,
+        repository: Optional[str] = None,
     ) -> List[RetrievalResult]:
-        """Bounded graph traversal retrieving related entities with relationship-aware scoring."""
+        """Bounded graph traversal retrieving related entities with relationship-aware scoring and repo scoping."""
         hops = min(max(hops, 1), 2)
         raw_nodes = self.queries.get_neighbors_with_depth(
-            entity_id_or_name, max_hops=hops, relationship_types=relationship_types
+            entity_id_or_name,
+            max_hops=hops,
+            relationship_types=relationship_types,
+            repository=repository,
         )
 
         results = []
@@ -86,10 +100,11 @@ class GraphRetriever:
         hops: int = 1,
         entity_type: Optional[str] = None,
         language: Optional[str] = None,
+        repository: Optional[str] = None,
     ) -> List[RetrievalResult]:
-        """Main graph search interface: finds seed entities then expands neighborhood with ranking."""
+        """Main graph search interface: finds seed entities then expands neighborhood with ranking and repo isolation."""
         seed_entities = self.queries.find_entities(
-            query, entity_type=entity_type, language=language
+            query, entity_type=entity_type, language=language, repository=repository
         )
         if not seed_entities:
             return []
@@ -103,7 +118,7 @@ class GraphRetriever:
                 seen_ids.add(seed["id"])
 
         for seed in seed_entities:
-            neighbors = self.get_related_code(seed["name"], hops=hops)
+            neighbors = self.get_related_code(seed["name"], hops=hops, repository=repository)
             for neighbor in neighbors:
                 if neighbor.id not in seen_ids:
                     results.append(neighbor)
@@ -125,6 +140,7 @@ def graph_search(
     hops: int = 1,
     entity_type: Optional[str] = None,
     language: Optional[str] = None,
+    repository: Optional[str] = None,
 ) -> List[RetrievalResult]:
     """Convenience functional API mirroring Person 1's search_code()."""
     target_store = store or Neo4jStore()
@@ -135,4 +151,5 @@ def graph_search(
         hops=hops,
         entity_type=entity_type,
         language=language,
+        repository=repository,
     )
