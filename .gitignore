@@ -184,3 +184,5 @@ data/qdrant/
 
 # Local test repositories
 temp_test_repo/
+# Local evaluation models
+models/
