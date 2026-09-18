@@ -8,6 +8,8 @@ class NodeType(str, Enum):
     FUNCTION = "Function"
     METHOD = "Method"
     VARIABLE = "Variable"
+    MODULE = "Module"
+    SYMBOL = "Symbol"
 
 
 class RelationType(str, Enum):

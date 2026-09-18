@@ -26,37 +26,26 @@ class Neo4jStore:
 
     def create_constraints(self):
         queries = [
-            "CREATE CONSTRAINT file_id_unique IF NOT EXISTS FOR (f:File) REQUIRE f.id IS UNIQUE",
-            "CREATE CONSTRAINT func_id_unique IF NOT EXISTS FOR (f:Function) REQUIRE f.id IS UNIQUE",
-            "CREATE CONSTRAINT class_id_unique IF NOT EXISTS FOR (c:Class) REQUIRE c.id IS UNIQUE",
+            "CREATE CONSTRAINT node_id_unique IF NOT EXISTS FOR (n:Node) REQUIRE n.id IS UNIQUE",
         ]
         with self.driver.session() as session:
             for q in queries:
                 session.run(q)
 
     def insert_nodes(self, nodes: List[GraphNode]):
-        query = """
-        UNWIND $batch AS data
-        MERGE (n:Node {id: data.id})
-        SET n.name = data.name,
-            n.file_path = data.file_path,
-            n.language = data.language,
-            n.start_line = data.start_line,
-            n.end_line = data.end_line
-        WITH n, data
-        CALL apoc.create.addLabels(n, [data.label]) YIELD node
-        RETURN count(node)
-        """
-        # Fallback query without APOC plugin for maximum cross-environment portability
+        """Insert queryable graph nodes without requiring the APOC plugin."""
         portable_query = """
         UNWIND $batch AS data
         MERGE (n {id: data.id})
-        SET n.name = data.name,
+        SET n:Node,
+            n.name = data.name,
             n.file_path = data.file_path,
             n.language = data.language,
             n.start_line = data.start_line,
             n.end_line = data.end_line,
-            n.label = data.label
+            n.label = data.label,
+            n.repository = coalesce(data.properties.repository, 'default_repo'),
+            n.reference = coalesce(data.properties.reference, false)
         """
         payload = [node.model_dump() for node in nodes]
         with self.driver.session() as session:

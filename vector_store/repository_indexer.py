@@ -20,7 +20,21 @@ def index_repository_files(
         Mapping from file path to AST entities produced by Person 2.
     """
 
-    chunks = []
+    chunks = build_repository_chunks(files, entities_by_file)
+
+    index_chunks(
+        chunks=chunks,
+        embedder=embedder,
+        store=store,
+    )
+
+
+def build_repository_chunks(
+    files: list[dict],
+    entities_by_file: dict[str, list[dict]],
+) -> list[dict]:
+    """Build reusable vector/BM25 chunks from parsed repository files."""
+    chunks: list[dict] = []
 
     for file_data in files:
         file_path = file_data["file_path"]
@@ -40,8 +54,4 @@ def index_repository_files(
             for chunk in file_chunks
         )
 
-    index_chunks(
-        chunks=chunks,
-        embedder=embedder,
-        store=store,
-    )
+    return chunks
