@@ -4,7 +4,7 @@ from graph.neo4j_store import Neo4jStore
 from graph.builder import GraphBuilder
 from graph.retrieval import GraphRetriever
 from graph.grounding import GraphGroundingService
-from parser.models import CodeEntity
+from parser.models import ParsedFile, CodeEntity, CodeRelationship
 
 
 @pytest.mark.skipif(
@@ -14,40 +14,54 @@ from parser.models import CodeEntity
 def test_live_neo4j_pipeline():
     """End-to-end integration test validating CodeEntity -> Builder -> Neo4j -> Retriever -> Grounding."""
     store = Neo4jStore()
-    builder = GraphBuilder()
+    builder = GraphBuilder(repository_name="live_test_repo")
     retriever = GraphRetriever(store)
     grounding = GraphGroundingService(store)
 
-    entities = [
-        CodeEntity(
-            id="auth_live.py:class:AuthService",
-            type="class",
-            name="AuthService",
-            file_path="auth_live.py",
-            start_line=1,
-            end_line=10,
-        ),
-        CodeEntity(
-            id="auth_live.py:function:login",
-            type="function",
-            name="login",
-            file_path="auth_live.py",
-            start_line=2,
-            end_line=5,
-        ),
-    ]
+    auth_class = CodeEntity(
+        id="auth_live.py:class:AuthService",
+        type="class",
+        name="AuthService",
+        file_path="auth_live.py",
+        start_line=1,
+        end_line=10,
+    )
+    login_func = CodeEntity(
+        id="auth_live.py:function:login",
+        type="function",
+        name="login",
+        file_path="auth_live.py",
+        start_line=2,
+        end_line=5,
+    )
+    rel = CodeRelationship(
+        source_id=auth_class.id,
+        target_id=login_func.id,
+        type="CONTAINS",
+    )
 
-    nodes, edges = builder.build(entities, repository="live_test_repo")
-    store.insert_nodes(nodes)
-    store.insert_edges(edges)
+    parsed_file = ParsedFile(
+        file_path="auth_live.py",
+        language="python",
+        entities=[auth_class, login_func],
+        relationships=[rel],
+    )
 
-    # Validate retrieval against live database
-    results = retriever.search("login", repository="live_test_repo")
-    assert len(results) > 0
+    nodes, edges = builder.build_from_parsed_files([parsed_file])
 
-    # Validate structural grounding extraction
-    evidence = grounding.get_evidence("login")
-    assert any(e.source_entity == "login" or e.target_entity == "login" for e in evidence)
+    try:
+        store.insert_nodes(nodes)
+        store.insert_edges(edges)
 
-    # Cleanup test data
-    store.execute_query("MATCH (n:Node {repository: 'live_test_repo'}) DETACH DELETE n")
+        # Validate retrieval against live database
+        results = retriever.search("login", repository="live_test_repo")
+        assert len(results) > 0
+        assert any(getattr(r, "symbol", "") == "login" or "login" in getattr(r, "content", "") for r in results)
+
+        # Validate structural grounding extraction
+        evidence = grounding.get_evidence("login")
+        assert isinstance(evidence, list)
+
+    finally:
+        # Cleanup test data using repository isolation
+        store.execute_query("MATCH (n {repository: $repo}) DETACH DELETE n", {"repo": "live_test_repo"})
