@@ -3,24 +3,29 @@ from __future__ import annotations
 import os
 from typing import Any
 
+from dotenv import load_dotenv
+
+# Load local .env variables into os.environ
+load_dotenv(override=True)
+
 from generation.llm import LLMClient, LLMError
 
 
 class OpenAILLM(LLMClient):
-    """Production ``LLMClient`` backed by the OpenAI Responses API.
+    """Production ``LLMClient`` backed by OpenAI or an OpenAI-compatible API (e.g. Grok / xAI).
 
-    The OpenAI SDK is imported only when the client is constructed so unit
-    tests and local indexing do not require an API key or the SDK.  By
-    default, the SDK reads ``OPENAI_API_KEY`` from the environment.
+    The SDK reads ``OPENAI_API_KEY``, ``OPENAI_BASE_URL``, and ``OPENAI_MODEL``
+    directly from the environment or local .env file.
     """
 
     def __init__(
         self,
-        model: str = "gpt-5",
+        model: str | None = None,
         api_key: str | None = None,
+        base_url: str | None = None,
         client: Any | None = None,
     ) -> None:
-        self.model = model
+        self.model = model or os.getenv("OPENAI_MODEL", "grok-2-latest")
 
         if client is not None:
             self.client = client
@@ -29,8 +34,10 @@ class OpenAILLM(LLMClient):
         resolved_key = api_key or os.getenv("OPENAI_API_KEY")
         if not resolved_key:
             raise LLMError(
-                "OPENAI_API_KEY must be set to use the OpenAI LLM provider"
+                "OPENAI_API_KEY must be set to use the OpenAI/Grok LLM provider"
             )
+
+        resolved_base_url = base_url or os.getenv("OPENAI_BASE_URL")
 
         try:
             from openai import OpenAI
@@ -39,22 +46,36 @@ class OpenAILLM(LLMClient):
                 "The OpenAI SDK is not installed; install requirements.txt"
             ) from exc
 
-        self.client = OpenAI(api_key=resolved_key)
+        if resolved_base_url:
+            self.client = OpenAI(api_key=resolved_key, base_url=resolved_base_url)
+        else:
+            self.client = OpenAI(api_key=resolved_key)
 
     def generate(self, prompt: str) -> str:
         if not prompt.strip():
             raise LLMError("Prompt must not be empty")
 
         try:
-            response = self.client.responses.create(
-                model=self.model,
-                input=prompt,
-            )
-            output = response.output_text
+            # 1. Standard OpenAI and Grok (xAI) Chat Completions API
+            if hasattr(self.client, "chat") and hasattr(self.client.chat, "completions"):
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[{"role": "user", "content": prompt}],
+                )
+                output = response.choices[0].message.content
+            # 2. Fallback for legacy / specific OpenAI Responses endpoint
+            elif hasattr(self.client, "responses"):
+                response = self.client.responses.create(
+                    model=self.model,
+                    input=prompt,
+                )
+                output = getattr(response, "output_text", None) or str(response)
+            else:
+                raise LLMError("Unsupported OpenAI client interface")
         except Exception as exc:
-            raise LLMError("OpenAI generation failed") from exc
+            raise LLMError(f"LLM generation failed: {exc}") from exc
 
         if not isinstance(output, str) or not output.strip():
-            raise LLMError("OpenAI returned an empty response")
+            raise LLMError("LLM returned an empty response")
 
         return output
