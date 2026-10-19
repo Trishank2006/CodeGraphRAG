@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 
 # Load variables from .env if present
-load_dotenv(override=True)
+load_dotenv(override=False)
 
 
 @dataclass(frozen=True)
