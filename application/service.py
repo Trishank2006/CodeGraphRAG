@@ -203,6 +203,7 @@ class CodeGraphRAGService:
             graph_search=lambda text, top_k: graph_retriever.search(
                 text,
                 top_k=top_k,
+                repository=self._repository_name,
             ),
             reranker=self.reranker,
             config=config,
