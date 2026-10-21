@@ -6,6 +6,7 @@ from vector_store.qdrant_store import QdrantStore
 def search_code(
     query: str,
     top_k: int = 20,
+    repository: str | None = None,
     language: str | None = None,
     file_path: str | None = None,
     path_prefix: str | None = None,
@@ -34,6 +35,7 @@ def search_code(
     results = store.search(
         query_vector=query_vector,
         top_k=top_k,
+        repository=repository,
         language=language,
         file_path=file_path,
         path_prefix=path_prefix,
