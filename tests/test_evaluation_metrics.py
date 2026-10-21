@@ -102,3 +102,18 @@ def test_invalid_k():
 
     with pytest.raises(ValueError):
         ndcg_at_k(["a"], {"a"}, 0)
+
+
+def test_precision_at_k_does_not_overcount_duplicate_results():
+    retrieved = ["a", "a", "b"]
+    relevant = {"a"}
+
+    # Only one unique relevant item was retrieved.
+    assert precision_at_k(retrieved, relevant, 3) == pytest.approx(0.5)
+
+
+def test_recall_at_k_does_not_overcount_duplicate_results():
+    retrieved = ["a", "a", "b"]
+    relevant = {"a", "c"}
+
+    assert recall_at_k(retrieved, relevant, 3) == pytest.approx(0.5)

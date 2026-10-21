@@ -35,7 +35,8 @@ class ContextPackage:
 
 @dataclass(frozen=True)
 class GeneratedAnswer:
-    """Final grounded answer together with structured citations."""
+    """Final grounded answer with citations and supporting context."""
 
     answer: str
     citations: tuple[Citation, ...] = field(default_factory=tuple)
+    context: tuple[ContextItem, ...] = field(default_factory=tuple)

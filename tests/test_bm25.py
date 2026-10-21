@@ -1,3 +1,6 @@
+
+import pytest
+
 from retrieval.bm25 import BM25Retriever
 from retrieval.models import RetrievalResult
 
@@ -97,3 +100,33 @@ def test_bm25_respects_top_k():
     )
 
     assert len(results) <= 2
+
+
+@pytest.mark.parametrize(
+    "k1",
+    [
+        0,
+        -1,
+        float("nan"),
+        float("inf"),
+        float("-inf"),
+    ],
+)
+def test_bm25_rejects_invalid_k1(k1):
+    with pytest.raises(ValueError, match="k1"):
+        BM25Retriever(k1=k1)
+
+
+@pytest.mark.parametrize(
+    "b",
+    [
+        -0.1,
+        1.1,
+        float("nan"),
+        float("inf"),
+        float("-inf"),
+    ],
+)
+def test_bm25_rejects_invalid_b(b):
+    with pytest.raises(ValueError, match="b"):
+        BM25Retriever(b=b)

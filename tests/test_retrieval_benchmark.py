@@ -269,3 +269,95 @@ def test_invalid_retrieval_result_type():
         assert False
     except TypeError:
         pass
+
+
+def test_benchmark_normalizes_windows_file_paths():
+    dataset = [
+        EvaluationExample(
+            query="Find pipeline",
+            query_type="implementation",
+            expected_files=("retrieval/pipeline.py",),
+            expected_symbols=(),
+            ground_truth_answer="Pipeline implementation.",
+        )
+    ]
+
+    benchmark = RetrievalBenchmark(dataset, top_k=3)
+
+    result = benchmark.evaluate(
+        "Dense",
+        lambda example: [r"retrieval\pipeline.py"],
+    )
+
+    assert result.hit_rate == 1.0
+    assert result.precision == 1.0
+    assert result.recall == 1.0
+    assert result.mrr == 1.0
+    assert result.ndcg == 1.0
+
+
+def test_benchmark_matches_expected_symbol():
+    from retrieval.models import RetrievalResult
+
+    dataset = [
+        EvaluationExample(
+            query="Find the indexing method",
+            query_type="symbol_lookup",
+            expected_files=("application/service.py",),
+            expected_symbols=("CodeGraphRAGService.index_repository",),
+            ground_truth_answer="Find the indexing method.",
+        )
+    ]
+
+    benchmark = RetrievalBenchmark(dataset, top_k=3)
+
+    result = benchmark.evaluate(
+        "Dense",
+        lambda example: [
+            RetrievalResult(
+                id="chunk-1",
+                source="dense",
+                score=0.9,
+                repository="CodeGraphRAG",
+                file_path="application/service.py",
+                language="python",
+                symbol="CodeGraphRAGService.index_repository",
+                start_line=1,
+                end_line=20,
+                content="def index_repository(self): ...",
+            )
+        ],
+    )
+
+    assert result.hit_rate == 1.0
+    assert result.precision == 1.0
+    assert result.recall == 1.0
+    assert result.mrr == 1.0
+    assert result.ndcg == 1.0
+def test_evaluate_detailed_includes_per_query_rankings():
+    benchmark = RetrievalBenchmark(make_dataset(), top_k=3)
+
+    result = benchmark.evaluate_detailed(
+        "Dense",
+        lambda example: [
+            "unrelated.py",
+            *example.expected_files,
+        ],
+    )
+
+    assert len(result["per_query"]) == 3
+
+    first = result["per_query"][0]
+    assert first["query"] == (
+        "Where is the application service implemented?"
+    )
+    assert first["expected_targets"] == ["application/service.py"]
+    assert first["ranked_results"] == [
+        "unrelated.py",
+        "application/service.py",
+    ]
+    assert first["hit"] is True
+    assert first["first_relevant_rank"] == 2
+
+    # Existing aggregate metrics remain available.
+    assert result["by_query_type"]["overall"]["hit_rate"] == 1.0

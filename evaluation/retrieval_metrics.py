@@ -24,24 +24,24 @@ def hit_rate_at_k(
 
     return float(bool(set(retrieved[:k]) & relevant_set))
 
-
 def precision_at_k(
     retrieved: Sequence[str],
     relevant: Iterable[str],
     k: int,
 ) -> float:
-    """Fraction of the top-k retrieved items that are relevant."""
+    """Return the fraction of unique top-k results that are relevant."""
     if k <= 0:
         raise ValueError("k must be greater than 0")
 
     relevant_set = _normalise(relevant)
-    top_k = list(retrieved[:k])
+    top_k = list(dict.fromkeys(retrieved[:k]))
 
     if not top_k:
         return 0.0
 
     relevant_count = sum(item in relevant_set for item in top_k)
     return relevant_count / len(top_k)
+
 
 
 def recall_at_k(

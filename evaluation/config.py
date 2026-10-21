@@ -1,8 +1,53 @@
+
 from __future__ import annotations
 
+import hashlib
+import os
+import subprocess
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from typing import Any
+
+
+def get_repository_version() -> str:
+    """Return the current Git revision, or 'unknown' if unavailable."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=5,
+        )
+        return result.stdout.strip() or "unknown"
+    except (OSError, subprocess.SubprocessError):
+        return "unknown"
+
+
+def get_git_working_tree_metadata() -> tuple[bool, str]:
+    """Return dirty status and SHA-256 of tracked changes."""
+    try:
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=10,
+        ).stdout
+
+        diff = subprocess.run(
+            ["git", "diff", "HEAD", "--binary"],
+            capture_output=True,
+            check=True,
+            timeout=10,
+        ).stdout
+
+        return (
+            bool(status.strip()),
+            hashlib.sha256(diff).hexdigest(),
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False, "unknown"
 
 
 @dataclass(frozen=True)
@@ -16,12 +61,14 @@ class EvaluationConfig:
 
     embedding_model: str = "BAAI/bge-small-en-v1.5"
     reranker_model: str = "./models/ms-marco-MiniLM-L6-v2"
-    llm_model: str = "gpt-5"
+    llm_model: str = "qwen2.5:3b"
 
     max_context_items: int = 10
     max_context_characters: int = 12000
 
     repository_version: str = "unknown"
+    git_working_tree_dirty: bool = False
+    tracked_diff_sha256: str = "unknown"
     benchmark_timestamp: str = ""
 
     def __post_init__(self) -> None:
@@ -35,7 +82,9 @@ class EvaluationConfig:
             raise ValueError("rerank_top_k must be greater than 0")
 
         if self.max_context_items <= 0:
-            raise ValueError("max_context_items must be greater than 0")
+            raise ValueError(
+                "max_context_items must be greater than 0"
+            )
 
         if self.max_context_characters <= 0:
             raise ValueError(
@@ -46,18 +95,30 @@ class EvaluationConfig:
     def create(
         cls,
         *,
-        repository_version: str = "unknown",
+        repository_version: str | None = None,
         **kwargs: Any,
     ) -> "EvaluationConfig":
-        """Create a configuration with the current UTC timestamp."""
+        """Create configuration with timestamp and Git metadata."""
+        dirty, diff_hash = get_git_working_tree_metadata()
+
+        llm_model = os.getenv(
+            "CODEGRAPHRAG_OPENAI_MODEL",
+            os.getenv("OPENAI_MODEL", "qwen2.5:3b"),
+        )
 
         return cls(
-            repository_version=repository_version,
-            benchmark_timestamp=datetime.now(timezone.utc).isoformat(),
+            llm_model=llm_model,
+            repository_version=(
+                repository_version or get_repository_version()
+            ),
+            git_working_tree_dirty=dirty,
+            tracked_diff_sha256=diff_hash,
+            benchmark_timestamp=datetime.now(
+                timezone.utc
+            ).isoformat(),
             **kwargs,
         )
 
     def to_dict(self) -> dict[str, Any]:
         """Return a JSON-serializable configuration dictionary."""
-
         return asdict(self)

@@ -1,14 +1,23 @@
+
 from typing import List, Tuple
+
 from parser.models import ParsedFile
 from graph.models import GraphNode, GraphEdge
 from graph.schema import NodeType, RelationType
 
 
 class GraphBuilder:
-    """Converts AST parsed files into structured graph nodes and edges."""
+    """Build a repository-scoped graph from AST-parsed files."""
 
     def __init__(self, repository_name: str = "default_repo"):
+        if not repository_name or not repository_name.strip():
+            raise ValueError("Repository name must not be empty")
+
         self.repository_name = repository_name
+
+    def _scoped_id(self, node_id: str) -> str:
+        """Make node IDs unique across repositories."""
+        return f"repo:{self.repository_name}:{node_id}"
 
     def build_from_parsed_files(
         self, parsed_files: List[ParsedFile]
@@ -22,14 +31,9 @@ class GraphBuilder:
             file_path: str,
             language: str,
         ) -> None:
-            """Create a node for parser references without a local definition.
+            scoped_id = self._scoped_id(reference_id)
 
-            Parser relationships use ``module:`` and ``symbol:`` IDs for
-            imports and calls.  Persisting those references as nodes ensures
-            Neo4j can retain the relationship even when a definition is in an
-            external dependency or cannot be resolved unambiguously.
-            """
-            if reference_id in seen_node_ids:
+            if scoped_id in seen_node_ids:
                 return
 
             if reference_id.startswith("module:"):
@@ -41,7 +45,7 @@ class GraphBuilder:
 
             nodes.append(
                 GraphNode(
-                    id=reference_id,
+                    id=scoped_id,
                     label=label,
                     name=name,
                     file_path=file_path,
@@ -52,11 +56,12 @@ class GraphBuilder:
                     },
                 )
             )
-            seen_node_ids.add(reference_id)
+            seen_node_ids.add(scoped_id)
 
         for pf in parsed_files:
-            # 1. Create File node
-            file_node_id = f"file:{pf.file_path}"
+            # File node
+            file_node_id = self._scoped_id(f"file:{pf.file_path}")
+
             if file_node_id not in seen_node_ids:
                 nodes.append(
                     GraphNode(
@@ -70,30 +75,36 @@ class GraphBuilder:
                 )
                 seen_node_ids.add(file_node_id)
 
-            # 2. Create Entity nodes (Class, Function)
+            # Class and function nodes
             for entity in pf.entities:
-                node_label = (
-                    NodeType.CLASS if entity.type == "class" else NodeType.FUNCTION
-                )
-                if entity.id not in seen_node_ids:
-                    nodes.append(
-                        GraphNode(
-                            id=entity.id,
-                            label=node_label,
-                            name=entity.name,
-                            file_path=entity.file_path,
-                            language=pf.language,
-                            start_line=entity.start_line,
-                            end_line=entity.end_line,
-                            properties={"repository": self.repository_name},
-                        )
-                    )
-                    seen_node_ids.add(entity.id)
+                scoped_id = self._scoped_id(entity.id)
 
-            # 3. Create Edges
+                if scoped_id in seen_node_ids:
+                    continue
+
+                node_label = (
+                    NodeType.CLASS
+                    if entity.type == "class"
+                    else NodeType.FUNCTION
+                )
+
+                nodes.append(
+                    GraphNode(
+                        id=scoped_id,
+                        label=node_label,
+                        name=entity.name,
+                        file_path=entity.file_path,
+                        language=pf.language,
+                        start_line=entity.start_line,
+                        end_line=entity.end_line,
+                        properties={"repository": self.repository_name},
+                    )
+                )
+                seen_node_ids.add(scoped_id)
+
+            # Relationships
             for rel in pf.relationships:
-                # Convert file_path reference to standard file node id if applicable
-                source = (
+                source_id = (
                     f"file:{rel.source_id}"
                     if rel.source_id == pf.file_path
                     else rel.source_id
@@ -111,10 +122,11 @@ class GraphBuilder:
 
                 edges.append(
                     GraphEdge(
-                        source_id=source,
-                        target_id=rel.target_id,
+                        source_id=self._scoped_id(source_id),
+                        target_id=self._scoped_id(rel.target_id),
                         type=RelationType(rel.type),
                     )
                 )
 
         return nodes, edges
+     

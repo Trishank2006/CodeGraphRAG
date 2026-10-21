@@ -27,6 +27,9 @@ IGNORED_DIRECTORIES = {
     "__pycache__",
     "dist",
     "build",
+    "evaluation",
+    "tests",
+    "temp_test_repo",
 }
 
 
