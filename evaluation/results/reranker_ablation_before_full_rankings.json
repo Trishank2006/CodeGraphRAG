@@ -1,0 +1,3315 @@
+{
+  "query_count": 31,
+  "top_k": 5,
+  "methodology": {
+    "candidate_pools": "Fetched once per query and shared by all variants.",
+    "model": "The same warmed cross-encoder model is used for all variants.",
+    "controlled_variable": "Only the candidate text format changes.",
+    "variants": {
+      "code_only": "Code content only",
+      "path_code": "File path plus code content",
+      "path_symbol_code": "File path, symbol, and code content"
+    }
+  },
+  "results": {
+    "code_only": {
+      "query_count": 31,
+      "overall": {
+        "hit_rate": 0.7096774193548387,
+        "precision": 0.17096774193548386,
+        "recall": 0.7096774193548387,
+        "mrr": 0.41075268817204297,
+        "ndcg": 0.48956646147444194
+      },
+      "by_query_type": {
+        "conceptual": {
+          "query_count": 5,
+          "hit_rate": 0.2,
+          "precision": 0.1,
+          "recall": 0.2,
+          "mrr": 0.2,
+          "ndcg": 0.2
+        },
+        "functional": {
+          "query_count": 3,
+          "hit_rate": 0.6666666666666666,
+          "precision": 0.3333333333333333,
+          "recall": 0.6666666666666666,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.46228426907818054
+        },
+        "implementation_lookup": {
+          "query_count": 21,
+          "hit_rate": 0.9047619047619048,
+          "precision": 0.18095238095238098,
+          "recall": 0.9047619047619048,
+          "mrr": 0.5111111111111111,
+          "ndcg": 0.6090336904034837
+        },
+        "symbol_lookup": {
+          "query_count": 2,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0
+        }
+      },
+      "per_query": [
+        {
+          "query": "Where is the repository indexing pipeline implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.2,
+          "ndcg": 0.38685280723454163,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 6.292280673980713
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": 1.5940138101577759
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -1.0242726802825928
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "index_repository",
+              "score": -5.188436031341553
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "index_repository",
+              "score": -5.684584617614746
+            }
+          ]
+        },
+        {
+          "query": "Where is the REST API application created?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 1.490760326385498
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "create_app",
+              "score": -0.27010947465896606
+            },
+            {
+              "file_path": "tests/test_retrieval_benchmark.py",
+              "symbol": "make_dataset",
+              "score": -4.614235877990723
+            },
+            {
+              "file_path": "api/__init__.py",
+              "symbol": "api/__init__.py",
+              "score": -4.801487922668457
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "test_api.py",
+              "score": -6.648289680480957
+            }
+          ]
+        },
+        {
+          "query": "Where is the CLI entry point defined?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "run_pipeline.py",
+              "symbol": "run_pipeline.py",
+              "score": 2.6181416511535645
+            },
+            {
+              "file_path": "server/app.py",
+              "symbol": "main",
+              "score": -6.648281097412109
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "main",
+              "score": -8.98697280883789
+            },
+            {
+              "file_path": "application/config.py",
+              "symbol": "from_environment",
+              "score": -9.252069473266602
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "generate_text",
+              "score": -11.13859748840332
+            }
+          ]
+        },
+        {
+          "query": "Where is hybrid retrieval configured?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "create_hybrid_retriever",
+              "score": 3.0933384895324707
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "hybrid_rrf",
+              "score": 0.23578864336013794
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+              "score": -0.73148512840271
+            },
+            {
+              "file_path": "retrieval/pipeline.py",
+              "symbol": "HybridRetrievalPipeline",
+              "score": -1.4348258972167969
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "test_hybrid_empty_query_returns_empty",
+              "score": -2.455315589904785
+            }
+          ]
+        },
+        {
+          "query": "Where is BM25 retrieval implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.2,
+          "ndcg": 0.38685280723454163,
+          "top_results": [
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "make_bm25",
+              "score": 2.6208090782165527
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "bm25",
+              "score": 2.208432197570801
+            },
+            {
+              "file_path": "tests/test_bm25.py",
+              "symbol": "test_bm25_returns_retrieval_results",
+              "score": 1.7098679542541504
+            },
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": 1.36248779296875
+            },
+            {
+              "file_path": "retrieval/bm25.py",
+              "symbol": "search_bm25",
+              "score": 0.45586949586868286
+            }
+          ]
+        },
+        {
+          "query": "Where is reciprocal rank fusion implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/rrf.py",
+              "symbol": "reciprocal_rank_fusion",
+              "score": 2.0817131996154785
+            },
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": -1.2755250930786133
+            },
+            {
+              "file_path": "tests/test_rrf.py",
+              "symbol": "test_rrf_combines_rank_scores",
+              "score": -2.267235279083252
+            },
+            {
+              "file_path": "tests/test_evaluation_metrics.py",
+              "symbol": "test_reciprocal_rank",
+              "score": -3.827591896057129
+            },
+            {
+              "file_path": "evaluation/retrieval_metrics.py",
+              "symbol": "mean_reciprocal_rank",
+              "score": -4.3280487060546875
+            }
+          ]
+        },
+        {
+          "query": "Where is the cross-encoder reranker implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/reranker.py",
+              "symbol": "rerank_results",
+              "score": 2.1035165786743164
+            },
+            {
+              "file_path": "tests/test_reranker.py",
+              "symbol": "test_reranker_sorts_by_cross_encoder_score",
+              "score": 1.9145094156265259
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "test_pipeline_applies_reranker",
+              "score": -0.0036175698041915894
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "FakeCrossEncoder",
+              "score": -0.8113353848457336
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "__init__",
+              "score": -3.479381799697876
+            }
+          ]
+        },
+        {
+          "query": "Where is the context builder implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "build_prompt",
+              "score": -0.3066609501838684
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "__init__",
+              "score": -0.4185624122619629
+            },
+            {
+              "file_path": "generation/context.py",
+              "symbol": "ContextBuilder",
+              "score": -1.408881664276123
+            },
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_handles_empty_context",
+              "score": -1.5813758373260498
+            },
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "test_context_builder_includes_graph_context",
+              "score": -2.368831157684326
+            }
+          ]
+        },
+        {
+          "query": "Where is the prompt builder implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_contains_grounding_instructions",
+              "score": 1.2561945915222168
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "build_prompt",
+              "score": -0.0165792778134346
+            },
+            {
+              "file_path": "tests/test_citations.py",
+              "symbol": "make_generator",
+              "score": -0.5842244625091553
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -0.7185451984405518
+            },
+            {
+              "file_path": "generation/context.py",
+              "symbol": "ContextBuilder",
+              "score": -8.700443267822266
+            }
+          ]
+        },
+        {
+          "query": "Where is the LLM abstraction defined?",
+          "query_type": "symbol_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "generation/models.py",
+              "symbol": "ContextItem",
+              "score": -3.210151195526123
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "llm.py",
+              "score": -3.6980788707733154
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "LLMError",
+              "score": -3.6980788707733154
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "MockLLM",
+              "score": -3.7493669986724854
+            }
+          ]
+        },
+        {
+          "query": "Where is the OpenAI LLM provider implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "generation/openai_client.py",
+              "symbol": "OpenAILLM",
+              "score": 1.2794950008392334
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": -1.9826712608337402
+            },
+            {
+              "file_path": "tests/test_openai_llm.py",
+              "symbol": "test_openai_llm_uses_responses_api_client",
+              "score": -2.2890782356262207
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "llm.py",
+              "score": -3.9433140754699707
+            },
+            {
+              "file_path": "generation/__init__.py",
+              "symbol": "generation/__init__.py",
+              "score": -4.770824432373047
+            }
+          ]
+        },
+        {
+          "query": "Where is answer generation orchestrated?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": -4.139296054840088
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -4.92955207824707
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "run_generation_benchmark",
+              "score": -5.6714019775390625
+            },
+            {
+              "file_path": "evaluation/generation_metrics.py",
+              "symbol": "generation_metrics",
+              "score": -6.797144412994385
+            },
+            {
+              "file_path": "tests/test_generation_end_to_end.py",
+              "symbol": "test_generation_end_to_end_with_empty_retrieval",
+              "score": -6.826877117156982
+            }
+          ]
+        },
+        {
+          "query": "Where are generated-answer citations represented?",
+          "query_type": "symbol_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_generation_models.py",
+              "symbol": "test_generated_answer",
+              "score": 2.905742645263672
+            },
+            {
+              "file_path": "generation/models.py",
+              "symbol": "GeneratedAnswer",
+              "score": 2.2185983657836914
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": 2.070683240890503
+            },
+            {
+              "file_path": "tests/test_generation_models.py",
+              "symbol": "test_default_generated_answer_has_no_citations",
+              "score": 1.9648151397705078
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "AnswerGenerator",
+              "score": 0.21360662579536438
+            }
+          ]
+        },
+        {
+          "query": "Where is the repository indexer implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 4.474405765533447
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "index_repository",
+              "score": -2.7638280391693115
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -3.1604208946228027
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "index_repository",
+              "score": -3.4741411209106445
+            },
+            {
+              "file_path": "tests/test_repository_indexer.py",
+              "symbol": "test_index_repository_files",
+              "score": -4.803253173828125
+            }
+          ]
+        },
+        {
+          "query": "Where is Qdrant persistence implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.25,
+          "ndcg": 0.43067655807339306,
+          "top_results": [
+            {
+              "file_path": "tests/test_qdrant_insert.py",
+              "symbol": "test_qdrant_insert.py",
+              "score": -4.354691505432129
+            },
+            {
+              "file_path": "tests/test_qdrant_search.py",
+              "symbol": "test_qdrant_search.py",
+              "score": -4.452888011932373
+            },
+            {
+              "file_path": "tests/test_qdrant_store.py",
+              "symbol": "test_qdrant_store.py",
+              "score": -4.757203102111816
+            },
+            {
+              "file_path": "vector_store/qdrant_store.py",
+              "symbol": "QdrantStore",
+              "score": -5.037222862243652
+            },
+            {
+              "file_path": "scripts/semantic_search_demo.py",
+              "symbol": "main",
+              "score": -5.654496192932129
+            }
+          ]
+        },
+        {
+          "query": "Where is source-code parsing performed?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "parser/core_parser.py",
+              "symbol": "parse_source_code",
+              "score": -4.176769256591797
+            },
+            {
+              "file_path": "tests/run_parser.py",
+              "symbol": "tests/run_parser.py",
+              "score": -5.155643939971924
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -6.468884468078613
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -7.878286361694336
+            },
+            {
+              "file_path": "parser/models.py",
+              "symbol": "ParsedFile",
+              "score": -8.051417350769043
+            }
+          ]
+        },
+        {
+          "query": "Where is repository cloning implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "ingestion/repository.py",
+              "symbol": "clone_repository",
+              "score": -1.6948730945587158
+            },
+            {
+              "file_path": "tests/test_repository.py",
+              "symbol": "test_clone_repository",
+              "score": -5.038374900817871
+            },
+            {
+              "file_path": "ingestion/main.py",
+              "symbol": "ingest_repository",
+              "score": -5.812587738037109
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -8.273866653442383
+            },
+            {
+              "file_path": "graph/repository.py",
+              "symbol": "GraphRepositoryManager",
+              "score": -8.980562210083008
+            }
+          ]
+        },
+        {
+          "query": "Where is graph retrieval implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.25,
+          "ndcg": 0.43067655807339306,
+          "top_results": [
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "graph_search",
+              "score": -2.614567518234253
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "graph_search",
+              "score": -2.867223024368286
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "graph_search",
+              "score": -2.867223024368286
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "graph_search",
+              "score": -3.732879638671875
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "as_retrievers",
+              "score": -4.782631874084473
+            }
+          ]
+        },
+        {
+          "query": "Where is graph grounding implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/graph_benchmark.py",
+              "symbol": "__init__",
+              "score": -1.2307500839233398
+            },
+            {
+              "file_path": "tests/test_graph_grounding_integration.py",
+              "symbol": "test_graph_grounding_into_context_builder",
+              "score": -1.2806150913238525
+            },
+            {
+              "file_path": "graph/grounding.py",
+              "symbol": "GraphGroundingService",
+              "score": -6.009765148162842
+            },
+            {
+              "file_path": "graph/path.py",
+              "symbol": "GraphPathFinder",
+              "score": -7.376718521118164
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -8.916474342346191
+            }
+          ]
+        },
+        {
+          "query": "Where is Neo4j persistence implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "evaluation/neo4j_benchmark.py",
+              "symbol": "neo4j_benchmark.py",
+              "score": -1.337465763092041
+            },
+            {
+              "file_path": "graph/neo4j_store.py",
+              "symbol": "Neo4jStore",
+              "score": -3.224064588546753
+            },
+            {
+              "file_path": "tests/test_live_neo4j.py",
+              "symbol": "test_live_neo4j_pipeline",
+              "score": -3.524956226348877
+            },
+            {
+              "file_path": "tests/test_graph_persistence.py",
+              "symbol": "test_neo4j_store_uses_queryable_node_label_and_repository_metadata",
+              "score": -4.392155170440674
+            },
+            {
+              "file_path": "graph/health.py",
+              "symbol": "check_graph_health",
+              "score": -5.222796440124512
+            }
+          ]
+        },
+        {
+          "query": "Where are graph queries defined?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/entity_resolution.py",
+              "symbol": "__init__",
+              "score": 1.543657898902893
+            },
+            {
+              "file_path": "graph/__init__.py",
+              "symbol": "graph/__init__.py",
+              "score": -2.05499005317688
+            },
+            {
+              "file_path": "graph/queries.py",
+              "symbol": "GraphQueries",
+              "score": -2.3784303665161133
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "graph_search",
+              "score": -2.584728240966797
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "graph_search",
+              "score": -2.584728240966797
+            }
+          ]
+        },
+        {
+          "query": "Where are graph health checks implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "tests/test_graph_health.py",
+              "symbol": "test_graph_health_healthy",
+              "score": -2.4639577865600586
+            },
+            {
+              "file_path": "graph/health.py",
+              "symbol": "check_graph_health",
+              "score": -3.221127510070801
+            },
+            {
+              "file_path": "evaluation/citation_validation.py",
+              "symbol": "GraphCitationValidator",
+              "score": -8.42514419555664
+            },
+            {
+              "file_path": "server/app.py",
+              "symbol": "health",
+              "score": -9.341480255126953
+            },
+            {
+              "file_path": "evaluation/graph_benchmark.py",
+              "symbol": "GraphBenchmark",
+              "score": -9.540874481201172
+            }
+          ]
+        },
+        {
+          "query": "Where is repository-level graph management implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "graph/repository.py",
+              "symbol": "GraphRepositoryManager",
+              "score": -3.7372961044311523
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -4.519684791564941
+            },
+            {
+              "file_path": "graph/queries.py",
+              "symbol": "graph_search",
+              "score": -5.806420803070068
+            },
+            {
+              "file_path": "graph/builder.py",
+              "symbol": "GraphBuilder",
+              "score": -5.809185028076172
+            },
+            {
+              "file_path": "graph/evidence.py",
+              "symbol": "GraphEvidence",
+              "score": -6.649910926818848
+            }
+          ]
+        },
+        {
+          "query": "What component combines dense and lexical retrieval?",
+          "query_type": "conceptual",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": 1.528965950012207
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "dense_bm25",
+              "score": -0.022644303739070892
+            }
+          ]
+        },
+        {
+          "query": "What is the purpose of RRF in the retrieval pipeline?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "hybrid_rrf",
+              "score": 4.153736114501953
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "_retrieval_config",
+              "score": 1.7766505479812622
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "test_pipeline_respects_custom_rrf_k",
+              "score": 1.7705776691436768
+            }
+          ]
+        },
+        {
+          "query": "What does the context builder control?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "test_context_builder_preserves_rank_order",
+              "score": 1.095224380493164
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "__init__",
+              "score": 1.0091267824172974
+            },
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_handles_empty_context",
+              "score": 0.9663196206092834
+            }
+          ]
+        },
+        {
+          "query": "What does the application service orchestrate?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_citation_metrics.py",
+              "symbol": "make_context",
+              "score": -5.221165180206299
+            },
+            {
+              "file_path": "tests/test_generation_metrics.py",
+              "symbol": "test_answer_relevance",
+              "score": -5.2933030128479
+            },
+            {
+              "file_path": "application/__init__.py",
+              "symbol": "application/__init__.py",
+              "score": -6.7090654373168945
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "create_app",
+              "score": -8.428375244140625
+            }
+          ]
+        },
+        {
+          "query": "Which component provides grounded answers?",
+          "query_type": "functional",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6934264036172708,
+          "top_results": [
+            {
+              "file_path": "tests/test_openai_llm.py",
+              "symbol": "test_openai_llm_uses_responses_api_client",
+              "score": 0.2120783030986786
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "answer",
+              "score": 0.17525865137577057
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -1.0361528396606445
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -1.6762795448303223
+            }
+          ]
+        },
+        {
+          "query": "How are code search results represented?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_search.py",
+              "symbol": "test_search_code",
+              "score": 0.4141107499599457
+            },
+            {
+              "file_path": "retrieval/bm25.py",
+              "symbol": "search_bm25",
+              "score": -2.3870341777801514
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "search",
+              "score": -2.5397777557373047
+            },
+            {
+              "file_path": "retrieval/search.py",
+              "symbol": "search_code",
+              "score": -2.770082473754883
+            },
+            {
+              "file_path": "vector_store/qdrant_store.py",
+              "symbol": "search",
+              "score": -2.876596450805664
+            }
+          ]
+        },
+        {
+          "query": "Which component stores code embeddings?",
+          "query_type": "functional",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "vector_store/indexer.py",
+              "symbol": "index_chunks",
+              "score": 2.831519365310669
+            },
+            {
+              "file_path": "embeddings/embedder.py",
+              "symbol": "embed",
+              "score": -0.040096186101436615
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "CodeGraphRAGService",
+              "score": -0.7278141975402832
+            }
+          ]
+        },
+        {
+          "query": "How does the system expose repository indexing?",
+          "query_type": "functional",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6934264036172708,
+          "top_results": [
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": 1.3038119077682495
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "index_repository",
+              "score": -0.3159202039241791
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "index_repository",
+              "score": -1.1349760293960571
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -1.2180451154708862
+            }
+          ]
+        }
+      ],
+      "ndcg_delta_vs_code_only": 0.0
+    },
+    "path_code": {
+      "query_count": 31,
+      "overall": {
+        "hit_rate": 0.7419354838709677,
+        "precision": 0.17365591397849464,
+        "recall": 0.7258064516129032,
+        "mrr": 0.4806451612903226,
+        "ndcg": 0.5399695792178553
+      },
+      "by_query_type": {
+        "conceptual": {
+          "query_count": 5,
+          "hit_rate": 0.2,
+          "precision": 0.1,
+          "recall": 0.2,
+          "mrr": 0.2,
+          "ndcg": 0.2
+        },
+        "functional": {
+          "query_count": 3,
+          "hit_rate": 0.6666666666666666,
+          "precision": 0.27777777777777773,
+          "recall": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.3600930702839375
+        },
+        "implementation_lookup": {
+          "query_count": 21,
+          "hit_rate": 0.9047619047619048,
+          "precision": 0.18095238095238098,
+          "recall": 0.9047619047619048,
+          "mrr": 0.5666666666666667,
+          "ndcg": 0.6504179878524619
+        },
+        "symbol_lookup": {
+          "query_count": 2,
+          "hit_rate": 0.5,
+          "precision": 0.125,
+          "recall": 0.5,
+          "mrr": 0.5,
+          "ndcg": 0.5
+        }
+      },
+      "per_query": [
+        {
+          "query": "Where is the repository indexing pipeline implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.2,
+          "ndcg": 0.38685280723454163,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 6.217426300048828
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": 1.1131552457809448
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -1.0854198932647705
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "index_repository",
+              "score": -5.6320648193359375
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "index_repository",
+              "score": -5.673883438110352
+            }
+          ]
+        },
+        {
+          "query": "Where is the REST API application created?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 0.1491226702928543
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "create_app",
+              "score": -0.08001182228326797
+            },
+            {
+              "file_path": "tests/test_retrieval_benchmark.py",
+              "symbol": "make_dataset",
+              "score": -4.7694597244262695
+            },
+            {
+              "file_path": "api/__init__.py",
+              "symbol": "api/__init__.py",
+              "score": -4.873066425323486
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "test_api.py",
+              "score": -6.959070205688477
+            }
+          ]
+        },
+        {
+          "query": "Where is the CLI entry point defined?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "run_pipeline.py",
+              "symbol": "run_pipeline.py",
+              "score": 2.0414576530456543
+            },
+            {
+              "file_path": "server/app.py",
+              "symbol": "main",
+              "score": -7.476123809814453
+            },
+            {
+              "file_path": "application/config.py",
+              "symbol": "from_environment",
+              "score": -9.109842300415039
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "main",
+              "score": -9.125053405761719
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "generate_text",
+              "score": -11.104793548583984
+            }
+          ]
+        },
+        {
+          "query": "Where is hybrid retrieval configured?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "create_hybrid_retriever",
+              "score": 3.83137845993042
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "hybrid_rrf",
+              "score": 0.18610402941703796
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+              "score": -0.689385712146759
+            },
+            {
+              "file_path": "retrieval/pipeline.py",
+              "symbol": "HybridRetrievalPipeline",
+              "score": -1.6159474849700928
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "test_hybrid_empty_query_returns_empty",
+              "score": -2.2187743186950684
+            }
+          ]
+        },
+        {
+          "query": "Where is BM25 retrieval implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.2,
+          "ndcg": 0.38685280723454163,
+          "top_results": [
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "bm25",
+              "score": 2.5482611656188965
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "make_bm25",
+              "score": 2.4639840126037598
+            },
+            {
+              "file_path": "tests/test_bm25.py",
+              "symbol": "test_bm25_returns_retrieval_results",
+              "score": 1.5977749824523926
+            },
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": 1.3281452655792236
+            },
+            {
+              "file_path": "retrieval/bm25.py",
+              "symbol": "search_bm25",
+              "score": 0.3510611951351166
+            }
+          ]
+        },
+        {
+          "query": "Where is reciprocal rank fusion implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/rrf.py",
+              "symbol": "reciprocal_rank_fusion",
+              "score": 1.9066901206970215
+            },
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": -1.3230617046356201
+            },
+            {
+              "file_path": "tests/test_rrf.py",
+              "symbol": "test_rrf_combines_rank_scores",
+              "score": -2.4933042526245117
+            },
+            {
+              "file_path": "evaluation/retrieval_metrics.py",
+              "symbol": "mean_reciprocal_rank",
+              "score": -4.1629533767700195
+            },
+            {
+              "file_path": "tests/test_evaluation_metrics.py",
+              "symbol": "test_reciprocal_rank",
+              "score": -4.497077941894531
+            }
+          ]
+        },
+        {
+          "query": "Where is the cross-encoder reranker implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/reranker.py",
+              "symbol": "rerank_results",
+              "score": 2.380075216293335
+            },
+            {
+              "file_path": "tests/test_reranker.py",
+              "symbol": "test_reranker_sorts_by_cross_encoder_score",
+              "score": 1.8898614645004272
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "test_pipeline_applies_reranker",
+              "score": -0.17973288893699646
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "FakeCrossEncoder",
+              "score": -0.9846971035003662
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "__init__",
+              "score": -3.6512577533721924
+            }
+          ]
+        },
+        {
+          "query": "Where is the context builder implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.25,
+          "ndcg": 0.43067655807339306,
+          "top_results": [
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "__init__",
+              "score": -0.4518595039844513
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "build_prompt",
+              "score": -0.9062372446060181
+            },
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_handles_empty_context",
+              "score": -1.4500178098678589
+            },
+            {
+              "file_path": "generation/context.py",
+              "symbol": "ContextBuilder",
+              "score": -1.6595962047576904
+            },
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "test_context_builder_includes_graph_context",
+              "score": -2.498863458633423
+            }
+          ]
+        },
+        {
+          "query": "Where is the prompt builder implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_contains_grounding_instructions",
+              "score": 1.1815201044082642
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "build_prompt",
+              "score": -0.29450488090515137
+            },
+            {
+              "file_path": "tests/test_citations.py",
+              "symbol": "make_generator",
+              "score": -0.7582138180732727
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -0.8476019501686096
+            },
+            {
+              "file_path": "generation/context.py",
+              "symbol": "ContextBuilder",
+              "score": -8.731060981750488
+            }
+          ]
+        },
+        {
+          "query": "Where is the LLM abstraction defined?",
+          "query_type": "symbol_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.25,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "LLMClient",
+              "score": -1.9079711437225342
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "llm.py",
+              "score": -3.8700761795043945
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "LLMError",
+              "score": -3.8700761795043945
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "MockLLM",
+              "score": -3.9626312255859375
+            }
+          ]
+        },
+        {
+          "query": "Where is the OpenAI LLM provider implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "generation/openai_client.py",
+              "symbol": "OpenAILLM",
+              "score": 1.7510277032852173
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": -2.4572670459747314
+            },
+            {
+              "file_path": "tests/test_openai_llm.py",
+              "symbol": "test_openai_llm_uses_responses_api_client",
+              "score": -2.457883834838867
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "llm.py",
+              "score": -4.203962326049805
+            },
+            {
+              "file_path": "generation/__init__.py",
+              "symbol": "generation/__init__.py",
+              "score": -6.135919094085693
+            }
+          ]
+        },
+        {
+          "query": "Where is answer generation orchestrated?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -4.112024307250977
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": -4.8222198486328125
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "run_generation_benchmark",
+              "score": -5.896162033081055
+            },
+            {
+              "file_path": "tests/test_generation_end_to_end.py",
+              "symbol": "test_generation_end_to_end_with_empty_retrieval",
+              "score": -6.910550594329834
+            },
+            {
+              "file_path": "evaluation/generation_metrics.py",
+              "symbol": "generation_metrics",
+              "score": -7.245401859283447
+            }
+          ]
+        },
+        {
+          "query": "Where are generated-answer citations represented?",
+          "query_type": "symbol_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_generation_models.py",
+              "symbol": "test_default_generated_answer_has_no_citations",
+              "score": 2.0397353172302246
+            },
+            {
+              "file_path": "tests/test_generation_models.py",
+              "symbol": "test_generated_answer",
+              "score": 2.0019726753234863
+            },
+            {
+              "file_path": "generation/models.py",
+              "symbol": "GeneratedAnswer",
+              "score": 1.6638691425323486
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": 1.5763587951660156
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "AnswerGenerator",
+              "score": -0.1766626238822937
+            }
+          ]
+        },
+        {
+          "query": "Where is the repository indexer implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 4.466917991638184
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -2.1055266857147217
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "index_repository",
+              "score": -3.0954465866088867
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "index_repository",
+              "score": -3.5004091262817383
+            },
+            {
+              "file_path": "tests/test_repository_indexer.py",
+              "symbol": "test_index_repository_files",
+              "score": -4.9497528076171875
+            }
+          ]
+        },
+        {
+          "query": "Where is Qdrant persistence implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.25,
+          "ndcg": 0.43067655807339306,
+          "top_results": [
+            {
+              "file_path": "tests/test_qdrant_insert.py",
+              "symbol": "test_qdrant_insert.py",
+              "score": -4.268580436706543
+            },
+            {
+              "file_path": "tests/test_qdrant_search.py",
+              "symbol": "test_qdrant_search.py",
+              "score": -4.488525867462158
+            },
+            {
+              "file_path": "tests/test_qdrant_store.py",
+              "symbol": "test_qdrant_store.py",
+              "score": -4.762734889984131
+            },
+            {
+              "file_path": "vector_store/qdrant_store.py",
+              "symbol": "QdrantStore",
+              "score": -5.0343217849731445
+            },
+            {
+              "file_path": "scripts/semantic_search_demo.py",
+              "symbol": "main",
+              "score": -5.383476734161377
+            }
+          ]
+        },
+        {
+          "query": "Where is source-code parsing performed?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "parser/core_parser.py",
+              "symbol": "parse_source_code",
+              "score": -4.032382965087891
+            },
+            {
+              "file_path": "tests/run_parser.py",
+              "symbol": "tests/run_parser.py",
+              "score": -5.143365383148193
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -6.64054536819458
+            },
+            {
+              "file_path": "parser/models.py",
+              "symbol": "ParsedFile",
+              "score": -7.084657669067383
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -7.931670188903809
+            }
+          ]
+        },
+        {
+          "query": "Where is repository cloning implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "ingestion/repository.py",
+              "symbol": "clone_repository",
+              "score": -1.6498351097106934
+            },
+            {
+              "file_path": "tests/test_repository.py",
+              "symbol": "test_clone_repository",
+              "score": -5.9725751876831055
+            },
+            {
+              "file_path": "ingestion/main.py",
+              "symbol": "ingest_repository",
+              "score": -6.2753448486328125
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -8.463296890258789
+            },
+            {
+              "file_path": "graph/repository.py",
+              "symbol": "GraphRepositoryManager",
+              "score": -8.913607597351074
+            }
+          ]
+        },
+        {
+          "query": "Where is graph retrieval implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "graph_search",
+              "score": -2.5691208839416504
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "graph_search",
+              "score": -3.028449058532715
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "graph_search",
+              "score": -3.6244866847991943
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "graph_search",
+              "score": -3.649826765060425
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "as_retrievers",
+              "score": -4.852850914001465
+            }
+          ]
+        },
+        {
+          "query": "Where is graph grounding implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/graph_benchmark.py",
+              "symbol": "__init__",
+              "score": -1.2188754081726074
+            },
+            {
+              "file_path": "tests/test_graph_grounding_integration.py",
+              "symbol": "test_graph_grounding_into_context_builder",
+              "score": -1.5756042003631592
+            },
+            {
+              "file_path": "graph/grounding.py",
+              "symbol": "GraphGroundingService",
+              "score": -6.425684928894043
+            },
+            {
+              "file_path": "graph/path.py",
+              "symbol": "GraphPathFinder",
+              "score": -7.342669486999512
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -8.941961288452148
+            }
+          ]
+        },
+        {
+          "query": "Where is Neo4j persistence implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/neo4j_benchmark.py",
+              "symbol": "neo4j_benchmark.py",
+              "score": -1.0407445430755615
+            },
+            {
+              "file_path": "tests/test_graph_persistence.py",
+              "symbol": "test_neo4j_store_uses_queryable_node_label_and_repository_metadata",
+              "score": -1.7070014476776123
+            },
+            {
+              "file_path": "graph/neo4j_store.py",
+              "symbol": "Neo4jStore",
+              "score": -3.189889907836914
+            },
+            {
+              "file_path": "tests/test_live_neo4j.py",
+              "symbol": "test_live_neo4j_pipeline",
+              "score": -3.4394707679748535
+            },
+            {
+              "file_path": "graph/health.py",
+              "symbol": "check_graph_health",
+              "score": -5.163354873657227
+            }
+          ]
+        },
+        {
+          "query": "Where are graph queries defined?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/entity_resolution.py",
+              "symbol": "__init__",
+              "score": 0.37681591510772705
+            },
+            {
+              "file_path": "graph/__init__.py",
+              "symbol": "graph/__init__.py",
+              "score": -2.366849660873413
+            },
+            {
+              "file_path": "graph/queries.py",
+              "symbol": "GraphQueries",
+              "score": -2.8134961128234863
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "graph_search",
+              "score": -3.1699414253234863
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "graph_search",
+              "score": -3.261025905609131
+            }
+          ]
+        },
+        {
+          "query": "Where are graph health checks implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "tests/test_graph_health.py",
+              "symbol": "test_graph_health_healthy",
+              "score": -2.637855052947998
+            },
+            {
+              "file_path": "graph/health.py",
+              "symbol": "check_graph_health",
+              "score": -3.160215139389038
+            },
+            {
+              "file_path": "evaluation/citation_validation.py",
+              "symbol": "GraphCitationValidator",
+              "score": -8.668611526489258
+            },
+            {
+              "file_path": "server/app.py",
+              "symbol": "health",
+              "score": -9.325216293334961
+            },
+            {
+              "file_path": "evaluation/graph_benchmark.py",
+              "symbol": "GraphBenchmark",
+              "score": -9.584522247314453
+            }
+          ]
+        },
+        {
+          "query": "Where is repository-level graph management implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "graph/repository.py",
+              "symbol": "GraphRepositoryManager",
+              "score": -4.20028018951416
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -4.909316539764404
+            },
+            {
+              "file_path": "graph/queries.py",
+              "symbol": "graph_search",
+              "score": -5.565667629241943
+            },
+            {
+              "file_path": "graph/builder.py",
+              "symbol": "GraphBuilder",
+              "score": -6.0998687744140625
+            },
+            {
+              "file_path": "graph/evidence.py",
+              "symbol": "GraphEvidence",
+              "score": -7.005434989929199
+            }
+          ]
+        },
+        {
+          "query": "What component combines dense and lexical retrieval?",
+          "query_type": "conceptual",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": 1.4419193267822266
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "dense_bm25",
+              "score": -0.3157241940498352
+            }
+          ]
+        },
+        {
+          "query": "What is the purpose of RRF in the retrieval pipeline?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "hybrid_rrf",
+              "score": 3.999882221221924
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "test_pipeline_respects_custom_rrf_k",
+              "score": 1.7937355041503906
+            },
+            {
+              "file_path": "retrieval/config.py",
+              "symbol": "RetrievalConfig",
+              "score": 1.4712921380996704
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "_retrieval_config",
+              "score": 1.447455644607544
+            }
+          ]
+        },
+        {
+          "query": "What does the context builder control?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "test_context_builder_preserves_rank_order",
+              "score": 0.933811366558075
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "__init__",
+              "score": 0.8756376504898071
+            },
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_handles_empty_context",
+              "score": 0.8532137274742126
+            }
+          ]
+        },
+        {
+          "query": "What does the application service orchestrate?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_generation_metrics.py",
+              "symbol": "test_answer_relevance",
+              "score": -5.720093727111816
+            },
+            {
+              "file_path": "tests/test_citation_metrics.py",
+              "symbol": "make_context",
+              "score": -7.081348419189453
+            },
+            {
+              "file_path": "application/__init__.py",
+              "symbol": "application/__init__.py",
+              "score": -7.799947738647461
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "create_app",
+              "score": -8.466020584106445
+            }
+          ]
+        },
+        {
+          "query": "Which component provides grounded answers?",
+          "query_type": "functional",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6934264036172708,
+          "top_results": [
+            {
+              "file_path": "tests/test_openai_llm.py",
+              "symbol": "test_openai_llm_uses_responses_api_client",
+              "score": -0.22728094458580017
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "answer",
+              "score": -0.29592224955558777
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -0.9412135481834412
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -1.7135188579559326
+            }
+          ]
+        },
+        {
+          "query": "How are code search results represented?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_search.py",
+              "symbol": "test_search_code",
+              "score": 0.6472119092941284
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "search",
+              "score": -0.7516031265258789
+            },
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "make_result",
+              "score": -1.6630773544311523
+            },
+            {
+              "file_path": "retrieval/bm25.py",
+              "symbol": "search_bm25",
+              "score": -1.6817880868911743
+            },
+            {
+              "file_path": "vector_store/qdrant_store.py",
+              "symbol": "search",
+              "score": -1.7467284202575684
+            }
+          ]
+        },
+        {
+          "query": "Which component stores code embeddings?",
+          "query_type": "functional",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "vector_store/indexer.py",
+              "symbol": "index_chunks",
+              "score": 3.276904821395874
+            },
+            {
+              "file_path": "embeddings/embedder.py",
+              "symbol": "embed",
+              "score": 0.7984113693237305
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "__init__",
+              "score": -0.4733080267906189
+            }
+          ]
+        },
+        {
+          "query": "How does the system expose repository indexing?",
+          "query_type": "functional",
+          "hit_rate": 1.0,
+          "precision": 0.3333333333333333,
+          "recall": 0.5,
+          "mrr": 0.5,
+          "ndcg": 0.38685280723454163,
+          "top_results": [
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": 0.9514376521110535
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "index_repository",
+              "score": -0.26198065280914307
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -1.1603981256484985
+            }
+          ]
+        }
+      ],
+      "ndcg_delta_vs_code_only": 0.05040311774341333
+    },
+    "path_symbol_code": {
+      "query_count": 31,
+      "overall": {
+        "hit_rate": 0.7419354838709677,
+        "precision": 0.17903225806451611,
+        "recall": 0.7419354838709677,
+        "mrr": 0.49408602150537634,
+        "ndcg": 0.5535514845784004
+      },
+      "by_query_type": {
+        "conceptual": {
+          "query_count": 5,
+          "hit_rate": 0.2,
+          "precision": 0.1,
+          "recall": 0.2,
+          "mrr": 0.2,
+          "ndcg": 0.2
+        },
+        "functional": {
+          "query_count": 3,
+          "hit_rate": 0.6666666666666666,
+          "precision": 0.3333333333333333,
+          "recall": 0.6666666666666666,
+          "mrr": 0.5,
+          "ndcg": 0.5235472396517734
+        },
+        "implementation_lookup": {
+          "query_count": 21,
+          "hit_rate": 0.9047619047619048,
+          "precision": 0.18095238095238098,
+          "recall": 0.9047619047619048,
+          "mrr": 0.5626984126984127,
+          "ndcg": 0.6471168715702424
+        },
+        "symbol_lookup": {
+          "query_count": 2,
+          "hit_rate": 0.5,
+          "precision": 0.125,
+          "recall": 0.5,
+          "mrr": 0.5,
+          "ndcg": 0.5
+        }
+      },
+      "per_query": [
+        {
+          "query": "Where is the repository indexing pipeline implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.2,
+          "ndcg": 0.38685280723454163,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 6.217426300048828
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": 1.4560061693191528
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -0.9305729866027832
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "index_repository",
+              "score": -4.725239276885986
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "index_repository",
+              "score": -5.673883438110352
+            }
+          ]
+        },
+        {
+          "query": "Where is the REST API application created?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 0.1491226702928543
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "create_app",
+              "score": 0.044103190302848816
+            },
+            {
+              "file_path": "api/__init__.py",
+              "symbol": "api/__init__.py",
+              "score": -4.691815376281738
+            },
+            {
+              "file_path": "tests/test_retrieval_benchmark.py",
+              "symbol": "make_dataset",
+              "score": -4.76732873916626
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "test_api.py",
+              "score": -6.803912162780762
+            }
+          ]
+        },
+        {
+          "query": "Where is the CLI entry point defined?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "run_pipeline.py",
+              "symbol": "run_pipeline.py",
+              "score": 1.9130841493606567
+            },
+            {
+              "file_path": "server/app.py",
+              "symbol": "main",
+              "score": -7.625438690185547
+            },
+            {
+              "file_path": "application/config.py",
+              "symbol": "from_environment",
+              "score": -9.111385345458984
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "main",
+              "score": -9.125053405761719
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "generate_text",
+              "score": -11.104793548583984
+            }
+          ]
+        },
+        {
+          "query": "Where is hybrid retrieval configured?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "create_hybrid_retriever",
+              "score": 3.8203766345977783
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "hybrid_rrf",
+              "score": 0.2868470549583435
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+              "score": -0.6967946290969849
+            },
+            {
+              "file_path": "retrieval/pipeline.py",
+              "symbol": "HybridRetrievalPipeline",
+              "score": -1.5484659671783447
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "test_hybrid_empty_query_returns_empty",
+              "score": -2.6136765480041504
+            }
+          ]
+        },
+        {
+          "query": "Where is BM25 retrieval implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.2,
+          "ndcg": 0.38685280723454163,
+          "top_results": [
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "bm25",
+              "score": 2.6828103065490723
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "make_bm25",
+              "score": 2.5082497596740723
+            },
+            {
+              "file_path": "tests/test_bm25.py",
+              "symbol": "test_bm25_returns_retrieval_results",
+              "score": 1.6209642887115479
+            },
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": 1.3281452655792236
+            },
+            {
+              "file_path": "retrieval/bm25.py",
+              "symbol": "search_bm25",
+              "score": 0.44728219509124756
+            }
+          ]
+        },
+        {
+          "query": "Where is reciprocal rank fusion implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/rrf.py",
+              "symbol": "reciprocal_rank_fusion",
+              "score": 1.9066901206970215
+            },
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": -1.3230617046356201
+            },
+            {
+              "file_path": "tests/test_rrf.py",
+              "symbol": "test_rrf_combines_rank_scores",
+              "score": -2.565774917602539
+            },
+            {
+              "file_path": "evaluation/retrieval_metrics.py",
+              "symbol": "mean_reciprocal_rank",
+              "score": -3.7258124351501465
+            },
+            {
+              "file_path": "tests/test_evaluation_metrics.py",
+              "symbol": "test_reciprocal_rank",
+              "score": -3.8964037895202637
+            }
+          ]
+        },
+        {
+          "query": "Where is the cross-encoder reranker implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/reranker.py",
+              "symbol": "rerank_results",
+              "score": 2.430136203765869
+            },
+            {
+              "file_path": "tests/test_reranker.py",
+              "symbol": "test_reranker_sorts_by_cross_encoder_score",
+              "score": 1.8132888078689575
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "test_pipeline_applies_reranker",
+              "score": -0.3511095941066742
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "FakeCrossEncoder",
+              "score": -0.9846971035003662
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "__init__",
+              "score": -3.6510560512542725
+            }
+          ]
+        },
+        {
+          "query": "Where is the context builder implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.25,
+          "ndcg": 0.43067655807339306,
+          "top_results": [
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "__init__",
+              "score": -0.7442740797996521
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "build_prompt",
+              "score": -0.9081162214279175
+            },
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_handles_empty_context",
+              "score": -1.6373193264007568
+            },
+            {
+              "file_path": "generation/context.py",
+              "symbol": "ContextBuilder",
+              "score": -1.6595962047576904
+            },
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "test_context_builder_includes_graph_context",
+              "score": -2.378943920135498
+            }
+          ]
+        },
+        {
+          "query": "Where is the prompt builder implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_contains_grounding_instructions",
+              "score": 0.788677453994751
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "build_prompt",
+              "score": 0.03407770022749901
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -0.9479246139526367
+            },
+            {
+              "file_path": "tests/test_citations.py",
+              "symbol": "make_generator",
+              "score": -1.024482250213623
+            },
+            {
+              "file_path": "generation/context.py",
+              "symbol": "ContextBuilder",
+              "score": -8.731060981750488
+            }
+          ]
+        },
+        {
+          "query": "Where is the LLM abstraction defined?",
+          "query_type": "symbol_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.25,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "LLMClient",
+              "score": -1.5221962928771973
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "llm.py",
+              "score": -3.6131558418273926
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "LLMError",
+              "score": -3.7661993503570557
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "MockLLM",
+              "score": -4.2734174728393555
+            }
+          ]
+        },
+        {
+          "query": "Where is the OpenAI LLM provider implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "generation/openai_client.py",
+              "symbol": "OpenAILLM",
+              "score": 1.7510277032852173
+            },
+            {
+              "file_path": "tests/test_openai_llm.py",
+              "symbol": "test_openai_llm_uses_responses_api_client",
+              "score": -2.6377851963043213
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": -2.6821112632751465
+            },
+            {
+              "file_path": "generation/llm.py",
+              "symbol": "llm.py",
+              "score": -4.022802352905273
+            },
+            {
+              "file_path": "backend\\app\\services\\llm\\__init__.py",
+              "symbol": "get_llm_provider",
+              "score": -6.373567581176758
+            }
+          ]
+        },
+        {
+          "query": "Where is answer generation orchestrated?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -4.079372406005859
+            },
+            {
+              "file_path": "tests/test_live_end_to_end.py",
+              "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+              "score": -5.312148094177246
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "run_generation_benchmark",
+              "score": -5.8392229080200195
+            },
+            {
+              "file_path": "tests/test_generation_end_to_end.py",
+              "symbol": "test_generation_end_to_end_with_empty_retrieval",
+              "score": -6.888123512268066
+            },
+            {
+              "file_path": "evaluation/generation_metrics.py",
+              "symbol": "generation_metrics",
+              "score": -7.108455657958984
+            }
+          ]
+        },
+        {
+          "query": "Where are generated-answer citations represented?",
+          "query_type": "symbol_lookup",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_generation_models.py",
+              "symbol": "test_default_generated_answer_has_no_citations",
+              "score": 2.848583698272705
+            },
+            {
+              "file_path": "generation/models.py",
+              "symbol": "GeneratedAnswer",
+              "score": 2.833324432373047
+            },
+            {
+              "file_path": "tests/test_generation_models.py",
+              "symbol": "test_generated_answer",
+              "score": 2.2880239486694336
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": 1.6141247749328613
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "AnswerGenerator",
+              "score": -0.1766626238822937
+            }
+          ]
+        },
+        {
+          "query": "Where is the repository indexer implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "evaluation/dataset.py",
+              "symbol": "create_default_dataset",
+              "score": 4.466917991638184
+            },
+            {
+              "file_path": "vector_store/repository_indexer.py",
+              "symbol": "index_repository_files",
+              "score": -1.853715419769287
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "index_repository",
+              "score": -2.2767937183380127
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "index_repository",
+              "score": -3.5004091262817383
+            },
+            {
+              "file_path": "tests/test_repository_indexer.py",
+              "symbol": "test_index_repository_files",
+              "score": -4.9497528076171875
+            }
+          ]
+        },
+        {
+          "query": "Where is Qdrant persistence implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.25,
+          "ndcg": 0.43067655807339306,
+          "top_results": [
+            {
+              "file_path": "tests/test_qdrant_insert.py",
+              "symbol": "test_qdrant_insert.py",
+              "score": -4.268580436706543
+            },
+            {
+              "file_path": "tests/test_qdrant_search.py",
+              "symbol": "test_qdrant_search.py",
+              "score": -4.488525867462158
+            },
+            {
+              "file_path": "tests/test_qdrant_store.py",
+              "symbol": "test_qdrant_store.py",
+              "score": -4.754906177520752
+            },
+            {
+              "file_path": "vector_store/qdrant_store.py",
+              "symbol": "QdrantStore",
+              "score": -5.0343217849731445
+            },
+            {
+              "file_path": "scripts/semantic_search_demo.py",
+              "symbol": "main",
+              "score": -5.383476734161377
+            }
+          ]
+        },
+        {
+          "query": "Where is source-code parsing performed?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "parser/core_parser.py",
+              "symbol": "parse_source_code",
+              "score": -4.032382965087891
+            },
+            {
+              "file_path": "tests/run_parser.py",
+              "symbol": "tests/run_parser.py",
+              "score": -5.048981666564941
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -6.64054536819458
+            },
+            {
+              "file_path": "parser/models.py",
+              "symbol": "ParsedFile",
+              "score": -7.116270065307617
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -7.931670188903809
+            }
+          ]
+        },
+        {
+          "query": "Where is repository cloning implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "ingestion/repository.py",
+              "symbol": "clone_repository",
+              "score": -1.6381492614746094
+            },
+            {
+              "file_path": "tests/test_repository.py",
+              "symbol": "test_clone_repository",
+              "score": -5.79701042175293
+            },
+            {
+              "file_path": "ingestion/main.py",
+              "symbol": "ingest_repository",
+              "score": -6.207122802734375
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -8.463296890258789
+            },
+            {
+              "file_path": "graph/repository.py",
+              "symbol": "GraphRepositoryManager",
+              "score": -8.719393730163574
+            }
+          ]
+        },
+        {
+          "query": "Where is graph retrieval implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "graph_search",
+              "score": -2.5073118209838867
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "graph_search",
+              "score": -2.654831647872925
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "graph_search",
+              "score": -3.3566811084747314
+            },
+            {
+              "file_path": "tests/test_hybrid_end_to_end.py",
+              "symbol": "graph_search",
+              "score": -3.3715553283691406
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "as_retrievers",
+              "score": -4.900681495666504
+            }
+          ]
+        },
+        {
+          "query": "Where is graph grounding implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/graph_benchmark.py",
+              "symbol": "__init__",
+              "score": -1.4400372505187988
+            },
+            {
+              "file_path": "tests/test_graph_grounding_integration.py",
+              "symbol": "test_graph_grounding_into_context_builder",
+              "score": -1.5756042003631592
+            },
+            {
+              "file_path": "graph/grounding.py",
+              "symbol": "GraphGroundingService",
+              "score": -6.425684928894043
+            },
+            {
+              "file_path": "graph/path.py",
+              "symbol": "GraphPathFinder",
+              "score": -7.342669486999512
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -8.941961288452148
+            }
+          ]
+        },
+        {
+          "query": "Where is Neo4j persistence implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.5,
+          "top_results": [
+            {
+              "file_path": "evaluation/neo4j_benchmark.py",
+              "symbol": "neo4j_benchmark.py",
+              "score": -0.8707358837127686
+            },
+            {
+              "file_path": "tests/test_graph_persistence.py",
+              "symbol": "test_neo4j_store_uses_queryable_node_label_and_repository_metadata",
+              "score": -1.6186264753341675
+            },
+            {
+              "file_path": "graph/neo4j_store.py",
+              "symbol": "Neo4jStore",
+              "score": -3.189889907836914
+            },
+            {
+              "file_path": "tests/test_live_neo4j.py",
+              "symbol": "test_live_neo4j_pipeline",
+              "score": -3.4394707679748535
+            },
+            {
+              "file_path": "graph/health.py",
+              "symbol": "check_graph_health",
+              "score": -5.287822246551514
+            }
+          ]
+        },
+        {
+          "query": "Where are graph queries defined?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.25,
+          "ndcg": 0.43067655807339306,
+          "top_results": [
+            {
+              "file_path": "evaluation/entity_resolution.py",
+              "symbol": "__init__",
+              "score": -0.45252901315689087
+            },
+            {
+              "file_path": "graph/__init__.py",
+              "symbol": "graph/__init__.py",
+              "score": -2.394920825958252
+            },
+            {
+              "file_path": "tests/test_hybrid.py",
+              "symbol": "graph_search",
+              "score": -2.709556818008423
+            },
+            {
+              "file_path": "graph/queries.py",
+              "symbol": "GraphQueries",
+              "score": -2.8134961128234863
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "graph_search",
+              "score": -2.9263429641723633
+            }
+          ]
+        },
+        {
+          "query": "Where are graph health checks implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6309297535714575,
+          "top_results": [
+            {
+              "file_path": "tests/test_graph_health.py",
+              "symbol": "test_graph_health_healthy",
+              "score": -2.6732852458953857
+            },
+            {
+              "file_path": "graph/health.py",
+              "symbol": "check_graph_health",
+              "score": -2.985292434692383
+            },
+            {
+              "file_path": "evaluation/citation_validation.py",
+              "symbol": "GraphCitationValidator",
+              "score": -8.668611526489258
+            },
+            {
+              "file_path": "backend\\app\\main.py",
+              "symbol": "health_check",
+              "score": -8.676685333251953
+            },
+            {
+              "file_path": "temp_test_repo/backend/app/main.py",
+              "symbol": "health_check",
+              "score": -8.895505905151367
+            }
+          ]
+        },
+        {
+          "query": "Where is repository-level graph management implemented?",
+          "query_type": "implementation_lookup",
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "graph/repository.py",
+              "symbol": "GraphRepositoryManager",
+              "score": -4.284356594085693
+            },
+            {
+              "file_path": "graph/retrieval.py",
+              "symbol": "GraphRetriever",
+              "score": -4.909316539764404
+            },
+            {
+              "file_path": "graph/queries.py",
+              "symbol": "graph_search",
+              "score": -5.596892833709717
+            },
+            {
+              "file_path": "graph/builder.py",
+              "symbol": "GraphBuilder",
+              "score": -6.0998687744140625
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "CodeGraphRAGService",
+              "score": -7.078927993774414
+            }
+          ]
+        },
+        {
+          "query": "What component combines dense and lexical retrieval?",
+          "query_type": "conceptual",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "top_results": [
+            {
+              "file_path": "retrieval/hybrid.py",
+              "symbol": "HybridRetriever",
+              "score": 1.4419193267822266
+            },
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "dense",
+              "score": -0.2217496931552887
+            }
+          ]
+        },
+        {
+          "query": "What is the purpose of RRF in the retrieval pipeline?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "evaluation/service_retriever.py",
+              "symbol": "hybrid_rrf",
+              "score": 3.9772863388061523
+            },
+            {
+              "file_path": "tests/test_pipeline.py",
+              "symbol": "test_pipeline_respects_custom_rrf_k",
+              "score": 1.7495918273925781
+            },
+            {
+              "file_path": "retrieval/config.py",
+              "symbol": "RetrievalConfig",
+              "score": 1.4553107023239136
+            },
+            {
+              "file_path": "evaluation/benchmark_runner.py",
+              "symbol": "_retrieval_config",
+              "score": 1.4039667844772339
+            }
+          ]
+        },
+        {
+          "query": "What does the context builder control?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "test_context_builder_preserves_rank_order",
+              "score": 0.9312824606895447
+            },
+            {
+              "file_path": "tests/test_prompt_builder.py",
+              "symbol": "test_prompt_handles_empty_context",
+              "score": 0.7188724875450134
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "__init__",
+              "score": 0.5848372578620911
+            }
+          ]
+        },
+        {
+          "query": "What does the application service orchestrate?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_generation_metrics.py",
+              "symbol": "test_answer_relevance",
+              "score": -5.816100120544434
+            },
+            {
+              "file_path": "tests/test_citation_metrics.py",
+              "symbol": "make_context",
+              "score": -7.564906597137451
+            },
+            {
+              "file_path": "application/__init__.py",
+              "symbol": "application/__init__.py",
+              "score": -7.8157734870910645
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "create_app",
+              "score": -8.428220748901367
+            }
+          ]
+        },
+        {
+          "query": "Which component provides grounded answers?",
+          "query_type": "functional",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.9197207891481876,
+          "top_results": [
+            {
+              "file_path": "application/service.py",
+              "symbol": "answer",
+              "score": 0.0028069913387298584
+            },
+            {
+              "file_path": "tests/test_openai_llm.py",
+              "symbol": "test_openai_llm_uses_responses_api_client",
+              "score": -0.7435499429702759
+            },
+            {
+              "file_path": "generation/generator.py",
+              "symbol": "answer_query",
+              "score": -0.9587949514389038
+            },
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": -1.7135188579559326
+            }
+          ]
+        },
+        {
+          "query": "How are code search results represented?",
+          "query_type": "conceptual",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "tests/test_search.py",
+              "symbol": "test_search_code",
+              "score": 0.7163340449333191
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "search",
+              "score": -0.16560599207878113
+            },
+            {
+              "file_path": "retrieval/bm25.py",
+              "symbol": "search_bm25",
+              "score": -1.6112509965896606
+            },
+            {
+              "file_path": "vector_store/qdrant_store.py",
+              "symbol": "search",
+              "score": -1.6152313947677612
+            },
+            {
+              "file_path": "tests/test_context_builder.py",
+              "symbol": "make_result",
+              "score": -1.7605834007263184
+            }
+          ]
+        },
+        {
+          "query": "Which component stores code embeddings?",
+          "query_type": "functional",
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0,
+          "top_results": [
+            {
+              "file_path": "vector_store/indexer.py",
+              "symbol": "index_chunks",
+              "score": 3.227893829345703
+            },
+            {
+              "file_path": "embeddings/embedder.py",
+              "symbol": "embed",
+              "score": 0.8194372653961182
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "__init__",
+              "score": -0.5109430551528931
+            }
+          ]
+        },
+        {
+          "query": "How does the system expose repository indexing?",
+          "query_type": "functional",
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "mrr": 0.5,
+          "ndcg": 0.6509209298071326,
+          "top_results": [
+            {
+              "file_path": "generation/prompt.py",
+              "symbol": "PromptBuilder",
+              "score": 0.9514376521110535
+            },
+            {
+              "file_path": "api/main.py",
+              "symbol": "index_repository",
+              "score": 0.10772508382797241
+            },
+            {
+              "file_path": "tests/test_api.py",
+              "symbol": "index_repository",
+              "score": -0.8625738024711609
+            },
+            {
+              "file_path": "application/service.py",
+              "symbol": "RepositoryNotIndexedError",
+              "score": -0.887513279914856
+            }
+          ]
+        }
+      ],
+      "ndcg_delta_vs_code_only": 0.06398502310395848
+    }
+  }
+}

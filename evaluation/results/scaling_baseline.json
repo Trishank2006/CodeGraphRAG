@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-10-18T09:56:38.585428+00:00",
+  "repository_path": "C:\\Users\\Trishank Kopparapu\\OneDrive\\Desktop\\CodeGraphRAG",
+  "repository_name": "CodeGraphRAG-benchmark",
+  "indexing": {
+    "total_ms": 50092.375,
+    "files": 175,
+    "entities": 765,
+    "chunks": 775,
+    "graph_nodes": 1638,
+    "graph_edges": 4380,
+    "files_per_second": 3.494,
+    "chunks_per_second": 15.471,
+    "note": "Stage-level timings will be added after this end-to-end baseline is captured."
+  },
+  "retrieval": {
+    "count": 15,
+    "mean_ms": 2438.714766666635,
+    "p50_ms": 2318.888999999217,
+    "p95_ms": 2922.783029999664,
+    "p99_ms": 3018.4394859998065,
+    "min_ms": 2260.6378000000404,
+    "max_ms": 3042.353599999842,
+    "query_count": 5,
+    "iterations_per_query": 3
+  }
+}

@@ -1,0 +1,677 @@
+{
+  "benchmark": {
+    "dataset_version": "v1",
+    "query_count": 31,
+    "timestamp": "2026-10-17T22:59:53.091989+00:00",
+    "repository_version": "unknown"
+  },
+  "configuration": {
+    "dataset_version": "v1",
+    "top_k": 5,
+    "rrf_k": 60,
+    "rerank_top_k": 10,
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "reranker_model": "./models/ms-marco-MiniLM-L6-v2",
+    "llm_model": "gpt-5",
+    "max_context_items": 10,
+    "max_context_characters": 12000,
+    "repository_version": "unknown",
+    "benchmark_timestamp": "2026-10-17T22:58:34.933603+00:00"
+  },
+  "retrieval": {
+    "metrics": [
+      {
+        "name": "Dense",
+        "hit_rate": 0.6774193548387096,
+        "precision": 0.19462365591397848,
+        "recall": 0.6290322580645161,
+        "mrr": 0.5053763440860215,
+        "ndcg": 0.6292213119710766
+      },
+      {
+        "name": "BM25",
+        "hit_rate": 0.3548387096774194,
+        "precision": 0.09301075268817204,
+        "recall": 0.3387096774193548,
+        "mrr": 0.22580645161290322,
+        "ndcg": 0.3222855171732963
+      },
+      {
+        "name": "Dense + BM25 (RRF)",
+        "hit_rate": 0.7096774193548387,
+        "precision": 0.19677419354838707,
+        "recall": 0.6612903225806451,
+        "mrr": 0.39301075268817204,
+        "ndcg": 0.4913102727016712
+      },
+      {
+        "name": "Dense + BM25 + Graph",
+        "hit_rate": 0.6451612903225806,
+        "precision": 0.16021505376344086,
+        "recall": 0.5887096774193549,
+        "mrr": 0.3833333333333333,
+        "ndcg": 0.44751975375481456
+      },
+      {
+        "name": "Dense + BM25 + Graph + Reranker",
+        "hit_rate": 0.6451612903225806,
+        "precision": 0.16021505376344086,
+        "recall": 0.5887096774193549,
+        "mrr": 0.44086021505376344,
+        "ndcg": 0.5090424041027461
+      }
+    ],
+    "query_count": 31,
+    "top_k": 5
+  },
+  "generation": {
+    "query_count": 31,
+    "average": {
+      "faithfulness": 0.0,
+      "answer_relevance": 0.0,
+      "context_relevance": 0.0
+    },
+    "per_query": [
+      {
+        "query": "Where is the repository indexing pipeline implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the REST API application created?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the CLI entry point defined?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is hybrid retrieval configured?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is BM25 retrieval implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is reciprocal rank fusion implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the cross-encoder reranker implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the context builder implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the prompt builder implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the LLM abstraction defined?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the OpenAI LLM provider implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is answer generation orchestrated?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where are generated-answer citations represented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is the repository indexer implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is Qdrant persistence implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is source-code parsing performed?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is repository cloning implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is graph retrieval implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is graph grounding implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is Neo4j persistence implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where are graph queries defined?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where are graph health checks implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Where is repository-level graph management implemented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "What component combines dense and lexical retrieval?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "What is the purpose of RRF in the retrieval pipeline?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "What does the context builder control?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "What does the application service orchestrate?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Which component provides grounded answers?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "How are code search results represented?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "Which component stores code embeddings?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      },
+      {
+        "query": "How does the system expose repository indexing?",
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_relevance": 0.0
+        }
+      }
+    ]
+  },
+  "citation": {
+    "query_count": 31,
+    "average": {
+      "citation_validity_rate": 0.0,
+      "citation_coverage": 0.0
+    },
+    "per_query": [
+      {
+        "query": "Where is the repository indexing pipeline implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the REST API application created?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the CLI entry point defined?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is hybrid retrieval configured?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is BM25 retrieval implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is reciprocal rank fusion implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the cross-encoder reranker implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the context builder implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the prompt builder implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the LLM abstraction defined?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the OpenAI LLM provider implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is answer generation orchestrated?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where are generated-answer citations represented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the repository indexer implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is Qdrant persistence implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is source-code parsing performed?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is repository cloning implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is graph retrieval implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is graph grounding implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is Neo4j persistence implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where are graph queries defined?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where are graph health checks implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is repository-level graph management implemented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "What component combines dense and lexical retrieval?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "What is the purpose of RRF in the retrieval pipeline?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "What does the context builder control?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "What does the application service orchestrate?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Which component provides grounded answers?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "How are code search results represented?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Which component stores code embeddings?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "How does the system expose repository indexing?",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      }
+    ]
+  },
+  "latency": {
+    "iterations": 3,
+    "stages": {}
+  },
+  "context_efficiency": {
+    "10": {
+      "sample_count": 1,
+      "average_characters": 0.0,
+      "average_chunks": 0.0,
+      "average_tokens": 0.0,
+      "max_characters": 0,
+      "max_tokens": 0
+    },
+    "20": {
+      "sample_count": 1,
+      "average_characters": 0.0,
+      "average_chunks": 0.0,
+      "average_tokens": 0.0,
+      "max_characters": 0,
+      "max_tokens": 0
+    },
+    "30": {
+      "sample_count": 1,
+      "average_characters": 0.0,
+      "average_chunks": 0.0,
+      "average_tokens": 0.0,
+      "max_characters": 0,
+      "max_tokens": 0
+    }
+  },
+  "ablation": {
+    "stages": [
+      {
+        "name": "Dense",
+        "recall": 0.6290322580645161,
+        "mrr": 0.5053763440860215,
+        "ndcg": 0.6292213119710766,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "BM25",
+        "recall": 0.3387096774193548,
+        "mrr": 0.22580645161290322,
+        "ndcg": 0.3222855171732963,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 (RRF)",
+        "recall": 0.6612903225806451,
+        "mrr": 0.39301075268817204,
+        "ndcg": 0.4913102727016712,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph",
+        "recall": 0.5887096774193549,
+        "mrr": 0.3833333333333333,
+        "ndcg": 0.44751975375481456,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph + Reranker",
+        "recall": 0.5887096774193549,
+        "mrr": 0.44086021505376344,
+        "ndcg": 0.5090424041027461,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      }
+    ],
+    "table": [
+      {
+        "name": "Dense",
+        "recall": 0.6290322580645161,
+        "mrr": 0.5053763440860215,
+        "ndcg": 0.6292213119710766,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "BM25",
+        "recall": 0.3387096774193548,
+        "mrr": 0.22580645161290322,
+        "ndcg": 0.3222855171732963,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 (RRF)",
+        "recall": 0.6612903225806451,
+        "mrr": 0.39301075268817204,
+        "ndcg": 0.4913102727016712,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph",
+        "recall": 0.5887096774193549,
+        "mrr": 0.3833333333333333,
+        "ndcg": 0.44751975375481456,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph + Reranker",
+        "recall": 0.5887096774193549,
+        "mrr": 0.44086021505376344,
+        "ndcg": 0.5090424041027461,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      }
+    ]
+  }
+}

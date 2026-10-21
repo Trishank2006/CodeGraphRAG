@@ -1,0 +1,40 @@
+{
+  "queries": 5,
+  "iterations_per_query": 5,
+  "experiments": {
+    "10": {
+      "candidate_count_mean": 10,
+      "latency_ms": {
+        "count": 25,
+        "mean": 739.0004320001026,
+        "p50": 803.6979000007705,
+        "p95": 927.4038600004131,
+        "min": 372.38299999989977,
+        "max": 943.3075000015378
+      }
+    },
+    "20": {
+      "candidate_count_mean": 20,
+      "latency_ms": {
+        "count": 25,
+        "mean": 1619.4425519998185,
+        "p50": 1587.7479999999196,
+        "p95": 1764.6368799989432,
+        "min": 1501.864800000476,
+        "max": 1823.6747000009927
+      }
+    },
+    "30": {
+      "candidate_count_mean": 30,
+      "latency_ms": {
+        "count": 25,
+        "mean": 2417.214040000108,
+        "p50": 2402.9798000010487,
+        "p95": 2589.0224999991915,
+        "min": 2283.969399999478,
+        "max": 2902.5713999999425
+      }
+    }
+  },
+  "note": "Reranking latency only; retrieval candidates are generated once per query and shared across configurations. Retrieval quality must be evaluated separately."
+}

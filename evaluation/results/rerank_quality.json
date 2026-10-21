@@ -1,0 +1,136 @@
+{
+  "dataset_size": 31,
+  "evaluation_at_k": 5,
+  "candidate_count_comparison": {
+    "10": {
+      "name": "Hybrid + Reranker (candidates=10)",
+      "query_count": 31,
+      "hit_rate": 0.7096774193548387,
+      "precision": 0.19677419354838707,
+      "recall": 0.6451612903225806,
+      "mrr": 0.3897849462365592,
+      "ndcg": 0.5875893564237421,
+      "by_query_type": {
+        "implementation_lookup": {
+          "query_count": 21,
+          "hit_rate": 0.8095238095238095,
+          "precision": 0.20714285714285713,
+          "recall": 0.8095238095238095,
+          "mrr": 0.49682539682539684,
+          "ndcg": 0.7678580678374806
+        },
+        "symbol_lookup": {
+          "query_count": 2,
+          "hit_rate": 0.5,
+          "precision": 0.125,
+          "recall": 0.5,
+          "mrr": 0.1,
+          "ndcg": 0.19342640361727081
+        },
+        "conceptual": {
+          "query_count": 5,
+          "hit_rate": 0.4,
+          "precision": 0.1,
+          "recall": 0.2,
+          "mrr": 0.09,
+          "ndcg": 0.10025316706837742
+        },
+        "functional": {
+          "query_count": 3,
+          "hit_rate": 0.6666666666666666,
+          "precision": 0.3333333333333333,
+          "recall": 0.3333333333333333,
+          "mrr": 0.3333333333333333,
+          "ndcg": 0.4007106606574948
+        }
+      }
+    },
+    "20": {
+      "name": "Hybrid + Reranker (candidates=20)",
+      "query_count": 31,
+      "hit_rate": 0.6129032258064516,
+      "precision": 0.23279569892473118,
+      "recall": 0.5645161290322581,
+      "mrr": 0.4112903225806452,
+      "ndcg": 0.6322313895990304,
+      "by_query_type": {
+        "implementation_lookup": {
+          "query_count": 21,
+          "hit_rate": 0.7619047619047619,
+          "precision": 0.2642857142857143,
+          "recall": 0.7619047619047619,
+          "mrr": 0.5198412698412698,
+          "ndcg": 0.8585807757891776
+        },
+        "symbol_lookup": {
+          "query_count": 2,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0
+        },
+        "conceptual": {
+          "query_count": 5,
+          "hit_rate": 0.2,
+          "precision": 0.1,
+          "recall": 0.1,
+          "mrr": 0.2,
+          "ndcg": 0.12262943855309168
+        },
+        "functional": {
+          "query_count": 3,
+          "hit_rate": 0.6666666666666666,
+          "precision": 0.38888888888888884,
+          "recall": 0.3333333333333333,
+          "mrr": 0.27777777777777773,
+          "ndcg": 0.3186098644105848
+        }
+      }
+    },
+    "30": {
+      "name": "Hybrid + Reranker (candidates=30)",
+      "query_count": 31,
+      "hit_rate": 0.5806451612903226,
+      "precision": 0.22311827956989247,
+      "recall": 0.5241935483870968,
+      "mrr": 0.4231182795698925,
+      "ndcg": 0.63642675961818,
+      "by_query_type": {
+        "implementation_lookup": {
+          "query_count": 21,
+          "hit_rate": 0.7142857142857143,
+          "precision": 0.26587301587301587,
+          "recall": 0.7142857142857143,
+          "mrr": 0.5412698412698413,
+          "ndcg": 0.8740687041505915
+        },
+        "symbol_lookup": {
+          "query_count": 2,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "mrr": 0.0,
+          "ndcg": 0.0
+        },
+        "conceptual": {
+          "query_count": 5,
+          "hit_rate": 0.2,
+          "precision": 0.1,
+          "recall": 0.1,
+          "mrr": 0.2,
+          "ndcg": 0.12262943855309168
+        },
+        "functional": {
+          "query_count": 3,
+          "hit_rate": 0.6666666666666666,
+          "precision": 0.27777777777777773,
+          "recall": 0.25,
+          "mrr": 0.25,
+          "ndcg": 0.25354652274523454
+        }
+      }
+    }
+  },
+  "note": "Compare retrieval quality and latency together. The candidate count changes the RRF pool before reranking. Per-query-type metrics use the existing ground-truth relevance rules."
+}

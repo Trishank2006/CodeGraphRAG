@@ -1,0 +1,3327 @@
+{
+  "candidate_counts": {
+    "dense_top_k": 20,
+    "bm25_top_k": 20,
+    "graph_top_k": 20,
+    "rrf_top_k": 30
+  },
+  "rerank_top_k": 5,
+  "query_count": 31,
+  "methodology": {
+    "candidate_pool": "Each query's hybrid candidate pool is fetched once and shared by both rerankers.",
+    "implementation_lookup": "Candidates are deduplicated by normalized file path before reranking. The first occurrence is retained, preserving the hybrid retriever's candidate order.",
+    "final_rankings": "Final rankings are deduplicated by the benchmark's evaluation identifier before calculating metrics. This avoids repeated file paths or symbols inflating ranking scores.",
+    "other_query_types": "Candidate pools for non-implementation queries are not deduplicated by file before reranking.",
+    "comparison": "Both methods rerank the same candidates. The metadata-aware method includes file path, symbol, language, and line range with the code content.",
+    "per_query_status": "Improved, regressed, or unchanged is based on the difference in per-query NDCG@5.",
+    "limitations": "The evaluation uses the existing dataset and its current relevance labels. Some query types have few examples, so results are experimental rather than conclusive."
+  },
+  "original": {
+    "name": "original_cross_encoder",
+    "by_query_type": {
+      "overall": {
+        "query_count": 31,
+        "hit_rate": 0.7096774193548387,
+        "precision": 0.17096774193548386,
+        "recall": 0.7096774193548387,
+        "mrr": 0.41075268817204297,
+        "ndcg": 0.48956646147444194
+      },
+      "implementation_lookup": {
+        "query_count": 21,
+        "hit_rate": 0.9047619047619048,
+        "precision": 0.18095238095238098,
+        "recall": 0.9047619047619048,
+        "mrr": 0.5111111111111111,
+        "ndcg": 0.6090336904034837
+      },
+      "symbol_lookup": {
+        "query_count": 2,
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "ndcg": 0.0
+      },
+      "conceptual": {
+        "query_count": 5,
+        "hit_rate": 0.2,
+        "precision": 0.1,
+        "recall": 0.2,
+        "mrr": 0.2,
+        "ndcg": 0.2
+      },
+      "functional": {
+        "query_count": 3,
+        "hit_rate": 0.6666666666666666,
+        "precision": 0.3333333333333333,
+        "recall": 0.6666666666666666,
+        "mrr": 0.3333333333333333,
+        "ndcg": 0.46228426907818054
+      }
+    }
+  },
+  "metadata_aware": {
+    "name": "metadata_aware_cross_encoder",
+    "by_query_type": {
+      "overall": {
+        "query_count": 31,
+        "hit_rate": 0.8064516129032258,
+        "precision": 0.19623655913978497,
+        "recall": 0.7903225806451613,
+        "mrr": 0.5870967741935483,
+        "ndcg": 0.6341541208032806
+      },
+      "implementation_lookup": {
+        "query_count": 21,
+        "hit_rate": 0.9523809523809523,
+        "precision": 0.19047619047619047,
+        "recall": 0.9523809523809523,
+        "mrr": 0.6761904761904761,
+        "ndcg": 0.7448092944807476
+      },
+      "symbol_lookup": {
+        "query_count": 2,
+        "hit_rate": 0.5,
+        "precision": 0.125,
+        "recall": 0.5,
+        "mrr": 0.5,
+        "ndcg": 0.5
+      },
+      "conceptual": {
+        "query_count": 5,
+        "hit_rate": 0.4,
+        "precision": 0.2,
+        "recall": 0.4,
+        "mrr": 0.3,
+        "ndcg": 0.3261859507142915
+      },
+      "functional": {
+        "query_count": 3,
+        "hit_rate": 0.6666666666666666,
+        "precision": 0.27777777777777773,
+        "recall": 0.5,
+        "mrr": 0.5,
+        "ndcg": 0.46228426907818054
+      }
+    }
+  },
+  "delta_metadata_minus_original": {
+    "hit_rate": 0.096774,
+    "precision": 0.025269,
+    "recall": 0.080645,
+    "mrr": 0.176344,
+    "ndcg": 0.144588
+  },
+  "per_query_summary": {
+    "improved_by_ndcg": 13,
+    "regressed_by_ndcg": 3,
+    "unchanged_by_ndcg": 15
+  },
+  "per_query_diagnostics": [
+    {
+      "query": "Where is the repository indexing pipeline implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "application/service.py"
+      ],
+      "expected_symbols": [
+        "CodeGraphRAGService.index_repository"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 12
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.2,
+        "ndcg": 0.38685280723454163
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.25,
+        "ndcg": 0.43067655807339306
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.05,
+        "ndcg": 0.043824
+      },
+      "original_top_results": [
+        {
+          "file_path": "evaluation/dataset.py",
+          "symbol": "create_default_dataset",
+          "start_line": 36,
+          "end_line": 344,
+          "score": 6.292280673980713
+        },
+        {
+          "file_path": "tests/test_live_end_to_end.py",
+          "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+          "start_line": 20,
+          "end_line": 39,
+          "score": 1.5940138101577759
+        },
+        {
+          "file_path": "vector_store/repository_indexer.py",
+          "symbol": "index_repository_files",
+          "start_line": 8,
+          "end_line": 29,
+          "score": -1.0242726802825928
+        },
+        {
+          "file_path": "tests/test_api.py",
+          "symbol": "index_repository",
+          "start_line": 16,
+          "end_line": 18,
+          "score": -5.188436031341553
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "index_repository",
+          "start_line": 78,
+          "end_line": 127,
+          "score": -5.684584617614746
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "evaluation/dataset.py",
+          "symbol": "create_default_dataset",
+          "start_line": 36,
+          "end_line": 344,
+          "score": 5.796534538269043
+        },
+        {
+          "file_path": "vector_store/repository_indexer.py",
+          "symbol": "index_repository_files",
+          "start_line": 8,
+          "end_line": 29,
+          "score": -0.7467681765556335
+        },
+        {
+          "file_path": "tests/test_live_end_to_end.py",
+          "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+          "start_line": 20,
+          "end_line": 39,
+          "score": -2.59658145904541
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "index_repository",
+          "start_line": 78,
+          "end_line": 127,
+          "score": -5.634328365325928
+        },
+        {
+          "file_path": "tests/test_api.py",
+          "symbol": "index_repository",
+          "start_line": 16,
+          "end_line": 18,
+          "score": -5.772090911865234
+        }
+      ]
+    },
+    {
+      "query": "Where is the REST API application created?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "api/main.py"
+      ],
+      "expected_symbols": [
+        "create_app"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 19
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.36907
+      },
+      "original_top_results": [
+        {
+          "file_path": "evaluation/dataset.py",
+          "symbol": "create_default_dataset",
+          "start_line": 36,
+          "end_line": 344,
+          "score": 1.490760326385498
+        },
+        {
+          "file_path": "api/main.py",
+          "symbol": "create_app",
+          "start_line": 20,
+          "end_line": 65,
+          "score": -0.27010947465896606
+        },
+        {
+          "file_path": "tests/test_retrieval_benchmark.py",
+          "symbol": "make_dataset",
+          "start_line": 8,
+          "end_line": 31,
+          "score": -4.614235877990723
+        },
+        {
+          "file_path": "api/__init__.py",
+          "symbol": "api/__init__.py",
+          "start_line": 1,
+          "end_line": 3,
+          "score": -4.801487922668457
+        },
+        {
+          "file_path": "tests/test_api.py",
+          "symbol": "test_api.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -6.648289680480957
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "api/main.py",
+          "symbol": "create_app",
+          "start_line": 20,
+          "end_line": 65,
+          "score": 0.5428571701049805
+        },
+        {
+          "file_path": "evaluation/dataset.py",
+          "symbol": "create_default_dataset",
+          "start_line": 36,
+          "end_line": 344,
+          "score": -0.8707770109176636
+        },
+        {
+          "file_path": "tests/test_retrieval_benchmark.py",
+          "symbol": "make_dataset",
+          "start_line": 8,
+          "end_line": 31,
+          "score": -5.738006591796875
+        },
+        {
+          "file_path": "api/__init__.py",
+          "symbol": "api/__init__.py",
+          "start_line": 1,
+          "end_line": 3,
+          "score": -6.345210075378418
+        },
+        {
+          "file_path": "tests/test_api.py",
+          "symbol": "test_api.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -7.4718756675720215
+        }
+      ]
+    },
+    {
+      "query": "Where is the CLI entry point defined?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "cli.py"
+      ],
+      "expected_symbols": [
+        "main"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 17
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metric_deltas": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.63093
+      },
+      "original_top_results": [
+        {
+          "file_path": "run_pipeline.py",
+          "symbol": "run_pipeline.py",
+          "start_line": 1,
+          "end_line": 7,
+          "score": 2.6181416511535645
+        },
+        {
+          "file_path": "server/app.py",
+          "symbol": "main",
+          "start_line": 141,
+          "end_line": 146,
+          "score": -6.648281097412109
+        },
+        {
+          "file_path": "evaluation/benchmark_runner.py",
+          "symbol": "main",
+          "start_line": 569,
+          "end_line": 747,
+          "score": -8.98697280883789
+        },
+        {
+          "file_path": "application/config.py",
+          "symbol": "from_environment",
+          "start_line": 19,
+          "end_line": 29,
+          "score": -9.252069473266602
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "generate_text",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -11.13859748840332
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "run_pipeline.py",
+          "symbol": "run_pipeline.py",
+          "start_line": 1,
+          "end_line": 7,
+          "score": 0.508890688419342
+        },
+        {
+          "file_path": "cli.py",
+          "symbol": "cli.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -7.175689697265625
+        },
+        {
+          "file_path": "server/app.py",
+          "symbol": "main",
+          "start_line": 141,
+          "end_line": 146,
+          "score": -8.514303207397461
+        },
+        {
+          "file_path": "evaluation/benchmark_runner.py",
+          "symbol": "main",
+          "start_line": 569,
+          "end_line": 747,
+          "score": -9.423832893371582
+        },
+        {
+          "file_path": "application/config.py",
+          "symbol": "from_environment",
+          "start_line": 19,
+          "end_line": 29,
+          "score": -9.525087356567383
+        }
+      ]
+    },
+    {
+      "query": "Where is hybrid retrieval configured?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "retrieval/config.py"
+      ],
+      "expected_symbols": [],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 8
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "create_hybrid_retriever",
+          "start_line": 91,
+          "end_line": 103,
+          "score": 3.0933384895324707
+        },
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "hybrid_rrf",
+          "start_line": 103,
+          "end_line": 127,
+          "score": 0.23578864336013794
+        },
+        {
+          "file_path": "tests/test_hybrid_end_to_end.py",
+          "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+          "start_line": 162,
+          "end_line": 181,
+          "score": -0.73148512840271
+        },
+        {
+          "file_path": "retrieval/pipeline.py",
+          "symbol": "HybridRetrievalPipeline",
+          "start_line": 10,
+          "end_line": 62,
+          "score": -1.4348258972167969
+        },
+        {
+          "file_path": "tests/test_hybrid.py",
+          "symbol": "test_hybrid_empty_query_returns_empty",
+          "start_line": 175,
+          "end_line": 181,
+          "score": -2.455315589904785
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "create_hybrid_retriever",
+          "start_line": 91,
+          "end_line": 103,
+          "score": 4.315829277038574
+        },
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "hybrid_rrf",
+          "start_line": 103,
+          "end_line": 127,
+          "score": 0.5434529781341553
+        },
+        {
+          "file_path": "tests/test_hybrid_end_to_end.py",
+          "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+          "start_line": 162,
+          "end_line": 181,
+          "score": -0.607083261013031
+        },
+        {
+          "file_path": "retrieval/pipeline.py",
+          "symbol": "HybridRetrievalPipeline",
+          "start_line": 10,
+          "end_line": 62,
+          "score": -0.6550651788711548
+        },
+        {
+          "file_path": "tests/test_hybrid.py",
+          "symbol": "test_hybrid_empty_query_returns_empty",
+          "start_line": 175,
+          "end_line": 181,
+          "score": -2.5045056343078613
+        }
+      ]
+    },
+    {
+      "query": "Where is BM25 retrieval implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "retrieval/bm25.py"
+      ],
+      "expected_symbols": [
+        "BM25Retriever"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 9
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.2,
+        "ndcg": 0.38685280723454163
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.25,
+        "ndcg": 0.43067655807339306
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.05,
+        "ndcg": 0.043824
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_hybrid.py",
+          "symbol": "make_bm25",
+          "start_line": 46,
+          "end_line": 74,
+          "score": 2.6208090782165527
+        },
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "bm25",
+          "start_line": 45,
+          "end_line": 50,
+          "score": 2.208432197570801
+        },
+        {
+          "file_path": "tests/test_bm25.py",
+          "symbol": "test_bm25_returns_retrieval_results",
+          "start_line": 77,
+          "end_line": 87,
+          "score": 1.7098679542541504
+        },
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "HybridRetriever",
+          "start_line": 14,
+          "end_line": 88,
+          "score": 1.36248779296875
+        },
+        {
+          "file_path": "retrieval/bm25.py",
+          "symbol": "search_bm25",
+          "start_line": 182,
+          "end_line": 230,
+          "score": 0.45586949586868286
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "bm25",
+          "start_line": 45,
+          "end_line": 50,
+          "score": 2.3140785694122314
+        },
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "HybridRetriever",
+          "start_line": 14,
+          "end_line": 88,
+          "score": 1.677582859992981
+        },
+        {
+          "file_path": "tests/test_hybrid.py",
+          "symbol": "make_bm25",
+          "start_line": 46,
+          "end_line": 74,
+          "score": 1.6272635459899902
+        },
+        {
+          "file_path": "retrieval/bm25.py",
+          "symbol": "search_bm25",
+          "start_line": 182,
+          "end_line": 230,
+          "score": 1.455290675163269
+        },
+        {
+          "file_path": "tests/test_bm25.py",
+          "symbol": "test_bm25_returns_retrieval_results",
+          "start_line": 77,
+          "end_line": 87,
+          "score": 1.342877984046936
+        }
+      ]
+    },
+    {
+      "query": "Where is reciprocal rank fusion implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "retrieval/rrf.py"
+      ],
+      "expected_symbols": [
+        "reciprocal_rank_fusion"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 14
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "retrieval/rrf.py",
+          "symbol": "reciprocal_rank_fusion",
+          "start_line": 6,
+          "end_line": 83,
+          "score": 2.0817131996154785
+        },
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "HybridRetriever",
+          "start_line": 14,
+          "end_line": 88,
+          "score": -1.2755250930786133
+        },
+        {
+          "file_path": "tests/test_rrf.py",
+          "symbol": "test_rrf_combines_rank_scores",
+          "start_line": 20,
+          "end_line": 37,
+          "score": -2.267235279083252
+        },
+        {
+          "file_path": "tests/test_evaluation_metrics.py",
+          "symbol": "test_reciprocal_rank",
+          "start_line": 37,
+          "end_line": 41,
+          "score": -3.827591896057129
+        },
+        {
+          "file_path": "evaluation/retrieval_metrics.py",
+          "symbol": "mean_reciprocal_rank",
+          "start_line": 82,
+          "end_line": 98,
+          "score": -4.3280487060546875
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "retrieval/rrf.py",
+          "symbol": "reciprocal_rank_fusion",
+          "start_line": 6,
+          "end_line": 83,
+          "score": 2.217312812805176
+        },
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "HybridRetriever",
+          "start_line": 14,
+          "end_line": 88,
+          "score": -1.5042247772216797
+        },
+        {
+          "file_path": "tests/test_rrf.py",
+          "symbol": "test_rrf_combines_rank_scores",
+          "start_line": 20,
+          "end_line": 37,
+          "score": -2.801511764526367
+        },
+        {
+          "file_path": "evaluation/retrieval_metrics.py",
+          "symbol": "mean_reciprocal_rank",
+          "start_line": 82,
+          "end_line": 98,
+          "score": -4.319945812225342
+        },
+        {
+          "file_path": "tests/test_evaluation_metrics.py",
+          "symbol": "test_reciprocal_rank",
+          "start_line": 37,
+          "end_line": 41,
+          "score": -4.958117485046387
+        }
+      ]
+    },
+    {
+      "query": "Where is the cross-encoder reranker implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "retrieval/reranker.py"
+      ],
+      "expected_symbols": [
+        "CrossEncoderReranker"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 9
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "retrieval/reranker.py",
+          "symbol": "rerank_results",
+          "start_line": 93,
+          "end_line": 112,
+          "score": 2.1035165786743164
+        },
+        {
+          "file_path": "tests/test_reranker.py",
+          "symbol": "test_reranker_sorts_by_cross_encoder_score",
+          "start_line": 36,
+          "end_line": 57,
+          "score": 1.9145094156265259
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "test_pipeline_applies_reranker",
+          "start_line": 123,
+          "end_line": 149,
+          "score": -0.0036175698041915894
+        },
+        {
+          "file_path": "tests/test_hybrid_end_to_end.py",
+          "symbol": "FakeCrossEncoder",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -0.8113353848457336
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "__init__",
+          "start_line": 48,
+          "end_line": 72,
+          "score": -3.479381799697876
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "retrieval/reranker.py",
+          "symbol": "rerank_results",
+          "start_line": 93,
+          "end_line": 112,
+          "score": 2.2100250720977783
+        },
+        {
+          "file_path": "tests/test_reranker.py",
+          "symbol": "test_reranker_sorts_by_cross_encoder_score",
+          "start_line": 36,
+          "end_line": 57,
+          "score": 1.3893425464630127
+        },
+        {
+          "file_path": "tests/test_hybrid_end_to_end.py",
+          "symbol": "FakeCrossEncoder",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -1.142998456954956
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "test_pipeline_applies_reranker",
+          "start_line": 123,
+          "end_line": 149,
+          "score": -1.1487631797790527
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "__init__",
+          "start_line": 48,
+          "end_line": 72,
+          "score": -4.737195014953613
+        }
+      ]
+    },
+    {
+      "query": "Where is the context builder implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "generation/context.py"
+      ],
+      "expected_symbols": [
+        "ContextBuilder"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 13
+      },
+      "status_by_ndcg": "regressed",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "ndcg": 0.5
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.2,
+        "ndcg": 0.38685280723454163
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": -0.133333,
+        "ndcg": -0.113147
+      },
+      "original_top_results": [
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "build_prompt",
+          "start_line": 27,
+          "end_line": 40,
+          "score": -0.3066609501838684
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "__init__",
+          "start_line": 27,
+          "end_line": 37,
+          "score": -0.4185624122619629
+        },
+        {
+          "file_path": "generation/context.py",
+          "symbol": "ContextBuilder",
+          "start_line": 32,
+          "end_line": 183,
+          "score": -1.408881664276123
+        },
+        {
+          "file_path": "tests/test_prompt_builder.py",
+          "symbol": "test_prompt_handles_empty_context",
+          "start_line": 71,
+          "end_line": 81,
+          "score": -1.5813758373260498
+        },
+        {
+          "file_path": "tests/test_context_builder.py",
+          "symbol": "test_context_builder_includes_graph_context",
+          "start_line": 148,
+          "end_line": 190,
+          "score": -2.368831157684326
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "__init__",
+          "start_line": 27,
+          "end_line": 37,
+          "score": -0.8108304142951965
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "build_prompt",
+          "start_line": 27,
+          "end_line": 40,
+          "score": -1.2830562591552734
+        },
+        {
+          "file_path": "tests/test_context_builder.py",
+          "symbol": "test_context_builder_includes_graph_context",
+          "start_line": 148,
+          "end_line": 190,
+          "score": -1.5186526775360107
+        },
+        {
+          "file_path": "tests/test_prompt_builder.py",
+          "symbol": "test_prompt_handles_empty_context",
+          "start_line": 71,
+          "end_line": 81,
+          "score": -1.7095085382461548
+        },
+        {
+          "file_path": "generation/context.py",
+          "symbol": "ContextBuilder",
+          "start_line": 32,
+          "end_line": 183,
+          "score": -2.6818599700927734
+        }
+      ]
+    },
+    {
+      "query": "Where is the prompt builder implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "generation/prompt.py"
+      ],
+      "expected_symbols": [
+        "PromptBuilder"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 10
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_prompt_builder.py",
+          "symbol": "test_prompt_contains_grounding_instructions",
+          "start_line": 61,
+          "end_line": 68,
+          "score": 1.2561945915222168
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "build_prompt",
+          "start_line": 27,
+          "end_line": 40,
+          "score": -0.0165792778134346
+        },
+        {
+          "file_path": "tests/test_citations.py",
+          "symbol": "make_generator",
+          "start_line": 37,
+          "end_line": 43,
+          "score": -0.5842244625091553
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 107,
+          "end_line": 122,
+          "score": -0.7185451984405518
+        },
+        {
+          "file_path": "generation/context.py",
+          "symbol": "ContextBuilder",
+          "start_line": 31,
+          "end_line": 182,
+          "score": -8.700443267822266
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "tests/test_prompt_builder.py",
+          "symbol": "test_prompt_contains_grounding_instructions",
+          "start_line": 61,
+          "end_line": 68,
+          "score": 0.8530446290969849
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "build_prompt",
+          "start_line": 27,
+          "end_line": 40,
+          "score": -0.06080601364374161
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 107,
+          "end_line": 122,
+          "score": -1.5963084697723389
+        },
+        {
+          "file_path": "tests/test_citations.py",
+          "symbol": "make_generator",
+          "start_line": 37,
+          "end_line": 43,
+          "score": -1.7148942947387695
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "generate",
+          "start_line": 39,
+          "end_line": 44,
+          "score": -9.133947372436523
+        }
+      ]
+    },
+    {
+      "query": "Where is the LLM abstraction defined?",
+      "query_type": "symbol_lookup",
+      "expected_files": [
+        "generation/llm.py"
+      ],
+      "expected_symbols": [
+        "LLMClient"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 1.0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "generation/models.py",
+          "symbol": "ContextItem",
+          "start_line": 15,
+          "end_line": 24,
+          "score": -3.210151195526123
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "llm.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.6980788707733154
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "LLMError",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.6980788707733154
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "MockLLM",
+          "start_line": 27,
+          "end_line": 43,
+          "score": -3.7493669986724854
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "LLMClient",
+          "start_line": 9,
+          "end_line": 24,
+          "score": -1.4682499170303345
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "LLMError",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.1603221893310547
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "llm.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.176696538925171
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "MockLLM",
+          "start_line": 27,
+          "end_line": 43,
+          "score": -4.970826148986816
+        }
+      ]
+    },
+    {
+      "query": "Where is the OpenAI LLM provider implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "generation/openai_client.py"
+      ],
+      "expected_symbols": [
+        "OpenAILLM"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 12
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "generation/openai_client.py",
+          "symbol": "OpenAILLM",
+          "start_line": 14,
+          "end_line": 81,
+          "score": 1.2794950008392334
+        },
+        {
+          "file_path": "tests/test_live_end_to_end.py",
+          "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+          "start_line": 20,
+          "end_line": 39,
+          "score": -1.9826712608337402
+        },
+        {
+          "file_path": "tests/test_openai_llm.py",
+          "symbol": "test_openai_llm_uses_responses_api_client",
+          "start_line": 18,
+          "end_line": 20,
+          "score": -2.2890782356262207
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "llm.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.9433140754699707
+        },
+        {
+          "file_path": "generation/__init__.py",
+          "symbol": "generation/__init__.py",
+          "start_line": 1,
+          "end_line": 3,
+          "score": -4.770824432373047
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "generation/openai_client.py",
+          "symbol": "OpenAILLM",
+          "start_line": 14,
+          "end_line": 81,
+          "score": 1.3953614234924316
+        },
+        {
+          "file_path": "tests/test_openai_llm.py",
+          "symbol": "test_openai_llm_uses_responses_api_client",
+          "start_line": 18,
+          "end_line": 20,
+          "score": -2.751417636871338
+        },
+        {
+          "file_path": "generation/llm.py",
+          "symbol": "llm.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.827515125274658
+        },
+        {
+          "file_path": "backend\\app\\services\\llm\\__init__.py",
+          "symbol": "get_llm_provider",
+          "start_line": 6,
+          "end_line": 11,
+          "score": -6.103860378265381
+        },
+        {
+          "file_path": "tests/test_live_end_to_end.py",
+          "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+          "start_line": 20,
+          "end_line": 39,
+          "score": -7.114635467529297
+        }
+      ]
+    },
+    {
+      "query": "Where is answer generation orchestrated?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "generation/generator.py"
+      ],
+      "expected_symbols": [
+        "AnswerGenerator"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 13
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.36907
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_live_end_to_end.py",
+          "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+          "start_line": 20,
+          "end_line": 39,
+          "score": -4.139296054840088
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 108,
+          "end_line": 123,
+          "score": -4.92955207824707
+        },
+        {
+          "file_path": "evaluation/benchmark_runner.py",
+          "symbol": "run_generation_benchmark",
+          "start_line": 105,
+          "end_line": 178,
+          "score": -5.6714019775390625
+        },
+        {
+          "file_path": "evaluation/generation_metrics.py",
+          "symbol": "generation_metrics",
+          "start_line": 93,
+          "end_line": 104,
+          "score": -6.797144412994385
+        },
+        {
+          "file_path": "tests/test_generation_end_to_end.py",
+          "symbol": "test_generation_end_to_end_with_empty_retrieval",
+          "start_line": 107,
+          "end_line": 132,
+          "score": -6.826877117156982
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 108,
+          "end_line": 123,
+          "score": -3.829378843307495
+        },
+        {
+          "file_path": "evaluation/benchmark_runner.py",
+          "symbol": "run_generation_benchmark",
+          "start_line": 105,
+          "end_line": 178,
+          "score": -6.880801200866699
+        },
+        {
+          "file_path": "tests/test_generation_end_to_end.py",
+          "symbol": "test_generation_end_to_end_with_empty_retrieval",
+          "start_line": 107,
+          "end_line": 132,
+          "score": -7.004453659057617
+        },
+        {
+          "file_path": "evaluation/generation_metrics.py",
+          "symbol": "generation_metrics",
+          "start_line": 93,
+          "end_line": 104,
+          "score": -7.367231369018555
+        },
+        {
+          "file_path": "tests/test_live_end_to_end.py",
+          "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+          "start_line": 20,
+          "end_line": 39,
+          "score": -7.995785713195801
+        }
+      ]
+    },
+    {
+      "query": "Where are generated-answer citations represented?",
+      "query_type": "symbol_lookup",
+      "expected_files": [
+        "generation/models.py"
+      ],
+      "expected_symbols": [
+        "Citation"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_generation_models.py",
+          "symbol": "test_generated_answer",
+          "start_line": 64,
+          "end_line": 78,
+          "score": 2.905742645263672
+        },
+        {
+          "file_path": "generation/models.py",
+          "symbol": "GeneratedAnswer",
+          "start_line": 37,
+          "end_line": 41,
+          "score": 2.2185983657836914
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 39,
+          "end_line": 71,
+          "score": 2.070683240890503
+        },
+        {
+          "file_path": "tests/test_generation_models.py",
+          "symbol": "test_default_generated_answer_has_no_citations",
+          "start_line": 90,
+          "end_line": 95,
+          "score": 1.9648151397705078
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "AnswerGenerator",
+          "start_line": 19,
+          "end_line": 105,
+          "score": 0.21360662579536438
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "generation/models.py",
+          "symbol": "GeneratedAnswer",
+          "start_line": 37,
+          "end_line": 41,
+          "score": 2.4600844383239746
+        },
+        {
+          "file_path": "tests/test_generation_models.py",
+          "symbol": "test_default_generated_answer_has_no_citations",
+          "start_line": 90,
+          "end_line": 95,
+          "score": 2.1475284099578857
+        },
+        {
+          "file_path": "tests/test_generation_models.py",
+          "symbol": "test_generated_answer",
+          "start_line": 64,
+          "end_line": 78,
+          "score": 2.060758590698242
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 39,
+          "end_line": 71,
+          "score": 1.4522504806518555
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "AnswerGenerator",
+          "start_line": 19,
+          "end_line": 105,
+          "score": 0.1274956464767456
+        }
+      ]
+    },
+    {
+      "query": "Where is the repository indexer implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "vector_store/repository_indexer.py"
+      ],
+      "expected_symbols": [
+        "index_repository_files"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 9
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "ndcg": 0.5
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.166667,
+        "ndcg": 0.13093
+      },
+      "original_top_results": [
+        {
+          "file_path": "evaluation/dataset.py",
+          "symbol": "create_default_dataset",
+          "start_line": 36,
+          "end_line": 344,
+          "score": 4.474405765533447
+        },
+        {
+          "file_path": "tests/test_api.py",
+          "symbol": "index_repository",
+          "start_line": 16,
+          "end_line": 18,
+          "score": -2.7638280391693115
+        },
+        {
+          "file_path": "vector_store/repository_indexer.py",
+          "symbol": "index_repository_files",
+          "start_line": 8,
+          "end_line": 29,
+          "score": -3.1604208946228027
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "index_repository",
+          "start_line": 78,
+          "end_line": 127,
+          "score": -3.4741411209106445
+        },
+        {
+          "file_path": "tests/test_repository_indexer.py",
+          "symbol": "test_index_repository_files",
+          "start_line": 33,
+          "end_line": 97,
+          "score": -4.803253173828125
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "evaluation/dataset.py",
+          "symbol": "create_default_dataset",
+          "start_line": 36,
+          "end_line": 344,
+          "score": 3.9493331909179688
+        },
+        {
+          "file_path": "vector_store/repository_indexer.py",
+          "symbol": "index_repository_files",
+          "start_line": 8,
+          "end_line": 29,
+          "score": -0.5730265378952026
+        },
+        {
+          "file_path": "tests/test_repository_indexer.py",
+          "symbol": "test_index_repository_files",
+          "start_line": 33,
+          "end_line": 97,
+          "score": -2.737908363342285
+        },
+        {
+          "file_path": "tests/test_api.py",
+          "symbol": "index_repository",
+          "start_line": 16,
+          "end_line": 18,
+          "score": -2.9689788818359375
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "index_repository",
+          "start_line": 78,
+          "end_line": 127,
+          "score": -3.6164629459381104
+        }
+      ]
+    },
+    {
+      "query": "Where is Qdrant persistence implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "vector_store/qdrant_store.py"
+      ],
+      "expected_symbols": [
+        "QdrantStore"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 13
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.25,
+        "ndcg": 0.43067655807339306
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "ndcg": 0.5
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.083333,
+        "ndcg": 0.069323
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_qdrant_insert.py",
+          "symbol": "test_qdrant_insert.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -4.354691505432129
+        },
+        {
+          "file_path": "tests/test_qdrant_search.py",
+          "symbol": "test_qdrant_search.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -4.452888011932373
+        },
+        {
+          "file_path": "tests/test_qdrant_store.py",
+          "symbol": "test_qdrant_store.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -4.757203102111816
+        },
+        {
+          "file_path": "vector_store/qdrant_store.py",
+          "symbol": "QdrantStore",
+          "start_line": 17,
+          "end_line": 160,
+          "score": -5.037222862243652
+        },
+        {
+          "file_path": "scripts/semantic_search_demo.py",
+          "symbol": "main",
+          "start_line": 6,
+          "end_line": 90,
+          "score": -5.654496192932129
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "tests/test_qdrant_insert.py",
+          "symbol": "test_qdrant_insert.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.8997926712036133
+        },
+        {
+          "file_path": "tests/test_qdrant_search.py",
+          "symbol": "test_qdrant_search.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -3.9484825134277344
+        },
+        {
+          "file_path": "vector_store/qdrant_store.py",
+          "symbol": "QdrantStore",
+          "start_line": 17,
+          "end_line": 160,
+          "score": -4.194711685180664
+        },
+        {
+          "file_path": "scripts/semantic_search_demo.py",
+          "symbol": "main",
+          "start_line": 6,
+          "end_line": 90,
+          "score": -4.773406982421875
+        },
+        {
+          "file_path": "tests/test_qdrant_store.py",
+          "symbol": "test_qdrant_store.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -4.88916015625
+        }
+      ]
+    },
+    {
+      "query": "Where is source-code parsing performed?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "parser/core_parser.py"
+      ],
+      "expected_symbols": [
+        "parse_source_code"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 20,
+        "after_deduplication": 14
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "parser/core_parser.py",
+          "symbol": "parse_source_code",
+          "start_line": 72,
+          "end_line": 151,
+          "score": -4.176769256591797
+        },
+        {
+          "file_path": "tests/run_parser.py",
+          "symbol": "tests/run_parser.py",
+          "start_line": 1,
+          "end_line": 21,
+          "score": -5.155643939971924
+        },
+        {
+          "file_path": "graph/retrieval.py",
+          "symbol": "GraphRetriever",
+          "start_line": 11,
+          "end_line": 319,
+          "score": -6.468884468078613
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": -7.878286361694336
+        },
+        {
+          "file_path": "parser/models.py",
+          "symbol": "ParsedFile",
+          "start_line": 17,
+          "end_line": 21,
+          "score": -8.051417350769043
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "parser/core_parser.py",
+          "symbol": "parse_source_code",
+          "start_line": 72,
+          "end_line": 151,
+          "score": -3.8218917846679688
+        },
+        {
+          "file_path": "tests/run_parser.py",
+          "symbol": "tests/run_parser.py",
+          "start_line": 1,
+          "end_line": 21,
+          "score": -5.395806312561035
+        },
+        {
+          "file_path": "graph/retrieval.py",
+          "symbol": "GraphRetriever",
+          "start_line": 11,
+          "end_line": 319,
+          "score": -7.4900922775268555
+        },
+        {
+          "file_path": "parser/models.py",
+          "symbol": "ParsedFile",
+          "start_line": 17,
+          "end_line": 21,
+          "score": -7.546056747436523
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": -8.140061378479004
+        }
+      ]
+    },
+    {
+      "query": "Where is repository cloning implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "ingestion/repository.py"
+      ],
+      "expected_symbols": [
+        "clone_repository"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 15
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "ingestion/repository.py",
+          "symbol": "clone_repository",
+          "start_line": 5,
+          "end_line": 29,
+          "score": -1.6948730945587158
+        },
+        {
+          "file_path": "tests/test_repository.py",
+          "symbol": "test_clone_repository",
+          "start_line": 6,
+          "end_line": 18,
+          "score": -5.038374900817871
+        },
+        {
+          "file_path": "ingestion/main.py",
+          "symbol": "ingest_repository",
+          "start_line": 9,
+          "end_line": 65,
+          "score": -5.812587738037109
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": -8.273866653442383
+        },
+        {
+          "file_path": "graph/repository.py",
+          "symbol": "GraphRepositoryManager",
+          "start_line": 5,
+          "end_line": 40,
+          "score": -8.980562210083008
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "ingestion/repository.py",
+          "symbol": "clone_repository",
+          "start_line": 5,
+          "end_line": 29,
+          "score": -2.238785743713379
+        },
+        {
+          "file_path": "tests/test_repository.py",
+          "symbol": "test_clone_repository",
+          "start_line": 6,
+          "end_line": 18,
+          "score": -5.699282646179199
+        },
+        {
+          "file_path": "ingestion/main.py",
+          "symbol": "ingest_repository",
+          "start_line": 9,
+          "end_line": 65,
+          "score": -6.104848861694336
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": -8.558584213256836
+        },
+        {
+          "file_path": "graph/repository.py",
+          "symbol": "GraphRepositoryManager",
+          "start_line": 5,
+          "end_line": 40,
+          "score": -8.865426063537598
+        }
+      ]
+    },
+    {
+      "query": "Where is graph retrieval implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "graph/retrieval.py"
+      ],
+      "expected_symbols": [
+        "GraphRetriever"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 11
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.25,
+        "ndcg": 0.43067655807339306
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.75,
+        "ndcg": 0.569323
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_hybrid.py",
+          "symbol": "graph_search",
+          "start_line": 35,
+          "end_line": 43,
+          "score": -2.614567518234253
+        },
+        {
+          "file_path": "tests/test_hybrid_end_to_end.py",
+          "symbol": "graph_search",
+          "start_line": 50,
+          "end_line": 62,
+          "score": -2.867223024368286
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "graph_search",
+          "start_line": 51,
+          "end_line": 63,
+          "score": -2.867223024368286
+        },
+        {
+          "file_path": "graph/retrieval.py",
+          "symbol": "graph_search",
+          "start_line": 231,
+          "end_line": 252,
+          "score": -3.732879638671875
+        },
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "as_retrievers",
+          "start_line": 173,
+          "end_line": 198,
+          "score": -4.782631874084473
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "graph/retrieval.py",
+          "symbol": "graph_search",
+          "start_line": 231,
+          "end_line": 252,
+          "score": -0.6003639698028564
+        },
+        {
+          "file_path": "tests/test_hybrid.py",
+          "symbol": "graph_search",
+          "start_line": 35,
+          "end_line": 43,
+          "score": -3.5038809776306152
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "graph_search",
+          "start_line": 51,
+          "end_line": 63,
+          "score": -3.585864543914795
+        },
+        {
+          "file_path": "tests/test_hybrid_end_to_end.py",
+          "symbol": "graph_search",
+          "start_line": 50,
+          "end_line": 62,
+          "score": -3.8663747310638428
+        },
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "as_retrievers",
+          "start_line": 173,
+          "end_line": 198,
+          "score": -5.31311559677124
+        }
+      ]
+    },
+    {
+      "query": "Where is graph grounding implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "graph/grounding.py"
+      ],
+      "expected_symbols": [
+        "GraphGroundingService"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 18
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "ndcg": 0.5
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "ndcg": 0.5
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "evaluation/graph_benchmark.py",
+          "symbol": "__init__",
+          "start_line": 17,
+          "end_line": 19,
+          "score": -1.2307500839233398
+        },
+        {
+          "file_path": "tests/test_graph_grounding_integration.py",
+          "symbol": "test_graph_grounding_into_context_builder",
+          "start_line": 7,
+          "end_line": 62,
+          "score": -1.2806150913238525
+        },
+        {
+          "file_path": "graph/grounding.py",
+          "symbol": "GraphGroundingService",
+          "start_line": 9,
+          "end_line": 78,
+          "score": -6.009765148162842
+        },
+        {
+          "file_path": "graph/path.py",
+          "symbol": "GraphPathFinder",
+          "start_line": 6,
+          "end_line": 95,
+          "score": -7.376718521118164
+        },
+        {
+          "file_path": "graph/retrieval.py",
+          "symbol": "GraphRetriever",
+          "start_line": 11,
+          "end_line": 319,
+          "score": -8.916474342346191
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "tests/test_graph_grounding_integration.py",
+          "symbol": "test_graph_grounding_into_context_builder",
+          "start_line": 7,
+          "end_line": 62,
+          "score": -1.1865531206130981
+        },
+        {
+          "file_path": "evaluation/graph_benchmark.py",
+          "symbol": "__init__",
+          "start_line": 17,
+          "end_line": 19,
+          "score": -1.475420594215393
+        },
+        {
+          "file_path": "graph/grounding.py",
+          "symbol": "GraphGroundingService",
+          "start_line": 9,
+          "end_line": 78,
+          "score": -1.7921295166015625
+        },
+        {
+          "file_path": "graph/path.py",
+          "symbol": "GraphPathFinder",
+          "start_line": 6,
+          "end_line": 95,
+          "score": -7.800423622131348
+        },
+        {
+          "file_path": "graph/context.py",
+          "symbol": "GraphContextExtractor",
+          "start_line": 5,
+          "end_line": 74,
+          "score": -8.992554664611816
+        }
+      ]
+    },
+    {
+      "query": "Where is Neo4j persistence implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "graph/neo4j_store.py"
+      ],
+      "expected_symbols": [
+        "Neo4jStore"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 14
+      },
+      "status_by_ndcg": "regressed",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "ndcg": 0.5
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": -0.166667,
+        "ndcg": -0.13093
+      },
+      "original_top_results": [
+        {
+          "file_path": "evaluation/neo4j_benchmark.py",
+          "symbol": "neo4j_benchmark.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -1.337465763092041
+        },
+        {
+          "file_path": "graph/neo4j_store.py",
+          "symbol": "Neo4jStore",
+          "start_line": 6,
+          "end_line": 63,
+          "score": -3.224064588546753
+        },
+        {
+          "file_path": "tests/test_live_neo4j.py",
+          "symbol": "test_live_neo4j_pipeline",
+          "start_line": 14,
+          "end_line": 67,
+          "score": -3.524956226348877
+        },
+        {
+          "file_path": "tests/test_graph_persistence.py",
+          "symbol": "test_neo4j_store_uses_queryable_node_label_and_repository_metadata",
+          "start_line": 24,
+          "end_line": 48,
+          "score": -4.392155170440674
+        },
+        {
+          "file_path": "graph/health.py",
+          "symbol": "check_graph_health",
+          "start_line": 4,
+          "end_line": 34,
+          "score": -5.222796440124512
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "evaluation/neo4j_benchmark.py",
+          "symbol": "neo4j_benchmark.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -0.10326603055000305
+        },
+        {
+          "file_path": "tests/test_graph_persistence.py",
+          "symbol": "test_neo4j_store_uses_queryable_node_label_and_repository_metadata",
+          "start_line": 24,
+          "end_line": 48,
+          "score": -0.37417930364608765
+        },
+        {
+          "file_path": "graph/neo4j_store.py",
+          "symbol": "Neo4jStore",
+          "start_line": 6,
+          "end_line": 63,
+          "score": -2.9355032444000244
+        },
+        {
+          "file_path": "tests/test_live_neo4j.py",
+          "symbol": "test_live_neo4j_pipeline",
+          "start_line": 14,
+          "end_line": 67,
+          "score": -3.5729498863220215
+        },
+        {
+          "file_path": "graph/health.py",
+          "symbol": "check_graph_health",
+          "start_line": 4,
+          "end_line": 34,
+          "score": -5.61769962310791
+        }
+      ]
+    },
+    {
+      "query": "Where are graph queries defined?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "graph/queries.py"
+      ],
+      "expected_symbols": [
+        "GraphQueries"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 15
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "ndcg": 0.5
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.666667,
+        "ndcg": 0.5
+      },
+      "original_top_results": [
+        {
+          "file_path": "evaluation/entity_resolution.py",
+          "symbol": "__init__",
+          "start_line": 8,
+          "end_line": 9,
+          "score": 1.543657898902893
+        },
+        {
+          "file_path": "graph/__init__.py",
+          "symbol": "graph/__init__.py",
+          "start_line": 1,
+          "end_line": 38,
+          "score": -2.05499005317688
+        },
+        {
+          "file_path": "graph/queries.py",
+          "symbol": "GraphQueries",
+          "start_line": 6,
+          "end_line": 203,
+          "score": -2.3784303665161133
+        },
+        {
+          "file_path": "tests/test_hybrid_end_to_end.py",
+          "symbol": "graph_search",
+          "start_line": 50,
+          "end_line": 62,
+          "score": -2.584728240966797
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "graph_search",
+          "start_line": 51,
+          "end_line": 63,
+          "score": -2.584728240966797
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "graph/queries.py",
+          "symbol": "GraphQueries",
+          "start_line": 6,
+          "end_line": 203,
+          "score": -1.0794411897659302
+        },
+        {
+          "file_path": "evaluation/entity_resolution.py",
+          "symbol": "__init__",
+          "start_line": 8,
+          "end_line": 9,
+          "score": -1.9193748235702515
+        },
+        {
+          "file_path": "graph/__init__.py",
+          "symbol": "graph/__init__.py",
+          "start_line": 1,
+          "end_line": 38,
+          "score": -2.523559808731079
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "graph_search",
+          "start_line": 51,
+          "end_line": 63,
+          "score": -3.7089695930480957
+        },
+        {
+          "file_path": "tests/test_hybrid.py",
+          "symbol": "graph_search",
+          "start_line": 35,
+          "end_line": 43,
+          "score": -4.004816055297852
+        }
+      ]
+    },
+    {
+      "query": "Where are graph health checks implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "graph/health.py"
+      ],
+      "expected_symbols": [],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 19
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.36907
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_graph_health.py",
+          "symbol": "test_graph_health_healthy",
+          "start_line": 5,
+          "end_line": 18,
+          "score": -2.4639577865600586
+        },
+        {
+          "file_path": "graph/health.py",
+          "symbol": "check_graph_health",
+          "start_line": 5,
+          "end_line": 35,
+          "score": -3.221127510070801
+        },
+        {
+          "file_path": "evaluation/citation_validation.py",
+          "symbol": "GraphCitationValidator",
+          "start_line": 5,
+          "end_line": 56,
+          "score": -8.42514419555664
+        },
+        {
+          "file_path": "server/app.py",
+          "symbol": "health",
+          "start_line": 60,
+          "end_line": 62,
+          "score": -9.341480255126953
+        },
+        {
+          "file_path": "evaluation/graph_benchmark.py",
+          "symbol": "GraphBenchmark",
+          "start_line": 14,
+          "end_line": 77,
+          "score": -9.540874481201172
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "graph/health.py",
+          "symbol": "check_graph_health",
+          "start_line": 5,
+          "end_line": 35,
+          "score": -1.7109382152557373
+        },
+        {
+          "file_path": "tests/test_graph_health.py",
+          "symbol": "test_graph_health_healthy",
+          "start_line": 5,
+          "end_line": 18,
+          "score": -2.3573527336120605
+        },
+        {
+          "file_path": "evaluation/citation_validation.py",
+          "symbol": "GraphCitationValidator",
+          "start_line": 5,
+          "end_line": 56,
+          "score": -8.41562271118164
+        },
+        {
+          "file_path": "backend\\app\\main.py",
+          "symbol": "health_check",
+          "start_line": 56,
+          "end_line": 61,
+          "score": -8.73466968536377
+        },
+        {
+          "file_path": "server/app.py",
+          "symbol": "health",
+          "start_line": 60,
+          "end_line": 62,
+          "score": -9.49215316772461
+        }
+      ]
+    },
+    {
+      "query": "Where is repository-level graph management implemented?",
+      "query_type": "implementation_lookup",
+      "expected_files": [
+        "graph/repository.py"
+      ],
+      "expected_symbols": [],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 13
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "graph/repository.py",
+          "symbol": "GraphRepositoryManager",
+          "start_line": 5,
+          "end_line": 40,
+          "score": -3.7372961044311523
+        },
+        {
+          "file_path": "graph/retrieval.py",
+          "symbol": "GraphRetriever",
+          "start_line": 11,
+          "end_line": 319,
+          "score": -4.519684791564941
+        },
+        {
+          "file_path": "graph/queries.py",
+          "symbol": "graph_search",
+          "start_line": 186,
+          "end_line": 203,
+          "score": -5.806420803070068
+        },
+        {
+          "file_path": "graph/builder.py",
+          "symbol": "GraphBuilder",
+          "start_line": 7,
+          "end_line": 120,
+          "score": -5.809185028076172
+        },
+        {
+          "file_path": "graph/evidence.py",
+          "symbol": "GraphEvidence",
+          "start_line": 19,
+          "end_line": 30,
+          "score": -6.649910926818848
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "graph/repository.py",
+          "symbol": "GraphRepositoryManager",
+          "start_line": 5,
+          "end_line": 40,
+          "score": -3.362436294555664
+        },
+        {
+          "file_path": "graph/retrieval.py",
+          "symbol": "GraphRetriever",
+          "start_line": 11,
+          "end_line": 319,
+          "score": -5.478363037109375
+        },
+        {
+          "file_path": "graph/queries.py",
+          "symbol": "graph_search",
+          "start_line": 186,
+          "end_line": 203,
+          "score": -5.75972843170166
+        },
+        {
+          "file_path": "graph/builder.py",
+          "symbol": "GraphBuilder",
+          "start_line": 7,
+          "end_line": 120,
+          "score": -5.842044830322266
+        },
+        {
+          "file_path": "graph/evidence.py",
+          "symbol": "GraphEvidence",
+          "start_line": 19,
+          "end_line": 30,
+          "score": -6.937409400939941
+        }
+      ]
+    },
+    {
+      "query": "What component combines dense and lexical retrieval?",
+      "query_type": "conceptual",
+      "expected_files": [
+        "retrieval/hybrid.py"
+      ],
+      "expected_symbols": [
+        "HybridRetriever"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "HybridRetriever",
+          "start_line": 14,
+          "end_line": 88,
+          "score": 1.528965950012207
+        },
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "dense_bm25",
+          "start_line": 52,
+          "end_line": 73,
+          "score": -0.022644303739070892
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "retrieval/hybrid.py",
+          "symbol": "HybridRetriever",
+          "start_line": 14,
+          "end_line": 88,
+          "score": 1.4950783252716064
+        },
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "_dense_search",
+          "start_line": 0,
+          "end_line": 0,
+          "score": 0.25978976488113403
+        }
+      ]
+    },
+    {
+      "query": "What is the purpose of RRF in the retrieval pipeline?",
+      "query_type": "conceptual",
+      "expected_files": [
+        "retrieval/rrf.py",
+        "retrieval/hybrid.py"
+      ],
+      "expected_symbols": [],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "hybrid_rrf",
+          "start_line": 103,
+          "end_line": 127,
+          "score": 4.153736114501953
+        },
+        {
+          "file_path": "evaluation/benchmark_runner.py",
+          "symbol": "_retrieval_config",
+          "start_line": 536,
+          "end_line": 566,
+          "score": 1.7766505479812622
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "test_pipeline_respects_custom_rrf_k",
+          "start_line": 189,
+          "end_line": 206,
+          "score": 1.7705776691436768
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "evaluation/service_retriever.py",
+          "symbol": "hybrid_rrf",
+          "start_line": 103,
+          "end_line": 127,
+          "score": 3.616668701171875
+        },
+        {
+          "file_path": "retrieval/config.py",
+          "symbol": "RetrievalConfig",
+          "start_line": 5,
+          "end_line": 27,
+          "score": 1.2850209474563599
+        },
+        {
+          "file_path": "tests/test_pipeline.py",
+          "symbol": "test_pipeline_respects_custom_rrf_k",
+          "start_line": 189,
+          "end_line": 206,
+          "score": 0.9047056436538696
+        },
+        {
+          "file_path": "evaluation/benchmark_runner.py",
+          "symbol": "_retrieval_config",
+          "start_line": 561,
+          "end_line": 591,
+          "score": 0.7296509146690369
+        }
+      ]
+    },
+    {
+      "query": "What does the context builder control?",
+      "query_type": "conceptual",
+      "expected_files": [
+        "generation/context.py"
+      ],
+      "expected_symbols": [
+        "ContextBuilder"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_context_builder.py",
+          "symbol": "test_context_builder_preserves_rank_order",
+          "start_line": 26,
+          "end_line": 44,
+          "score": 1.095224380493164
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "__init__",
+          "start_line": 27,
+          "end_line": 37,
+          "score": 1.0091267824172974
+        },
+        {
+          "file_path": "tests/test_prompt_builder.py",
+          "symbol": "test_prompt_handles_empty_context",
+          "start_line": 71,
+          "end_line": 81,
+          "score": 0.9663196206092834
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "tests/test_context_builder.py",
+          "symbol": "test_context_builder_preserves_rank_order",
+          "start_line": 26,
+          "end_line": 44,
+          "score": 0.862173318862915
+        },
+        {
+          "file_path": "tests/test_prompt_builder.py",
+          "symbol": "test_prompt_handles_empty_context",
+          "start_line": 71,
+          "end_line": 81,
+          "score": 0.7070619463920593
+        }
+      ]
+    },
+    {
+      "query": "What does the application service orchestrate?",
+      "query_type": "conceptual",
+      "expected_files": [
+        "application/service.py"
+      ],
+      "expected_symbols": [
+        "CodeGraphRAGService"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6309297535714575
+      },
+      "metric_deltas": {
+        "hit_rate": 1.0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.63093
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_citation_metrics.py",
+          "symbol": "make_context",
+          "start_line": 25,
+          "end_line": 32,
+          "score": -5.221165180206299
+        },
+        {
+          "file_path": "tests/test_generation_metrics.py",
+          "symbol": "test_answer_relevance",
+          "start_line": 37,
+          "end_line": 44,
+          "score": -5.2933030128479
+        },
+        {
+          "file_path": "application/__init__.py",
+          "symbol": "application/__init__.py",
+          "start_line": 1,
+          "end_line": 4,
+          "score": -6.7090654373168945
+        },
+        {
+          "file_path": "api/main.py",
+          "symbol": "create_app",
+          "start_line": 20,
+          "end_line": 65,
+          "score": -8.428375244140625
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "tests/test_generation_metrics.py",
+          "symbol": "test_context_relevance",
+          "start_line": 56,
+          "end_line": 66,
+          "score": -7.152132034301758
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "service.py",
+          "start_line": 0,
+          "end_line": 0,
+          "score": -8.015157699584961
+        }
+      ]
+    },
+    {
+      "query": "Which component provides grounded answers?",
+      "query_type": "functional",
+      "expected_files": [
+        "generation/generator.py",
+        "application/service.py"
+      ],
+      "expected_symbols": [
+        "AnswerGenerator",
+        "CodeGraphRAGService"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 26,
+        "after_deduplication": 26
+      },
+      "status_by_ndcg": "improved",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6934264036172708
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0,
+        "ndcg": 1.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.306574
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_openai_llm.py",
+          "symbol": "test_openai_llm_uses_responses_api_client",
+          "start_line": 18,
+          "end_line": 20,
+          "score": 0.2120783030986786
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "answer",
+          "start_line": 156,
+          "end_line": 169,
+          "score": 0.17525865137577057
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 39,
+          "end_line": 71,
+          "score": -1.0361528396606445
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": -1.6762795448303223
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "application/service.py",
+          "symbol": "answer",
+          "start_line": 156,
+          "end_line": 169,
+          "score": 0.07787799090147018
+        },
+        {
+          "file_path": "generation/generator.py",
+          "symbol": "answer_query",
+          "start_line": 39,
+          "end_line": 71,
+          "score": -1.3719278573989868
+        },
+        {
+          "file_path": "tests/test_openai_llm.py",
+          "symbol": "test_openai_llm_uses_responses_api_client",
+          "start_line": 18,
+          "end_line": 20,
+          "score": -1.4397082328796387
+        },
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": -2.3912487030029297
+        }
+      ]
+    },
+    {
+      "query": "How are code search results represented?",
+      "query_type": "conceptual",
+      "expected_files": [
+        "retrieval/models.py"
+      ],
+      "expected_symbols": [
+        "RetrievalResult"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "tests/test_search.py",
+          "symbol": "test_search_code",
+          "start_line": 43,
+          "end_line": 60,
+          "score": 0.4141107499599457
+        },
+        {
+          "file_path": "retrieval/bm25.py",
+          "symbol": "search_bm25",
+          "start_line": 220,
+          "end_line": 264,
+          "score": -2.3870341777801514
+        },
+        {
+          "file_path": "api/main.py",
+          "symbol": "search",
+          "start_line": 47,
+          "end_line": 52,
+          "score": -2.5397777557373047
+        },
+        {
+          "file_path": "retrieval/search.py",
+          "symbol": "search_code",
+          "start_line": 6,
+          "end_line": 62,
+          "score": -2.770082473754883
+        },
+        {
+          "file_path": "vector_store/qdrant_store.py",
+          "symbol": "search",
+          "start_line": 84,
+          "end_line": 160,
+          "score": -2.876596450805664
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "tests/test_search.py",
+          "symbol": "test_search_code",
+          "start_line": 43,
+          "end_line": 60,
+          "score": 0.47965818643569946
+        },
+        {
+          "file_path": "api/main.py",
+          "symbol": "search",
+          "start_line": 47,
+          "end_line": 52,
+          "score": -0.429435133934021
+        },
+        {
+          "file_path": "retrieval/search.py",
+          "symbol": "search_code",
+          "start_line": 6,
+          "end_line": 62,
+          "score": -1.174515724182129
+        },
+        {
+          "file_path": "retrieval/bm25.py",
+          "symbol": "search_bm25",
+          "start_line": 220,
+          "end_line": 264,
+          "score": -2.14237642288208
+        },
+        {
+          "file_path": "vector_store/qdrant_store.py",
+          "symbol": "search",
+          "start_line": 84,
+          "end_line": 160,
+          "score": -2.1483068466186523
+        }
+      ]
+    },
+    {
+      "query": "Which component stores code embeddings?",
+      "query_type": "functional",
+      "expected_files": [
+        "vector_store/qdrant_store.py"
+      ],
+      "expected_symbols": [
+        "QdrantStore"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "unchanged",
+      "original_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0,
+        "ndcg": 0.0
+      },
+      "original_top_results": [
+        {
+          "file_path": "vector_store/indexer.py",
+          "symbol": "index_chunks",
+          "start_line": 5,
+          "end_line": 35,
+          "score": 2.831519365310669
+        },
+        {
+          "file_path": "embeddings/embedder.py",
+          "symbol": "embed",
+          "start_line": 11,
+          "end_line": 20,
+          "score": -0.040096186101436615
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "CodeGraphRAGService",
+          "start_line": 46,
+          "end_line": 169,
+          "score": -0.7278141975402832
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "vector_store/indexer.py",
+          "symbol": "index_chunks",
+          "start_line": 5,
+          "end_line": 35,
+          "score": 3.2051775455474854
+        },
+        {
+          "file_path": "embeddings/embedder.py",
+          "symbol": "embed",
+          "start_line": 11,
+          "end_line": 20,
+          "score": 1.3711743354797363
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "CodeGraphRAGService",
+          "start_line": 46,
+          "end_line": 169,
+          "score": -1.2899972200393677
+        }
+      ]
+    },
+    {
+      "query": "How does the system expose repository indexing?",
+      "query_type": "functional",
+      "expected_files": [
+        "api/main.py",
+        "application/service.py"
+      ],
+      "expected_symbols": [
+        "create_app",
+        "CodeGraphRAGService.index_repository"
+      ],
+      "candidate_counts": {
+        "before_deduplication": 30,
+        "after_deduplication": 30
+      },
+      "status_by_ndcg": "regressed",
+      "original_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.6934264036172708
+      },
+      "metadata_aware_metrics": {
+        "hit_rate": 1.0,
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "reciprocal_rank": 0.5,
+        "ndcg": 0.38685280723454163
+      },
+      "metric_deltas": {
+        "hit_rate": 0.0,
+        "precision": -0.166667,
+        "recall": -0.5,
+        "reciprocal_rank": 0.0,
+        "ndcg": -0.306574
+      },
+      "original_top_results": [
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": 1.3038119077682495
+        },
+        {
+          "file_path": "api/main.py",
+          "symbol": "index_repository",
+          "start_line": 37,
+          "end_line": 45,
+          "score": -0.3159202039241791
+        },
+        {
+          "file_path": "application/service.py",
+          "symbol": "index_repository",
+          "start_line": 78,
+          "end_line": 127,
+          "score": -1.1349760293960571
+        },
+        {
+          "file_path": "vector_store/repository_indexer.py",
+          "symbol": "index_repository_files",
+          "start_line": 7,
+          "end_line": 29,
+          "score": -1.2180451154708862
+        }
+      ],
+      "metadata_aware_top_results": [
+        {
+          "file_path": "generation/prompt.py",
+          "symbol": "PromptBuilder",
+          "start_line": 6,
+          "end_line": 77,
+          "score": -0.07417979836463928
+        },
+        {
+          "file_path": "api/main.py",
+          "symbol": "index_repository",
+          "start_line": 37,
+          "end_line": 45,
+          "score": -0.08396251499652863
+        },
+        {
+          "file_path": "vector_store/repository_indexer.py",
+          "symbol": "index_repository_files",
+          "start_line": 7,
+          "end_line": 29,
+          "score": -0.9811069369316101
+        }
+      ]
+    }
+  ]
+}

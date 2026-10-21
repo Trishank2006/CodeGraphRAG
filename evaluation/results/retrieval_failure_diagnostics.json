@@ -1,0 +1,3910 @@
+{
+  "dataset_size": 31,
+  "top_k": 5,
+  "candidate_count_comparison": {
+    "10": [
+      {
+        "query": "Where is the repository indexing pipeline implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "CodeGraphRAGService.index_repository"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": -3.3309223651885986
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -4.06287145614624
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:api/main.py:37:45",
+            "score": -4.520807266235352
+          },
+          {
+            "file_path": "tests/test_api.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_api.py:16:18",
+            "score": -5.188436031341553
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "_require_index",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:function:_require_index",
+            "score": -5.485428333282471
+          }
+        ]
+      },
+      {
+        "query": "Where is the REST API application created?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "api/main.py"
+        ],
+        "expected_symbols": [
+          "create_app"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/dataset.py",
+            "symbol": "create_default_dataset",
+            "id": "CodeGraphRAG-benchmark:evaluation/dataset.py:36:344",
+            "score": 1.490760326385498
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:create_app",
+            "score": -0.27010947465896606
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "CodeGraphRAG-benchmark:api/main.py:21:66",
+            "score": -0.2712559103965759
+          },
+          {
+            "file_path": "api/__init__.py",
+            "symbol": "api/__init__.py",
+            "id": "CodeGraphRAG-benchmark:api/__init__.py:1:3",
+            "score": -4.801487922668457
+          },
+          {
+            "file_path": "api/__init__.py",
+            "symbol": "api.main",
+            "id": "repo:CodeGraphRAG-benchmark:module:api.main",
+            "score": -4.801487922668457
+          }
+        ]
+      },
+      {
+        "query": "Where is the CLI entry point defined?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "cli.py"
+        ],
+        "expected_symbols": [
+          "main"
+        ],
+        "results": [
+          {
+            "file_path": "run_pipeline.py",
+            "symbol": "run_pipeline.py",
+            "id": "CodeGraphRAG-benchmark:run_pipeline.py:1:7",
+            "score": 2.6181416511535645
+          },
+          {
+            "file_path": "run_pipeline.py",
+            "symbol": "cli",
+            "id": "repo:CodeGraphRAG-benchmark:module:cli",
+            "score": 2.6181416511535645
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:595:782",
+            "score": -9.05957317352295
+          },
+          {
+            "file_path": "application/config.py",
+            "symbol": "from_environment",
+            "id": "CodeGraphRAG-benchmark:application/config.py:24:39",
+            "score": -9.172916412353516
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "openai_client.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/openai_client.py",
+            "score": -11.225757598876953
+          }
+        ]
+      },
+      {
+        "query": "Where is hybrid retrieval configured?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/config.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "create_hybrid_retriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:91:103",
+            "score": 3.0933384895324707
+          },
+          {
+            "file_path": "retrieval/pipeline.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:retrieval/pipeline.py:43:62",
+            "score": 0.10788093507289886
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:162:181",
+            "score": -0.73148512840271
+          },
+          {
+            "file_path": "retrieval/pipeline.py",
+            "symbol": "HybridRetrievalPipeline",
+            "id": "CodeGraphRAG-benchmark:retrieval/pipeline.py:10:62",
+            "score": -1.4348245859146118
+          },
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": -1.882845163345337
+          }
+        ]
+      },
+      {
+        "query": "Where is BM25 retrieval implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/bm25.py"
+        ],
+        "expected_symbols": [
+          "BM25Retriever"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_hybrid.py",
+            "symbol": "make_bm25",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid.py:46:74",
+            "score": 2.6208090782165527
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "bm25",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:28:33",
+            "score": 2.208432197570801
+          },
+          {
+            "file_path": "tests/test_bm25.py",
+            "symbol": "test_bm25_returns_retrieval_results",
+            "id": "CodeGraphRAG-benchmark:tests/test_bm25.py:77:87",
+            "score": 1.7098679542541504
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense_bm25",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:84:89",
+            "score": 0.30559343099594116
+          },
+          {
+            "file_path": "retrieval/bm25.py",
+            "symbol": "search_bm25",
+            "id": "CodeGraphRAG-benchmark:retrieval/bm25.py:220:264",
+            "score": 0.051761444658041
+          }
+        ]
+      },
+      {
+        "query": "Where is reciprocal rank fusion implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/rrf.py"
+        ],
+        "expected_symbols": [
+          "reciprocal_rank_fusion"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/rrf.py",
+            "symbol": "reciprocal_rank_fusion",
+            "id": "CodeGraphRAG-benchmark:retrieval/rrf.py:42:108",
+            "score": 1.9766910076141357
+          },
+          {
+            "file_path": "tests/test_rrf.py",
+            "symbol": "test_rrf_combines_rank_scores",
+            "id": "CodeGraphRAG-benchmark:tests/test_rrf.py:20:37",
+            "score": -2.267235279083252
+          },
+          {
+            "file_path": "tests/test_evaluation_metrics.py",
+            "symbol": "test_reciprocal_rank",
+            "id": "CodeGraphRAG-benchmark:tests/test_evaluation_metrics.py:37:41",
+            "score": -3.827592372894287
+          },
+          {
+            "file_path": "evaluation/retrieval_metrics.py",
+            "symbol": "reciprocal_rank",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/retrieval_metrics.py:function:reciprocal_rank",
+            "score": -3.9238805770874023
+          },
+          {
+            "file_path": "evaluation/retrieval_metrics.py",
+            "symbol": "reciprocal_rank",
+            "id": "CodeGraphRAG-benchmark:evaluation/retrieval_metrics.py:65:79",
+            "score": -3.9959640502929688
+          }
+        ]
+      },
+      {
+        "query": "Where is the cross-encoder reranker implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/reranker.py"
+        ],
+        "expected_symbols": [
+          "CrossEncoderReranker"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "CrossEncoderReranker",
+            "id": "CodeGraphRAG-benchmark:retrieval/reranker.py:9:90",
+            "score": 2.8512372970581055
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "reranker.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:retrieval/reranker.py",
+            "score": 2.676673173904419
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "rerank_results",
+            "id": "CodeGraphRAG-benchmark:retrieval/reranker.py:93:112",
+            "score": 2.1035165786743164
+          },
+          {
+            "file_path": "tests/test_reranker.py",
+            "symbol": "test_reranker_sorts_by_cross_encoder_score",
+            "id": "CodeGraphRAG-benchmark:tests/test_reranker.py:36:57",
+            "score": 1.9145094156265259
+          },
+          {
+            "file_path": "tests/test_pipeline.py",
+            "symbol": "test_pipeline_applies_reranker",
+            "id": "CodeGraphRAG-benchmark:tests/test_pipeline.py:123:149",
+            "score": -0.0036175698041915894
+          }
+        ]
+      },
+      {
+        "query": "Where is the context builder implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/context.py"
+        ],
+        "expected_symbols": [
+          "ContextBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": -0.3066609501838684
+          },
+          {
+            "file_path": "generation/context.py",
+            "symbol": "ContextBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/context.py:32:183",
+            "score": -1.408881664276123
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_includes_graph_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:148:190",
+            "score": -2.368831157684326
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "_build_context_text",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:43:77",
+            "score": -2.57871150970459
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "build_report",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:function:build_report",
+            "score": -5.575470924377441
+          }
+        ]
+      },
+      {
+        "query": "Where is the prompt builder implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/prompt.py"
+        ],
+        "expected_symbols": [
+          "PromptBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_contains_grounding_instructions",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:61:68",
+            "score": 1.2561945915222168
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": -0.0165792778134346
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "repo:CodeGraphRAG-benchmark:generation/generator.py:function:answer_query",
+            "score": -0.7185451984405518
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "prompt.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/prompt.py",
+            "score": -2.3279104232788086
+          },
+          {
+            "file_path": "generation/context.py",
+            "symbol": "ContextBuilder",
+            "id": "repo:CodeGraphRAG-benchmark:generation/context.py:class:ContextBuilder",
+            "score": -8.700443267822266
+          }
+        ]
+      },
+      {
+        "query": "Where is the LLM abstraction defined?",
+        "query_type": "symbol_lookup",
+        "expected_files": [
+          "generation/llm.py"
+        ],
+        "expected_symbols": [
+          "LLMClient"
+        ],
+        "results": [
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "llm.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/llm.py",
+            "score": -3.6980788707733154
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "MockLLM",
+            "id": "repo:CodeGraphRAG-benchmark:generation/llm.py:class:MockLLM",
+            "score": -3.7493669986724854
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "MockLLM",
+            "id": "CodeGraphRAG-benchmark:generation/llm.py:28:44",
+            "score": -3.875303268432617
+          },
+          {
+            "file_path": "tests/test_openai_llm.py",
+            "symbol": "test_openai_llm_uses_responses_api_client",
+            "id": "CodeGraphRAG-benchmark:tests/test_openai_llm.py:18:20",
+            "score": -4.618402481079102
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "LLMClient",
+            "id": "repo:CodeGraphRAG-benchmark:generation/llm.py:class:LLMClient",
+            "score": -5.019486904144287
+          }
+        ]
+      },
+      {
+        "query": "Where is the OpenAI LLM provider implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/openai_client.py"
+        ],
+        "expected_symbols": [
+          "OpenAILLM"
+        ],
+        "results": [
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "openai_client.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/openai_client.py",
+            "score": 1.4101673364639282
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "OpenAILLM",
+            "id": "CodeGraphRAG-benchmark:generation/openai_client.py:14:81",
+            "score": 1.2794950008392334
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:generation/openai_client.py:21:52",
+            "score": 0.07597187161445618
+          },
+          {
+            "file_path": "tests/test_openai_llm.py",
+            "symbol": "test_openai_llm_uses_responses_api_client",
+            "id": "CodeGraphRAG-benchmark:tests/test_openai_llm.py:18:20",
+            "score": -2.2890782356262207
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "llm.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/llm.py",
+            "score": -3.9433140754699707
+          }
+        ]
+      },
+      {
+        "query": "Where is answer generation orchestrated?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/generator.py"
+        ],
+        "expected_symbols": [
+          "AnswerGenerator"
+        ],
+        "results": [
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:108:123",
+            "score": -4.92955207824707
+          },
+          {
+            "file_path": "evaluation/generation_metrics.py",
+            "symbol": "generation_metrics",
+            "id": "CodeGraphRAG-benchmark:evaluation/generation_metrics.py:93:104",
+            "score": -6.797144412994385
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "generation.context",
+            "id": "repo:CodeGraphRAG-benchmark:module:generation.context",
+            "score": -6.881907939910889
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "answer",
+            "id": "CodeGraphRAG-benchmark:application/service.py:156:169",
+            "score": -9.506089210510254
+          },
+          {
+            "file_path": "tests/test_citations.py",
+            "symbol": "make_generator",
+            "id": "CodeGraphRAG-benchmark:tests/test_citations.py:38:44",
+            "score": -9.998069763183594
+          }
+        ]
+      },
+      {
+        "query": "Where are generated-answer citations represented?",
+        "query_type": "symbol_lookup",
+        "expected_files": [
+          "generation/models.py"
+        ],
+        "expected_symbols": [
+          "Citation"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_generation_models.py",
+            "symbol": "test_generated_answer",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_models.py:64:78",
+            "score": 2.905742645263672
+          },
+          {
+            "file_path": "generation/models.py",
+            "symbol": "GeneratedAnswer",
+            "id": "CodeGraphRAG-benchmark:generation/models.py:37:41",
+            "score": 2.2185983657836914
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:39:71",
+            "score": 2.070683240890503
+          },
+          {
+            "file_path": "tests/test_generation_models.py",
+            "symbol": "test_default_generated_answer_has_no_citations",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_models.py:90:95",
+            "score": 1.9648150205612183
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "AnswerGenerator",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:19:105",
+            "score": 0.21360710263252258
+          }
+        ]
+      },
+      {
+        "query": "Where is the repository indexer implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "vector_store/repository_indexer.py"
+        ],
+        "expected_symbols": [
+          "index_repository_files"
+        ],
+        "results": [
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -0.7379746437072754
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:api/main.py:37:45",
+            "score": -0.9578859806060791
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "RepositoryNotIndexedError",
+            "id": "CodeGraphRAG-benchmark:application/service.py:32:33",
+            "score": -1.7314648628234863
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "_require_index",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:function:_require_index",
+            "score": -2.4618613719940186
+          },
+          {
+            "file_path": "tests/test_api.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_api.py:16:18",
+            "score": -2.7638280391693115
+          }
+        ]
+      },
+      {
+        "query": "Where is Qdrant persistence implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "vector_store/qdrant_store.py"
+        ],
+        "expected_symbols": [
+          "QdrantStore"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_qdrant_insert.py",
+            "symbol": "test_qdrant_insert.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_insert.py",
+            "score": -4.354691505432129
+          },
+          {
+            "file_path": "tests/test_qdrant_search.py",
+            "symbol": "test_qdrant_search.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_search.py",
+            "score": -4.452888011932373
+          },
+          {
+            "file_path": "tests/test_qdrant_store.py",
+            "symbol": "test_qdrant_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_store.py",
+            "score": -4.757203102111816
+          },
+          {
+            "file_path": "vector_store/qdrant_store.py",
+            "symbol": "QdrantStore",
+            "id": "CodeGraphRAG-benchmark:vector_store/qdrant_store.py:19:191",
+            "score": -4.770007133483887
+          },
+          {
+            "file_path": "vector_store/qdrant_store.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:vector_store/qdrant_store.py:20:28",
+            "score": -5.66340446472168
+          }
+        ]
+      },
+      {
+        "query": "Where is source-code parsing performed?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "parser/core_parser.py"
+        ],
+        "expected_symbols": [
+          "parse_source_code"
+        ],
+        "results": [
+          {
+            "file_path": "parser/core_parser.py",
+            "symbol": "parse_source_code",
+            "id": "CodeGraphRAG-benchmark:parser/core_parser.py:72:151",
+            "score": -4.176769256591797
+          },
+          {
+            "file_path": "tests/run_parser.py",
+            "symbol": "tests/run_parser.py",
+            "id": "CodeGraphRAG-benchmark:tests/run_parser.py:1:21",
+            "score": -5.155643939971924
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -6.468884468078613
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "PromptBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:6:77",
+            "score": -7.878286361694336
+          },
+          {
+            "file_path": "parser/models.py",
+            "symbol": "ParsedFile",
+            "id": "CodeGraphRAG-benchmark:parser/models.py:17:21",
+            "score": -8.051417350769043
+          }
+        ]
+      },
+      {
+        "query": "Where is repository cloning implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "ingestion/repository.py"
+        ],
+        "expected_symbols": [
+          "clone_repository"
+        ],
+        "results": [
+          {
+            "file_path": "ingestion/repository.py",
+            "symbol": "clone_repository",
+            "id": "CodeGraphRAG-benchmark:ingestion/repository.py:5:29",
+            "score": -1.6948730945587158
+          },
+          {
+            "file_path": "tests/test_repository.py",
+            "symbol": "test_clone_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_repository.py:6:18",
+            "score": -5.038374900817871
+          },
+          {
+            "file_path": "ingestion/main.py",
+            "symbol": "ingest_repository",
+            "id": "CodeGraphRAG-benchmark:ingestion/main.py:9:65",
+            "score": -5.812587738037109
+          },
+          {
+            "file_path": "graph/repository.py",
+            "symbol": "GraphRepositoryManager",
+            "id": "CodeGraphRAG-benchmark:graph/repository.py:5:40",
+            "score": -8.980562210083008
+          },
+          {
+            "file_path": "graph/neo4j_store.py",
+            "symbol": "replace_repository",
+            "id": "CodeGraphRAG-benchmark:graph/neo4j_store.py:108:149",
+            "score": -9.544601440429688
+          }
+        ]
+      },
+      {
+        "query": "Where is graph retrieval implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/retrieval.py"
+        ],
+        "expected_symbols": [
+          "GraphRetriever"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_hybrid.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid.py:35:43",
+            "score": -2.614567518234253
+          },
+          {
+            "file_path": "tests/test_pipeline.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_pipeline.py:51:63",
+            "score": -2.867223024368286
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:50:62",
+            "score": -2.8672232627868652
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:function:main",
+            "score": -4.334036827087402
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:322:352",
+            "score": -4.431660175323486
+          }
+        ]
+      },
+      {
+        "query": "Where is graph grounding implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/grounding.py"
+        ],
+        "expected_symbols": [
+          "GraphGroundingService"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:17:19",
+            "score": -1.2307498455047607
+          },
+          {
+            "file_path": "tests/test_graph_grounding_integration.py",
+            "symbol": "test_graph_grounding_into_context_builder",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_grounding_integration.py:7:62",
+            "score": -1.2806150913238525
+          },
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "GraphBenchmark",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:14:77",
+            "score": -1.5716062784194946
+          },
+          {
+            "file_path": "graph/grounding.py",
+            "symbol": "GraphGroundingService",
+            "id": "CodeGraphRAG-benchmark:graph/grounding.py:9:78",
+            "score": -6.009765148162842
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:class:CodeGraphRAGService",
+            "score": -9.966608047485352
+          }
+        ]
+      },
+      {
+        "query": "Where is Neo4j persistence implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/neo4j_store.py"
+        ],
+        "expected_symbols": [
+          "Neo4jStore"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/neo4j_benchmark.py",
+            "symbol": "neo4j_benchmark.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:evaluation/neo4j_benchmark.py",
+            "score": -1.337465763092041
+          },
+          {
+            "file_path": "graph/neo4j_store.py",
+            "symbol": "neo4j_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:graph/neo4j_store.py",
+            "score": -2.6828455924987793
+          },
+          {
+            "file_path": "graph/neo4j_store.py",
+            "symbol": "Neo4jStore",
+            "id": "CodeGraphRAG-benchmark:graph/neo4j_store.py:9:188",
+            "score": -3.2640023231506348
+          },
+          {
+            "file_path": "tests/test_live_neo4j.py",
+            "symbol": "test_live_neo4j_pipeline",
+            "id": "CodeGraphRAG-benchmark:tests/test_live_neo4j.py:14:67",
+            "score": -3.524956226348877
+          },
+          {
+            "file_path": "tests/test_graph_persistence.py",
+            "symbol": "test_graph_persistence.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_graph_persistence.py",
+            "score": -3.681173324584961
+          }
+        ]
+      },
+      {
+        "query": "Where are graph queries defined?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/queries.py"
+        ],
+        "expected_symbols": [
+          "GraphQueries"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/entity_resolution.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:evaluation/entity_resolution.py:8:9",
+            "score": 1.543657898902893
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:50:62",
+            "score": -2.584728240966797
+          },
+          {
+            "file_path": "tests/test_pipeline.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_pipeline.py:51:63",
+            "score": -2.584728240966797
+          },
+          {
+            "file_path": "tests/test_hybrid.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid.py:35:43",
+            "score": -2.6249470710754395
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:322:352",
+            "score": -5.495311260223389
+          }
+        ]
+      },
+      {
+        "query": "Where are graph health checks implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/health.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "tests/test_graph_health.py",
+            "symbol": "test_graph_health_healthy",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_health.py:5:18",
+            "score": -2.4639577865600586
+          },
+          {
+            "file_path": "tests/test_graph_health.py",
+            "symbol": "test_graph_health_connection_failure",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_health.py:21:28",
+            "score": -3.070387363433838
+          },
+          {
+            "file_path": "graph/health.py",
+            "symbol": "check_graph_health",
+            "id": "CodeGraphRAG-benchmark:graph/health.py:5:35",
+            "score": -3.221127510070801
+          },
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "GraphBenchmark",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:14:77",
+            "score": -9.540874481201172
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:class:CodeGraphRAGService",
+            "score": -10.273446083068848
+          }
+        ]
+      },
+      {
+        "query": "Where is repository-level graph management implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/repository.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "graph/repository.py",
+            "symbol": "GraphRepositoryManager",
+            "id": "CodeGraphRAG-benchmark:graph/repository.py:5:40",
+            "score": -3.7372961044311523
+          },
+          {
+            "file_path": "graph/queries.py",
+            "symbol": "GraphQueries",
+            "id": "CodeGraphRAG-benchmark:graph/queries.py:8:418",
+            "score": -4.378698825836182
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -4.519684791564941
+          },
+          {
+            "file_path": "graph/queries.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:graph/queries.py:381:418",
+            "score": -5.87657356262207
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:function:index_repository",
+            "score": -5.878934860229492
+          }
+        ]
+      },
+      {
+        "query": "What component combines dense and lexical retrieval?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/hybrid.py"
+        ],
+        "expected_symbols": [
+          "HybridRetriever"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:24:26",
+            "score": -0.6260685324668884
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/service_retriever.py:function:dense",
+            "score": -0.7429096698760986
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "_dense_search",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:35:46",
+            "score": -0.9524966478347778
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "_dense_search",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/service_retriever.py:function:_dense_search",
+            "score": -0.9834553003311157
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense_bm25",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/service_retriever.py:function:dense_bm25",
+            "score": -1.6771626472473145
+          }
+        ]
+      },
+      {
+        "query": "What is the purpose of RRF in the retrieval pipeline?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/rrf.py",
+          "retrieval/hybrid.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "_retrieval_config",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:562:592",
+            "score": 1.7766505479812622
+          },
+          {
+            "file_path": "tests/test_pipeline.py",
+            "symbol": "test_pipeline_respects_custom_rrf_k",
+            "id": "CodeGraphRAG-benchmark:tests/test_pipeline.py:189:206",
+            "score": 1.7705775499343872
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "_retrieval_config",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:function:_retrieval_config",
+            "score": 1.7686803340911865
+          },
+          {
+            "file_path": "retrieval/config.py",
+            "symbol": "RetrievalConfig",
+            "id": "CodeGraphRAG-benchmark:retrieval/config.py:5:27",
+            "score": 1.7609820365905762
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "_hybrid_pipeline",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/service_retriever.py:function:_hybrid_pipeline",
+            "score": -2.263793468475342
+          }
+        ]
+      },
+      {
+        "query": "What does the context builder control?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "generation/context.py"
+        ],
+        "expected_symbols": [
+          "ContextBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_handles_empty_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:71:81",
+            "score": 0.9663196802139282
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_deduplicates_by_id",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:47:64",
+            "score": 0.8364336490631104
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": 0.316389262676239
+          },
+          {
+            "file_path": "generation/context.py",
+            "symbol": "ContextBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/context.py:32:183",
+            "score": -1.0647106170654297
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_includes_graph_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:148:190",
+            "score": -1.2386181354522705
+          }
+        ]
+      },
+      {
+        "query": "What does the application service orchestrate?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "CodeGraphRAGService"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_citation_metrics.py",
+            "symbol": "make_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_citation_metrics.py:25:32",
+            "score": -5.221165180206299
+          },
+          {
+            "file_path": "application/__init__.py",
+            "symbol": "application/__init__.py",
+            "id": "CodeGraphRAG-benchmark:application/__init__.py:1:4",
+            "score": -6.7090654373168945
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:create_app",
+            "score": -8.428375244140625
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "CodeGraphRAG-benchmark:api/main.py:21:66",
+            "score": -8.429544448852539
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:class:CodeGraphRAGService",
+            "score": -10.367607116699219
+          }
+        ]
+      },
+      {
+        "query": "Which component provides grounded answers?",
+        "query_type": "functional",
+        "expected_files": [
+          "generation/generator.py",
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "AnswerGenerator",
+          "CodeGraphRAGService"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_openai_llm.py",
+            "symbol": "test_openai_llm_uses_responses_api_client",
+            "id": "CodeGraphRAG-benchmark:tests/test_openai_llm.py:18:20",
+            "score": 0.21207833290100098
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "answer",
+            "id": "CodeGraphRAG-benchmark:application/service.py:156:169",
+            "score": 0.17525865137577057
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:39:71",
+            "score": -1.0361528396606445
+          },
+          {
+            "file_path": "tests/test_generator.py",
+            "symbol": "test_answer_query_passes_grounded_prompt_to_llm",
+            "id": "repo:CodeGraphRAG-benchmark:tests/test_generator.py:function:test_answer_query_passes_grounded_prompt_to_llm",
+            "score": -4.744205474853516
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "answer_query",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:answer_query",
+            "score": -10.38627815246582
+          }
+        ]
+      },
+      {
+        "query": "How are code search results represented?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/models.py"
+        ],
+        "expected_symbols": [
+          "RetrievalResult"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_search.py",
+            "symbol": "test_search_code",
+            "id": "CodeGraphRAG-benchmark:tests/test_search.py:43:60",
+            "score": 0.4141107499599457
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "search",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:search",
+            "score": -2.5397777557373047
+          },
+          {
+            "file_path": "retrieval/search.py",
+            "symbol": "search_code",
+            "id": "CodeGraphRAG-benchmark:retrieval/search.py:6:62",
+            "score": -2.770082473754883
+          },
+          {
+            "file_path": "vector_store/qdrant_store.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:vector_store/qdrant_store.py:110:187",
+            "score": -2.9197452068328857
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:create_app",
+            "score": -4.8478899002075195
+          }
+        ]
+      },
+      {
+        "query": "Which component stores code embeddings?",
+        "query_type": "functional",
+        "expected_files": [
+          "vector_store/qdrant_store.py"
+        ],
+        "expected_symbols": [
+          "QdrantStore"
+        ],
+        "results": [
+          {
+            "file_path": "vector_store/indexer.py",
+            "symbol": "index_chunks",
+            "id": "CodeGraphRAG-benchmark:vector_store/indexer.py:5:35",
+            "score": 2.831519365310669
+          },
+          {
+            "file_path": "embeddings/embedder.py",
+            "symbol": "embed",
+            "id": "CodeGraphRAG-benchmark:embeddings/embedder.py:11:20",
+            "score": -0.04009611904621124
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "CodeGraphRAG-benchmark:application/service.py:46:169",
+            "score": -0.7278141975402832
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:class:CodeGraphRAGService",
+            "score": -0.7278141975402832
+          },
+          {
+            "file_path": "embeddings/embedder.py",
+            "symbol": "CodeEmbedder",
+            "id": "CodeGraphRAG-benchmark:embeddings/embedder.py:7:31",
+            "score": -0.7903778553009033
+          }
+        ]
+      },
+      {
+        "query": "How does the system expose repository indexing?",
+        "query_type": "functional",
+        "expected_files": [
+          "api/main.py",
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "create_app",
+          "CodeGraphRAGService.index_repository"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": 0.5959595441818237
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:api/main.py:37:45",
+            "score": -0.3159202039241791
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -0.3377976417541504
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:application/service.py:78:127",
+            "score": -1.1349760293960571
+          },
+          {
+            "file_path": "tests/test_api.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_api.py:16:18",
+            "score": -1.6299185752868652
+          }
+        ]
+      }
+    ],
+    "20": [
+      {
+        "query": "Where is the repository indexing pipeline implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "CodeGraphRAGService.index_repository"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/dataset.py",
+            "symbol": "create_default_dataset",
+            "id": "CodeGraphRAG-benchmark:evaluation/dataset.py:36:344",
+            "score": 6.292280673980713
+          },
+          {
+            "file_path": "vector_store/repository_indexer.py",
+            "symbol": "index_repository_files",
+            "id": "CodeGraphRAG-benchmark:vector_store/repository_indexer.py:8:29",
+            "score": -1.0242726802825928
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": -3.3309223651885986
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:function:main",
+            "score": -3.3309223651885986
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -4.06287145614624
+          }
+        ]
+      },
+      {
+        "query": "Where is the REST API application created?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "api/main.py"
+        ],
+        "expected_symbols": [
+          "create_app"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/dataset.py",
+            "symbol": "create_default_dataset",
+            "id": "CodeGraphRAG-benchmark:evaluation/dataset.py:36:344",
+            "score": 1.490760326385498
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:create_app",
+            "score": -0.27010947465896606
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "CodeGraphRAG-benchmark:api/main.py:21:66",
+            "score": -0.2712559103965759
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "fastapi",
+            "id": "repo:CodeGraphRAG-benchmark:module:fastapi",
+            "score": -4.451047897338867
+          },
+          {
+            "file_path": "tests/test_retrieval_benchmark.py",
+            "symbol": "make_dataset",
+            "id": "CodeGraphRAG-benchmark:tests/test_retrieval_benchmark.py:8:31",
+            "score": -4.614235877990723
+          }
+        ]
+      },
+      {
+        "query": "Where is the CLI entry point defined?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "cli.py"
+        ],
+        "expected_symbols": [
+          "main"
+        ],
+        "results": [
+          {
+            "file_path": "run_pipeline.py",
+            "symbol": "run_pipeline.py",
+            "id": "CodeGraphRAG-benchmark:run_pipeline.py:1:7",
+            "score": 2.6181416511535645
+          },
+          {
+            "file_path": "run_pipeline.py",
+            "symbol": "cli",
+            "id": "repo:CodeGraphRAG-benchmark:module:cli",
+            "score": 2.6181416511535645
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:595:782",
+            "score": -9.05957317352295
+          },
+          {
+            "file_path": "application/config.py",
+            "symbol": "from_environment",
+            "id": "CodeGraphRAG-benchmark:application/config.py:24:39",
+            "score": -9.172916412353516
+          },
+          {
+            "file_path": "application/config.py",
+            "symbol": "ApplicationSettings",
+            "id": "CodeGraphRAG-benchmark:application/config.py:13:39",
+            "score": -10.715543746948242
+          }
+        ]
+      },
+      {
+        "query": "Where is hybrid retrieval configured?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/config.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "create_hybrid_retriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:91:103",
+            "score": 3.0933384895324707
+          },
+          {
+            "file_path": "retrieval/pipeline.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:retrieval/pipeline.py:43:62",
+            "score": 0.10788093507289886
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:162:181",
+            "score": -0.73148512840271
+          },
+          {
+            "file_path": "retrieval/pipeline.py",
+            "symbol": "HybridRetrievalPipeline",
+            "id": "CodeGraphRAG-benchmark:retrieval/pipeline.py:10:62",
+            "score": -1.4348245859146118
+          },
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": -1.882845163345337
+          }
+        ]
+      },
+      {
+        "query": "Where is BM25 retrieval implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/bm25.py"
+        ],
+        "expected_symbols": [
+          "BM25Retriever"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_hybrid.py",
+            "symbol": "make_bm25",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid.py:46:74",
+            "score": 2.6208090782165527
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "bm25",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:28:33",
+            "score": 2.2084319591522217
+          },
+          {
+            "file_path": "tests/test_bm25.py",
+            "symbol": "test_bm25_returns_retrieval_results",
+            "id": "CodeGraphRAG-benchmark:tests/test_bm25.py:77:87",
+            "score": 1.7098679542541504
+          },
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": 1.36248779296875
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense_bm25",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:84:89",
+            "score": 0.30559343099594116
+          }
+        ]
+      },
+      {
+        "query": "Where is reciprocal rank fusion implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/rrf.py"
+        ],
+        "expected_symbols": [
+          "reciprocal_rank_fusion"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/rrf.py",
+            "symbol": "reciprocal_rank_fusion",
+            "id": "CodeGraphRAG-benchmark:retrieval/rrf.py:42:108",
+            "score": 1.9766910076141357
+          },
+          {
+            "file_path": "tests/test_rrf.py",
+            "symbol": "test_rrf_is_deterministic_for_equal_scores",
+            "id": "CodeGraphRAG-benchmark:tests/test_rrf.py:73:84",
+            "score": -1.9423222541809082
+          },
+          {
+            "file_path": "tests/test_rrf.py",
+            "symbol": "test_rrf_combines_rank_scores",
+            "id": "CodeGraphRAG-benchmark:tests/test_rrf.py:20:37",
+            "score": -2.267235279083252
+          },
+          {
+            "file_path": "tests/test_rrf.py",
+            "symbol": "test_rrf_deduplicates_results_and_preserves_sources",
+            "id": "CodeGraphRAG-benchmark:tests/test_rrf.py:40:53",
+            "score": -2.5930299758911133
+          },
+          {
+            "file_path": "tests/test_evaluation_metrics.py",
+            "symbol": "test_reciprocal_rank",
+            "id": "CodeGraphRAG-benchmark:tests/test_evaluation_metrics.py:37:41",
+            "score": -3.827591896057129
+          }
+        ]
+      },
+      {
+        "query": "Where is the cross-encoder reranker implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/reranker.py"
+        ],
+        "expected_symbols": [
+          "CrossEncoderReranker"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "CrossEncoderReranker",
+            "id": "CodeGraphRAG-benchmark:retrieval/reranker.py:9:90",
+            "score": 2.8512372970581055
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "CrossEncoderReranker",
+            "id": "repo:CodeGraphRAG-benchmark:retrieval/reranker.py:class:CrossEncoderReranker",
+            "score": 2.8431501388549805
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "reranker.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:retrieval/reranker.py",
+            "score": 2.676673173904419
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "rerank_results",
+            "id": "CodeGraphRAG-benchmark:retrieval/reranker.py:93:112",
+            "score": 2.1035163402557373
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "rerank_results",
+            "id": "repo:CodeGraphRAG-benchmark:retrieval/reranker.py:function:rerank_results",
+            "score": 2.0689191818237305
+          }
+        ]
+      },
+      {
+        "query": "Where is the context builder implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/context.py"
+        ],
+        "expected_symbols": [
+          "ContextBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_deduplicates_identical_code",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:67:81",
+            "score": 2.1930735111236572
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": -0.3066609501838684
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:27:37",
+            "score": -0.4185624122619629
+          },
+          {
+            "file_path": "generation/context.py",
+            "symbol": "ContextBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/context.py:32:183",
+            "score": -1.408881664276123
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "PromptBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:6:77",
+            "score": -2.3121211528778076
+          }
+        ]
+      },
+      {
+        "query": "Where is the prompt builder implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/prompt.py"
+        ],
+        "expected_symbols": [
+          "PromptBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_contains_grounding_instructions",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:61:68",
+            "score": 1.2561945915222168
+          },
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_contains_user_query",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:26:31",
+            "score": 0.7225048542022705
+          },
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_does_not_require_citation_imports",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:93:104",
+            "score": 0.0434948205947876
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": -0.0165792778134346
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "repo:CodeGraphRAG-benchmark:generation/generator.py:function:answer_query",
+            "score": -0.7185451984405518
+          }
+        ]
+      },
+      {
+        "query": "Where is the LLM abstraction defined?",
+        "query_type": "symbol_lookup",
+        "expected_files": [
+          "generation/llm.py"
+        ],
+        "expected_symbols": [
+          "LLMClient"
+        ],
+        "results": [
+          {
+            "file_path": "generation/models.py",
+            "symbol": "ContextItem",
+            "id": "CodeGraphRAG-benchmark:generation/models.py:15:24",
+            "score": -3.210151195526123
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "llm.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/llm.py",
+            "score": -3.6980788707733154
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "LLMError",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:LLMError",
+            "score": -3.6980788707733154
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "MockLLM",
+            "id": "repo:CodeGraphRAG-benchmark:generation/llm.py:class:MockLLM",
+            "score": -3.7493669986724854
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "MockLLM",
+            "id": "CodeGraphRAG-benchmark:generation/llm.py:28:44",
+            "score": -3.875303268432617
+          }
+        ]
+      },
+      {
+        "query": "Where is the OpenAI LLM provider implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/openai_client.py"
+        ],
+        "expected_symbols": [
+          "OpenAILLM"
+        ],
+        "results": [
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "openai_client.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/openai_client.py",
+            "score": 1.4101673364639282
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "OpenAILLM",
+            "id": "CodeGraphRAG-benchmark:generation/openai_client.py:14:81",
+            "score": 1.2794950008392334
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "OpenAILLM",
+            "id": "repo:CodeGraphRAG-benchmark:generation/openai_client.py:class:OpenAILLM",
+            "score": 1.2794950008392334
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:generation/openai_client.py:21:52",
+            "score": 0.07597187161445618
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "__init__",
+            "id": "repo:CodeGraphRAG-benchmark:generation/openai_client.py:function:__init__",
+            "score": 0.03537934646010399
+          }
+        ]
+      },
+      {
+        "query": "Where is answer generation orchestrated?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/generator.py"
+        ],
+        "expected_symbols": [
+          "AnswerGenerator"
+        ],
+        "results": [
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "AnswerGenerator",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:19:105",
+            "score": -3.780569553375244
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:108:123",
+            "score": -4.92955207824707
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "run_generation_benchmark",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:105:178",
+            "score": -5.6714019775390625
+          },
+          {
+            "file_path": "evaluation/generation_metrics.py",
+            "symbol": "generation_metrics",
+            "id": "CodeGraphRAG-benchmark:evaluation/generation_metrics.py:93:104",
+            "score": -6.797144412994385
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "generation.context",
+            "id": "repo:CodeGraphRAG-benchmark:module:generation.context",
+            "score": -6.881907939910889
+          }
+        ]
+      },
+      {
+        "query": "Where are generated-answer citations represented?",
+        "query_type": "symbol_lookup",
+        "expected_files": [
+          "generation/models.py"
+        ],
+        "expected_symbols": [
+          "Citation"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_generation_models.py",
+            "symbol": "test_generated_answer",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_models.py:64:78",
+            "score": 2.905742645263672
+          },
+          {
+            "file_path": "generation/models.py",
+            "symbol": "GeneratedAnswer",
+            "id": "CodeGraphRAG-benchmark:generation/models.py:37:41",
+            "score": 2.2185983657836914
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:39:71",
+            "score": 2.070683240890503
+          },
+          {
+            "file_path": "tests/test_generation_models.py",
+            "symbol": "test_default_generated_answer_has_no_citations",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_models.py:90:95",
+            "score": 1.9648151397705078
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "AnswerGenerator",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:19:105",
+            "score": 0.21360710263252258
+          }
+        ]
+      },
+      {
+        "query": "Where is the repository indexer implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "vector_store/repository_indexer.py"
+        ],
+        "expected_symbols": [
+          "index_repository_files"
+        ],
+        "results": [
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -0.7379746437072754
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:api/main.py:37:45",
+            "score": -0.9578859806060791
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "_require_index",
+            "id": "CodeGraphRAG-benchmark:application/service.py:129:133",
+            "score": -1.410749912261963
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "RepositoryNotIndexedError",
+            "id": "CodeGraphRAG-benchmark:application/service.py:32:33",
+            "score": -1.7314648628234863
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "IndexRequest",
+            "id": "CodeGraphRAG-benchmark:api/main.py:12:14",
+            "score": -2.270766496658325
+          }
+        ]
+      },
+      {
+        "query": "Where is Qdrant persistence implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "vector_store/qdrant_store.py"
+        ],
+        "expected_symbols": [
+          "QdrantStore"
+        ],
+        "results": [
+          {
+            "file_path": "vector_store/qdrant_store.py",
+            "symbol": "qdrant_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:vector_store/qdrant_store.py",
+            "score": -3.495068073272705
+          },
+          {
+            "file_path": "tests/test_qdrant_insert.py",
+            "symbol": "test_qdrant_insert.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_insert.py",
+            "score": -4.354691505432129
+          },
+          {
+            "file_path": "tests/test_qdrant_search.py",
+            "symbol": "test_qdrant_search.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_search.py",
+            "score": -4.452888011932373
+          },
+          {
+            "file_path": "tests/test_qdrant_store.py",
+            "symbol": "test_qdrant_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_store.py",
+            "score": -4.757203102111816
+          },
+          {
+            "file_path": "tests/test_qdrant_store.py",
+            "symbol": "qdrant_client",
+            "id": "repo:CodeGraphRAG-benchmark:module:qdrant_client",
+            "score": -4.757203102111816
+          }
+        ]
+      },
+      {
+        "query": "Where is source-code parsing performed?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "parser/core_parser.py"
+        ],
+        "expected_symbols": [
+          "parse_source_code"
+        ],
+        "results": [
+          {
+            "file_path": "parser/core_parser.py",
+            "symbol": "parse_source_code",
+            "id": "CodeGraphRAG-benchmark:parser/core_parser.py:72:151",
+            "score": -4.176769256591797
+          },
+          {
+            "file_path": "tests/run_parser.py",
+            "symbol": "tests/run_parser.py",
+            "id": "CodeGraphRAG-benchmark:tests/run_parser.py:1:21",
+            "score": -5.155643939971924
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "CodeGraphRAG-benchmark:application/service.py:46:169",
+            "score": -6.042257308959961
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -6.468884468078613
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": -6.4903435707092285
+          }
+        ]
+      },
+      {
+        "query": "Where is repository cloning implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "ingestion/repository.py"
+        ],
+        "expected_symbols": [
+          "clone_repository"
+        ],
+        "results": [
+          {
+            "file_path": "ingestion/repository.py",
+            "symbol": "clone_repository",
+            "id": "CodeGraphRAG-benchmark:ingestion/repository.py:5:29",
+            "score": -1.6948730945587158
+          },
+          {
+            "file_path": "tests/test_repository.py",
+            "symbol": "test_clone_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_repository.py:6:18",
+            "score": -5.038374900817871
+          },
+          {
+            "file_path": "ingestion/main.py",
+            "symbol": "ingest_repository",
+            "id": "CodeGraphRAG-benchmark:ingestion/main.py:9:65",
+            "score": -5.812587738037109
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "PromptBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:6:77",
+            "score": -8.273866653442383
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:function:main",
+            "score": -8.724910736083984
+          }
+        ]
+      },
+      {
+        "query": "Where is graph retrieval implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/retrieval.py"
+        ],
+        "expected_symbols": [
+          "GraphRetriever"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:34:88",
+            "score": -0.5712798833847046
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -0.9650359153747559
+          },
+          {
+            "file_path": "tests/test_hybrid.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid.py:35:43",
+            "score": -2.614567756652832
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:application/service.py:135:154",
+            "score": -2.741698741912842
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:50:62",
+            "score": -2.8672232627868652
+          }
+        ]
+      },
+      {
+        "query": "Where is graph grounding implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/grounding.py"
+        ],
+        "expected_symbols": [
+          "GraphGroundingService"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:17:19",
+            "score": -1.2307500839233398
+          },
+          {
+            "file_path": "tests/test_graph_grounding_integration.py",
+            "symbol": "test_graph_grounding_into_context_builder",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_grounding_integration.py:7:62",
+            "score": -1.2806150913238525
+          },
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "GraphBenchmark",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:14:77",
+            "score": -1.5716062784194946
+          },
+          {
+            "file_path": "graph/grounding.py",
+            "symbol": "GraphGroundingService",
+            "id": "CodeGraphRAG-benchmark:graph/grounding.py:9:78",
+            "score": -6.009765148162842
+          },
+          {
+            "file_path": "graph/path.py",
+            "symbol": "GraphPathFinder",
+            "id": "CodeGraphRAG-benchmark:graph/path.py:6:95",
+            "score": -7.376718521118164
+          }
+        ]
+      },
+      {
+        "query": "Where is Neo4j persistence implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/neo4j_store.py"
+        ],
+        "expected_symbols": [
+          "Neo4jStore"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/neo4j_benchmark.py",
+            "symbol": "neo4j_benchmark.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:evaluation/neo4j_benchmark.py",
+            "score": -1.337465763092041
+          },
+          {
+            "file_path": "tests/test_live_neo4j.py",
+            "symbol": "test_live_neo4j.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_live_neo4j.py",
+            "score": -2.4948134422302246
+          },
+          {
+            "file_path": "graph/neo4j_store.py",
+            "symbol": "neo4j_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:graph/neo4j_store.py",
+            "score": -2.6828455924987793
+          },
+          {
+            "file_path": "graph/grounding.py",
+            "symbol": "GraphGroundingService",
+            "id": "CodeGraphRAG-benchmark:graph/grounding.py:9:78",
+            "score": -2.8747687339782715
+          },
+          {
+            "file_path": "graph/neo4j_store.py",
+            "symbol": "Neo4jStore",
+            "id": "CodeGraphRAG-benchmark:graph/neo4j_store.py:9:188",
+            "score": -3.2640023231506348
+          }
+        ]
+      },
+      {
+        "query": "Where are graph queries defined?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/queries.py"
+        ],
+        "expected_symbols": [
+          "GraphQueries"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/entity_resolution.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:evaluation/entity_resolution.py:8:9",
+            "score": 1.543657898902893
+          },
+          {
+            "file_path": "graph/queries.py",
+            "symbol": "GraphQueries",
+            "id": "CodeGraphRAG-benchmark:graph/queries.py:8:418",
+            "score": -1.272944450378418
+          },
+          {
+            "file_path": "graph/__init__.py",
+            "symbol": "graph/__init__.py",
+            "id": "CodeGraphRAG-benchmark:graph/__init__.py:1:38",
+            "score": -2.05499005317688
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:50:62",
+            "score": -2.584728240966797
+          },
+          {
+            "file_path": "tests/test_pipeline.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_pipeline.py:51:63",
+            "score": -2.584728240966797
+          }
+        ]
+      },
+      {
+        "query": "Where are graph health checks implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/health.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "tests/test_graph_health.py",
+            "symbol": "test_graph_health_healthy",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_health.py:5:18",
+            "score": -2.4639577865600586
+          },
+          {
+            "file_path": "tests/test_graph_health.py",
+            "symbol": "test_graph_health_connection_failure",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_health.py:21:28",
+            "score": -3.070387363433838
+          },
+          {
+            "file_path": "graph/health.py",
+            "symbol": "check_graph_health",
+            "id": "CodeGraphRAG-benchmark:graph/health.py:5:35",
+            "score": -3.221127510070801
+          },
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "GraphBenchmark",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:14:77",
+            "score": -9.540874481201172
+          },
+          {
+            "file_path": "temp_test_repo/backend/app/main.py",
+            "symbol": "health_check",
+            "id": "CodeGraphRAG-benchmark:temp_test_repo/backend/app/main.py:56:61",
+            "score": -10.096780776977539
+          }
+        ]
+      },
+      {
+        "query": "Where is repository-level graph management implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/repository.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "graph/repository.py",
+            "symbol": "GraphRepositoryManager",
+            "id": "CodeGraphRAG-benchmark:graph/repository.py:5:40",
+            "score": -3.7372961044311523
+          },
+          {
+            "file_path": "graph/queries.py",
+            "symbol": "GraphQueries",
+            "id": "CodeGraphRAG-benchmark:graph/queries.py:8:418",
+            "score": -4.378698825836182
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -4.519684791564941
+          },
+          {
+            "file_path": "graph/queries.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:graph/queries.py:381:418",
+            "score": -5.87657356262207
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:function:index_repository",
+            "score": -5.878934860229492
+          }
+        ]
+      },
+      {
+        "query": "What component combines dense and lexical retrieval?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/hybrid.py"
+        ],
+        "expected_symbols": [
+          "HybridRetriever"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": 1.528965950012207
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "_dense_search",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:_dense_search",
+            "score": -0.5403148531913757
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "_hybrid_pipeline",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:_hybrid_pipeline",
+            "score": -0.5403148531913757
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:24:26",
+            "score": -0.6260685920715332
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/service_retriever.py:function:dense",
+            "score": -0.7429097890853882
+          }
+        ]
+      },
+      {
+        "query": "What is the purpose of RRF in the retrieval pipeline?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/rrf.py",
+          "retrieval/hybrid.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "_retrieval_config",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:562:592",
+            "score": 1.7766505479812622
+          },
+          {
+            "file_path": "tests/test_pipeline.py",
+            "symbol": "test_pipeline_respects_custom_rrf_k",
+            "id": "CodeGraphRAG-benchmark:tests/test_pipeline.py:189:206",
+            "score": 1.7705776691436768
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "_retrieval_config",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:function:_retrieval_config",
+            "score": 1.7686803340911865
+          },
+          {
+            "file_path": "retrieval/config.py",
+            "symbol": "RetrievalConfig",
+            "id": "CodeGraphRAG-benchmark:retrieval/config.py:5:27",
+            "score": 1.7609820365905762
+          },
+          {
+            "file_path": "retrieval/pipeline.py",
+            "symbol": "HybridRetrievalPipeline",
+            "id": "CodeGraphRAG-benchmark:retrieval/pipeline.py:10:62",
+            "score": 0.981701135635376
+          }
+        ]
+      },
+      {
+        "query": "What does the context builder control?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "generation/context.py"
+        ],
+        "expected_symbols": [
+          "ContextBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:27:37",
+            "score": 1.0091267824172974
+          },
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_handles_empty_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:71:81",
+            "score": 0.9663196206092834
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_deduplicates_by_id",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:47:64",
+            "score": 0.8364336490631104
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_preserves_metadata",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:121:145",
+            "score": 0.4240204691886902
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": 0.316389262676239
+          }
+        ]
+      },
+      {
+        "query": "What does the application service orchestrate?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "CodeGraphRAGService"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_citation_metrics.py",
+            "symbol": "make_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_citation_metrics.py:25:32",
+            "score": -5.221165180206299
+          },
+          {
+            "file_path": "tests/test_generation_metrics.py",
+            "symbol": "test_answer_relevance",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_metrics.py:37:44",
+            "score": -5.2933030128479
+          },
+          {
+            "file_path": "tests/test_generation_metrics.py",
+            "symbol": "test_context_relevance",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_metrics.py:56:66",
+            "score": -5.732208251953125
+          },
+          {
+            "file_path": "application/__init__.py",
+            "symbol": "application/__init__.py",
+            "id": "CodeGraphRAG-benchmark:application/__init__.py:1:4",
+            "score": -6.7090654373168945
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:create_app",
+            "score": -8.428375244140625
+          }
+        ]
+      },
+      {
+        "query": "Which component provides grounded answers?",
+        "query_type": "functional",
+        "expected_files": [
+          "generation/generator.py",
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "AnswerGenerator",
+          "CodeGraphRAGService"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_openai_llm.py",
+            "symbol": "test_openai_llm_uses_responses_api_client",
+            "id": "CodeGraphRAG-benchmark:tests/test_openai_llm.py:18:20",
+            "score": 0.2120783030986786
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "answer",
+            "id": "CodeGraphRAG-benchmark:application/service.py:156:169",
+            "score": 0.17525865137577057
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:39:71",
+            "score": -1.0361528396606445
+          },
+          {
+            "file_path": "tests/test_generator.py",
+            "symbol": "test_answer_query_passes_grounded_prompt_to_llm",
+            "id": "repo:CodeGraphRAG-benchmark:tests/test_generator.py:function:test_answer_query_passes_grounded_prompt_to_llm",
+            "score": -4.744205474853516
+          },
+          {
+            "file_path": "tests/test_generator.py",
+            "symbol": "test_answer_query_passes_grounded_prompt_to_llm",
+            "id": "CodeGraphRAG-benchmark:tests/test_generator.py:100:123",
+            "score": -4.976376533508301
+          }
+        ]
+      },
+      {
+        "query": "How are code search results represented?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/models.py"
+        ],
+        "expected_symbols": [
+          "RetrievalResult"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_search.py",
+            "symbol": "test_search_code",
+            "id": "CodeGraphRAG-benchmark:tests/test_search.py:43:60",
+            "score": 0.4141107499599457
+          },
+          {
+            "file_path": "retrieval/bm25.py",
+            "symbol": "search_bm25",
+            "id": "CodeGraphRAG-benchmark:retrieval/bm25.py:220:264",
+            "score": -2.3870341777801514
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "search",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:search",
+            "score": -2.5397777557373047
+          },
+          {
+            "file_path": "retrieval/search.py",
+            "symbol": "search_code",
+            "id": "CodeGraphRAG-benchmark:retrieval/search.py:6:62",
+            "score": -2.770082473754883
+          },
+          {
+            "file_path": "vector_store/qdrant_store.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:vector_store/qdrant_store.py:110:187",
+            "score": -2.9197452068328857
+          }
+        ]
+      },
+      {
+        "query": "Which component stores code embeddings?",
+        "query_type": "functional",
+        "expected_files": [
+          "vector_store/qdrant_store.py"
+        ],
+        "expected_symbols": [
+          "QdrantStore"
+        ],
+        "results": [
+          {
+            "file_path": "vector_store/indexer.py",
+            "symbol": "index_chunks",
+            "id": "CodeGraphRAG-benchmark:vector_store/indexer.py:5:35",
+            "score": 2.831519365310669
+          },
+          {
+            "file_path": "embeddings/embedder.py",
+            "symbol": "embed",
+            "id": "CodeGraphRAG-benchmark:embeddings/embedder.py:11:20",
+            "score": -0.040096186101436615
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "CodeGraphRAG-benchmark:application/service.py:46:169",
+            "score": -0.7278141975402832
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:class:CodeGraphRAGService",
+            "score": -0.7278141975402832
+          },
+          {
+            "file_path": "embeddings/embedder.py",
+            "symbol": "CodeEmbedder",
+            "id": "CodeGraphRAG-benchmark:embeddings/embedder.py:7:31",
+            "score": -0.7903778553009033
+          }
+        ]
+      },
+      {
+        "query": "How does the system expose repository indexing?",
+        "query_type": "functional",
+        "expected_files": [
+          "api/main.py",
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "create_app",
+          "CodeGraphRAGService.index_repository"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": 0.5959595441818237
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:function:main",
+            "score": 0.5959595441818237
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:api/main.py:37:45",
+            "score": -0.3159202039241791
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -0.3377976417541504
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:application/service.py:78:127",
+            "score": -1.1349760293960571
+          }
+        ]
+      }
+    ],
+    "30": [
+      {
+        "query": "Where is the repository indexing pipeline implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "CodeGraphRAGService.index_repository"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/dataset.py",
+            "symbol": "create_default_dataset",
+            "id": "CodeGraphRAG-benchmark:evaluation/dataset.py:36:344",
+            "score": 6.292280673980713
+          },
+          {
+            "file_path": "tests/test_live_end_to_end.py",
+            "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_live_end_to_end.py:20:39",
+            "score": 1.5940138101577759
+          },
+          {
+            "file_path": "vector_store/repository_indexer.py",
+            "symbol": "index_repository_files",
+            "id": "CodeGraphRAG-benchmark:vector_store/repository_indexer.py:8:29",
+            "score": -1.0242726802825928
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": -3.3309223651885986
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:function:main",
+            "score": -3.3309223651885986
+          }
+        ]
+      },
+      {
+        "query": "Where is the REST API application created?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "api/main.py"
+        ],
+        "expected_symbols": [
+          "create_app"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/dataset.py",
+            "symbol": "create_default_dataset",
+            "id": "CodeGraphRAG-benchmark:evaluation/dataset.py:36:344",
+            "score": 1.490760326385498
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:create_app",
+            "score": -0.27010947465896606
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "CodeGraphRAG-benchmark:api/main.py:21:66",
+            "score": -0.2712559103965759
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "fastapi",
+            "id": "repo:CodeGraphRAG-benchmark:module:fastapi",
+            "score": -4.451047897338867
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "FastAPI",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:FastAPI",
+            "score": -4.451047897338867
+          }
+        ]
+      },
+      {
+        "query": "Where is the CLI entry point defined?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "cli.py"
+        ],
+        "expected_symbols": [
+          "main"
+        ],
+        "results": [
+          {
+            "file_path": "run_pipeline.py",
+            "symbol": "run_pipeline.py",
+            "id": "CodeGraphRAG-benchmark:run_pipeline.py:1:7",
+            "score": 2.6181416511535645
+          },
+          {
+            "file_path": "run_pipeline.py",
+            "symbol": "cli",
+            "id": "repo:CodeGraphRAG-benchmark:module:cli",
+            "score": 2.6181416511535645
+          },
+          {
+            "file_path": "evaluation/dataset.py",
+            "symbol": "create_default_dataset",
+            "id": "CodeGraphRAG-benchmark:evaluation/dataset.py:36:344",
+            "score": 0.5894471406936646
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:595:782",
+            "score": -9.05957317352295
+          },
+          {
+            "file_path": "application/config.py",
+            "symbol": "from_environment",
+            "id": "CodeGraphRAG-benchmark:application/config.py:24:39",
+            "score": -9.172916412353516
+          }
+        ]
+      },
+      {
+        "query": "Where is hybrid retrieval configured?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/config.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "retrieval/config.py",
+            "symbol": "RetrievalConfig",
+            "id": "CodeGraphRAG-benchmark:retrieval/config.py:5:27",
+            "score": 3.3307583332061768
+          },
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "create_hybrid_retriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:91:103",
+            "score": 3.0933384895324707
+          },
+          {
+            "file_path": "retrieval/pipeline.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:retrieval/pipeline.py:43:62",
+            "score": 0.10788093507289886
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "ServiceRetriever",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:13:124",
+            "score": -0.6232416033744812
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "test_hybrid_end_to_end_preserves_retrieval_metadata",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:162:181",
+            "score": -0.73148512840271
+          }
+        ]
+      },
+      {
+        "query": "Where is BM25 retrieval implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/bm25.py"
+        ],
+        "expected_symbols": [
+          "BM25Retriever"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_hybrid.py",
+            "symbol": "make_bm25",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid.py:46:74",
+            "score": 2.6208090782165527
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "bm25",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:28:33",
+            "score": 2.2084319591522217
+          },
+          {
+            "file_path": "tests/test_bm25.py",
+            "symbol": "test_bm25_returns_retrieval_results",
+            "id": "CodeGraphRAG-benchmark:tests/test_bm25.py:77:87",
+            "score": 1.7098679542541504
+          },
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": 1.36248779296875
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense_bm25",
+            "id": "CodeGraphRAG-benchmark:evaluation/service_retriever.py:84:89",
+            "score": 0.30559343099594116
+          }
+        ]
+      },
+      {
+        "query": "Where is reciprocal rank fusion implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/rrf.py"
+        ],
+        "expected_symbols": [
+          "reciprocal_rank_fusion"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/rrf.py",
+            "symbol": "reciprocal_rank_fusion",
+            "id": "CodeGraphRAG-benchmark:retrieval/rrf.py:42:108",
+            "score": 1.9766910076141357
+          },
+          {
+            "file_path": "tests/test_rrf.py",
+            "symbol": "test_rrf_rejects_invalid_k",
+            "id": "CodeGraphRAG-benchmark:tests/test_rrf.py:87:92",
+            "score": -0.32997220754623413
+          },
+          {
+            "file_path": "tests/test_rrf.py",
+            "symbol": "test_rrf_rejects_invalid_top_k",
+            "id": "CodeGraphRAG-benchmark:tests/test_rrf.py:95:100",
+            "score": -0.5631487965583801
+          },
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": -1.2755250930786133
+          },
+          {
+            "file_path": "tests/test_rrf.py",
+            "symbol": "test_rrf_is_deterministic_for_equal_scores",
+            "id": "CodeGraphRAG-benchmark:tests/test_rrf.py:73:84",
+            "score": -1.9423222541809082
+          }
+        ]
+      },
+      {
+        "query": "Where is the cross-encoder reranker implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "retrieval/reranker.py"
+        ],
+        "expected_symbols": [
+          "CrossEncoderReranker"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "CrossEncoderReranker",
+            "id": "CodeGraphRAG-benchmark:retrieval/reranker.py:9:90",
+            "score": 2.8512372970581055
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "CrossEncoderReranker",
+            "id": "repo:CodeGraphRAG-benchmark:retrieval/reranker.py:class:CrossEncoderReranker",
+            "score": 2.8431501388549805
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "reranker.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:retrieval/reranker.py",
+            "score": 2.676673173904419
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "rerank_results",
+            "id": "CodeGraphRAG-benchmark:retrieval/reranker.py:93:112",
+            "score": 2.1035163402557373
+          },
+          {
+            "file_path": "retrieval/reranker.py",
+            "symbol": "rerank_results",
+            "id": "repo:CodeGraphRAG-benchmark:retrieval/reranker.py:function:rerank_results",
+            "score": 2.0689191818237305
+          }
+        ]
+      },
+      {
+        "query": "Where is the context builder implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/context.py"
+        ],
+        "expected_symbols": [
+          "ContextBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_deduplicates_identical_code",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:67:81",
+            "score": 2.1930735111236572
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": -0.3066609501838684
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:27:37",
+            "score": -0.4185624122619629
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_preserves_metadata",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:121:145",
+            "score": -0.7232198119163513
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_deduplicates_by_id",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:47:64",
+            "score": -1.0785646438598633
+          }
+        ]
+      },
+      {
+        "query": "Where is the prompt builder implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/prompt.py"
+        ],
+        "expected_symbols": [
+          "PromptBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_contains_grounding_instructions",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:61:68",
+            "score": 1.2561945915222168
+          },
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_contains_user_query",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:26:31",
+            "score": 0.7225048542022705
+          },
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_contains_retrieved_code",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:44:49",
+            "score": 0.5595149993896484
+          },
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_does_not_require_citation_imports",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:93:104",
+            "score": 0.0434948205947876
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "build_prompt",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:27:40",
+            "score": -0.0165792778134346
+          }
+        ]
+      },
+      {
+        "query": "Where is the LLM abstraction defined?",
+        "query_type": "symbol_lookup",
+        "expected_files": [
+          "generation/llm.py"
+        ],
+        "expected_symbols": [
+          "LLMClient"
+        ],
+        "results": [
+          {
+            "file_path": "generation/models.py",
+            "symbol": "ContextItem",
+            "id": "CodeGraphRAG-benchmark:generation/models.py:15:24",
+            "score": -3.210151195526123
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "llm.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/llm.py",
+            "score": -3.6980788707733154
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "LLMError",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:LLMError",
+            "score": -3.6980788707733154
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "MockLLM",
+            "id": "repo:CodeGraphRAG-benchmark:generation/llm.py:class:MockLLM",
+            "score": -3.7493669986724854
+          },
+          {
+            "file_path": "generation/llm.py",
+            "symbol": "MockLLM",
+            "id": "CodeGraphRAG-benchmark:generation/llm.py:28:44",
+            "score": -3.875303268432617
+          }
+        ]
+      },
+      {
+        "query": "Where is the OpenAI LLM provider implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/openai_client.py"
+        ],
+        "expected_symbols": [
+          "OpenAILLM"
+        ],
+        "results": [
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "openai_client.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:generation/openai_client.py",
+            "score": 1.4101673364639282
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "OpenAILLM",
+            "id": "CodeGraphRAG-benchmark:generation/openai_client.py:14:81",
+            "score": 1.2794950008392334
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "OpenAILLM",
+            "id": "repo:CodeGraphRAG-benchmark:generation/openai_client.py:class:OpenAILLM",
+            "score": 1.2794950008392334
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:generation/openai_client.py:21:52",
+            "score": 0.07597187161445618
+          },
+          {
+            "file_path": "generation/openai_client.py",
+            "symbol": "__init__",
+            "id": "repo:CodeGraphRAG-benchmark:generation/openai_client.py:function:__init__",
+            "score": 0.03537934646010399
+          }
+        ]
+      },
+      {
+        "query": "Where is answer generation orchestrated?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "generation/generator.py"
+        ],
+        "expected_symbols": [
+          "AnswerGenerator"
+        ],
+        "results": [
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "AnswerGenerator",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:19:105",
+            "score": -3.780569553375244
+          },
+          {
+            "file_path": "tests/test_live_end_to_end.py",
+            "symbol": "test_real_pipeline_indexes_and_answers_a_local_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_live_end_to_end.py:20:39",
+            "score": -4.139297008514404
+          },
+          {
+            "file_path": "tests/test_generation_metrics.py",
+            "symbol": "test_faithfulness_with_supported_answer",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_metrics.py:12:26",
+            "score": -4.495912551879883
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:108:123",
+            "score": -4.92955207824707
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "run_generation_benchmark",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:105:178",
+            "score": -5.6714019775390625
+          }
+        ]
+      },
+      {
+        "query": "Where are generated-answer citations represented?",
+        "query_type": "symbol_lookup",
+        "expected_files": [
+          "generation/models.py"
+        ],
+        "expected_symbols": [
+          "Citation"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_generation_models.py",
+            "symbol": "test_generated_answer",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_models.py:64:78",
+            "score": 2.905742645263672
+          },
+          {
+            "file_path": "generation/models.py",
+            "symbol": "GeneratedAnswer",
+            "id": "CodeGraphRAG-benchmark:generation/models.py:37:41",
+            "score": 2.2185983657836914
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:39:71",
+            "score": 2.070683240890503
+          },
+          {
+            "file_path": "tests/test_generation_models.py",
+            "symbol": "test_default_generated_answer_has_no_citations",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_models.py:90:95",
+            "score": 1.9648151397705078
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "AnswerGenerator",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:19:105",
+            "score": 0.21360662579536438
+          }
+        ]
+      },
+      {
+        "query": "Where is the repository indexer implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "vector_store/repository_indexer.py"
+        ],
+        "expected_symbols": [
+          "index_repository_files"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/dataset.py",
+            "symbol": "create_default_dataset",
+            "id": "CodeGraphRAG-benchmark:evaluation/dataset.py:36:344",
+            "score": 4.474405765533447
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -0.7379746437072754
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:api/main.py:37:45",
+            "score": -0.9578859806060791
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "_require_index",
+            "id": "CodeGraphRAG-benchmark:application/service.py:129:133",
+            "score": -1.410749912261963
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "RepositoryNotIndexedError",
+            "id": "CodeGraphRAG-benchmark:application/service.py:32:33",
+            "score": -1.7314648628234863
+          }
+        ]
+      },
+      {
+        "query": "Where is Qdrant persistence implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "vector_store/qdrant_store.py"
+        ],
+        "expected_symbols": [
+          "QdrantStore"
+        ],
+        "results": [
+          {
+            "file_path": "vector_store/qdrant_store.py",
+            "symbol": "qdrant_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:vector_store/qdrant_store.py",
+            "score": -3.495068073272705
+          },
+          {
+            "file_path": "tests/test_qdrant_insert.py",
+            "symbol": "test_qdrant_insert.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_insert.py",
+            "score": -4.354691505432129
+          },
+          {
+            "file_path": "tests/test_qdrant_search.py",
+            "symbol": "test_qdrant_search.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_search.py",
+            "score": -4.452888011932373
+          },
+          {
+            "file_path": "tests/test_qdrant_store.py",
+            "symbol": "test_qdrant_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_qdrant_store.py",
+            "score": -4.757203102111816
+          },
+          {
+            "file_path": "tests/test_qdrant_store.py",
+            "symbol": "qdrant_client",
+            "id": "repo:CodeGraphRAG-benchmark:module:qdrant_client",
+            "score": -4.757203102111816
+          }
+        ]
+      },
+      {
+        "query": "Where is source-code parsing performed?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "parser/core_parser.py"
+        ],
+        "expected_symbols": [
+          "parse_source_code"
+        ],
+        "results": [
+          {
+            "file_path": "parser/core_parser.py",
+            "symbol": "parse_source_code",
+            "id": "CodeGraphRAG-benchmark:parser/core_parser.py:72:151",
+            "score": -4.176769256591797
+          },
+          {
+            "file_path": "tests/run_parser.py",
+            "symbol": "tests/run_parser.py",
+            "id": "CodeGraphRAG-benchmark:tests/run_parser.py:1:21",
+            "score": -5.155643939971924
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "CodeGraphRAG-benchmark:application/service.py:46:169",
+            "score": -6.042257308959961
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -6.468884468078613
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": -6.4903435707092285
+          }
+        ]
+      },
+      {
+        "query": "Where is repository cloning implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "ingestion/repository.py"
+        ],
+        "expected_symbols": [
+          "clone_repository"
+        ],
+        "results": [
+          {
+            "file_path": "ingestion/repository.py",
+            "symbol": "clone_repository",
+            "id": "CodeGraphRAG-benchmark:ingestion/repository.py:5:29",
+            "score": -1.6948730945587158
+          },
+          {
+            "file_path": "tests/test_repository.py",
+            "symbol": "test_clone_repository",
+            "id": "CodeGraphRAG-benchmark:tests/test_repository.py:6:18",
+            "score": -5.038374900817871
+          },
+          {
+            "file_path": "ingestion/main.py",
+            "symbol": "ingest_repository",
+            "id": "CodeGraphRAG-benchmark:ingestion/main.py:9:65",
+            "score": -5.812587738037109
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "PromptBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:6:77",
+            "score": -8.273866653442383
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:function:main",
+            "score": -8.724910736083984
+          }
+        ]
+      },
+      {
+        "query": "Where is graph retrieval implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/retrieval.py"
+        ],
+        "expected_symbols": [
+          "GraphRetriever"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:34:88",
+            "score": -0.5712798833847046
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -0.9650359153747559
+          },
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": -2.1985273361206055
+          },
+          {
+            "file_path": "tests/test_hybrid.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid.py:35:43",
+            "score": -2.614567756652832
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:application/service.py:135:154",
+            "score": -2.741698741912842
+          }
+        ]
+      },
+      {
+        "query": "Where is graph grounding implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/grounding.py"
+        ],
+        "expected_symbols": [
+          "GraphGroundingService"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:17:19",
+            "score": -1.2307500839233398
+          },
+          {
+            "file_path": "tests/test_graph_grounding_integration.py",
+            "symbol": "test_graph_grounding_into_context_builder",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_grounding_integration.py:7:62",
+            "score": -1.2806150913238525
+          },
+          {
+            "file_path": "evaluation/graph_benchmark.py",
+            "symbol": "GraphBenchmark",
+            "id": "CodeGraphRAG-benchmark:evaluation/graph_benchmark.py:14:77",
+            "score": -1.5716062784194946
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "graph.builder",
+            "id": "repo:CodeGraphRAG-benchmark:module:graph.builder",
+            "score": -5.475132942199707
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "graph.grounding",
+            "id": "repo:CodeGraphRAG-benchmark:module:graph.grounding",
+            "score": -5.475132942199707
+          }
+        ]
+      },
+      {
+        "query": "Where is Neo4j persistence implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/neo4j_store.py"
+        ],
+        "expected_symbols": [
+          "Neo4jStore"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/neo4j_benchmark.py",
+            "symbol": "neo4j_benchmark.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:evaluation/neo4j_benchmark.py",
+            "score": -1.337465763092041
+          },
+          {
+            "file_path": "tests/test_live_neo4j.py",
+            "symbol": "test_live_neo4j.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:tests/test_live_neo4j.py",
+            "score": -2.4948134422302246
+          },
+          {
+            "file_path": "graph/neo4j_store.py",
+            "symbol": "neo4j_store.py",
+            "id": "repo:CodeGraphRAG-benchmark:file:graph/neo4j_store.py",
+            "score": -2.6828455924987793
+          },
+          {
+            "file_path": "graph/neo4j_store.py",
+            "symbol": "neo4j",
+            "id": "repo:CodeGraphRAG-benchmark:module:neo4j",
+            "score": -2.6828455924987793
+          },
+          {
+            "file_path": "graph/grounding.py",
+            "symbol": "GraphGroundingService",
+            "id": "CodeGraphRAG-benchmark:graph/grounding.py:9:78",
+            "score": -2.8747687339782715
+          }
+        ]
+      },
+      {
+        "query": "Where are graph queries defined?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/queries.py"
+        ],
+        "expected_symbols": [
+          "GraphQueries"
+        ],
+        "results": [
+          {
+            "file_path": "evaluation/entity_resolution.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:evaluation/entity_resolution.py:8:9",
+            "score": 1.543657898902893
+          },
+          {
+            "file_path": "graph/queries.py",
+            "symbol": "GraphQueries",
+            "id": "CodeGraphRAG-benchmark:graph/queries.py:8:418",
+            "score": -1.272944450378418
+          },
+          {
+            "file_path": "graph/__init__.py",
+            "symbol": "graph/__init__.py",
+            "id": "CodeGraphRAG-benchmark:graph/__init__.py:1:38",
+            "score": -2.05499005317688
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -2.1450953483581543
+          },
+          {
+            "file_path": "tests/test_hybrid_end_to_end.py",
+            "symbol": "graph_search",
+            "id": "CodeGraphRAG-benchmark:tests/test_hybrid_end_to_end.py:50:62",
+            "score": -2.584728240966797
+          }
+        ]
+      },
+      {
+        "query": "Where are graph health checks implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/health.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "tests/test_graph_health.py",
+            "symbol": "test_graph_health_healthy",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_health.py:5:18",
+            "score": -2.4639577865600586
+          },
+          {
+            "file_path": "tests/test_graph_health.py",
+            "symbol": "test_graph_health_connection_failure",
+            "id": "CodeGraphRAG-benchmark:tests/test_graph_health.py:21:28",
+            "score": -3.070387363433838
+          },
+          {
+            "file_path": "graph/health.py",
+            "symbol": "check_graph_health",
+            "id": "CodeGraphRAG-benchmark:graph/health.py:5:35",
+            "score": -3.221127510070801
+          },
+          {
+            "file_path": "graph/__init__.py",
+            "symbol": "graph/__init__.py",
+            "id": "CodeGraphRAG-benchmark:graph/__init__.py:1:38",
+            "score": -3.762868881225586
+          },
+          {
+            "file_path": "evaluation/citation_validation.py",
+            "symbol": "GraphCitationValidator",
+            "id": "CodeGraphRAG-benchmark:evaluation/citation_validation.py:5:56",
+            "score": -8.42514419555664
+          }
+        ]
+      },
+      {
+        "query": "Where is repository-level graph management implemented?",
+        "query_type": "implementation_lookup",
+        "expected_files": [
+          "graph/repository.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "graph/repository.py",
+            "symbol": "GraphRepositoryManager",
+            "id": "CodeGraphRAG-benchmark:graph/repository.py:5:40",
+            "score": -3.7372961044311523
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "IndexSummary",
+            "id": "CodeGraphRAG-benchmark:application/service.py:37:43",
+            "score": -4.292291164398193
+          },
+          {
+            "file_path": "graph/builder.py",
+            "symbol": "GraphBuilder",
+            "id": "CodeGraphRAG-benchmark:graph/builder.py:9:131",
+            "score": -4.373838424682617
+          },
+          {
+            "file_path": "graph/queries.py",
+            "symbol": "GraphQueries",
+            "id": "CodeGraphRAG-benchmark:graph/queries.py:8:418",
+            "score": -4.378698825836182
+          },
+          {
+            "file_path": "graph/retrieval.py",
+            "symbol": "GraphRetriever",
+            "id": "CodeGraphRAG-benchmark:graph/retrieval.py:11:319",
+            "score": -4.519684791564941
+          }
+        ]
+      },
+      {
+        "query": "What component combines dense and lexical retrieval?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/hybrid.py"
+        ],
+        "expected_symbols": [
+          "HybridRetriever"
+        ],
+        "results": [
+          {
+            "file_path": "retrieval/hybrid.py",
+            "symbol": "HybridRetriever",
+            "id": "CodeGraphRAG-benchmark:retrieval/hybrid.py:14:88",
+            "score": 1.528965950012207
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "_dense_search",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:_dense_search",
+            "score": -0.5403148531913757
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "_hybrid_pipeline",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:_hybrid_pipeline",
+            "score": -0.5403148531913757
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:dense",
+            "score": -0.5403148531913757
+          },
+          {
+            "file_path": "evaluation/service_retriever.py",
+            "symbol": "dense_bm25",
+            "id": "repo:CodeGraphRAG-benchmark:symbol:dense_bm25",
+            "score": -0.5403148531913757
+          }
+        ]
+      },
+      {
+        "query": "What is the purpose of RRF in the retrieval pipeline?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/rrf.py",
+          "retrieval/hybrid.py"
+        ],
+        "expected_symbols": [],
+        "results": [
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "_retrieval_config",
+            "id": "CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:562:592",
+            "score": 1.7766505479812622
+          },
+          {
+            "file_path": "tests/test_pipeline.py",
+            "symbol": "test_pipeline_respects_custom_rrf_k",
+            "id": "CodeGraphRAG-benchmark:tests/test_pipeline.py:189:206",
+            "score": 1.7705776691436768
+          },
+          {
+            "file_path": "evaluation/benchmark_runner.py",
+            "symbol": "_retrieval_config",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/benchmark_runner.py:function:_retrieval_config",
+            "score": 1.7686803340911865
+          },
+          {
+            "file_path": "retrieval/config.py",
+            "symbol": "RetrievalConfig",
+            "id": "CodeGraphRAG-benchmark:retrieval/config.py:5:27",
+            "score": 1.7609820365905762
+          },
+          {
+            "file_path": "retrieval/pipeline.py",
+            "symbol": "HybridRetrievalPipeline",
+            "id": "CodeGraphRAG-benchmark:retrieval/pipeline.py:10:62",
+            "score": 0.981701135635376
+          }
+        ]
+      },
+      {
+        "query": "What does the context builder control?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "generation/context.py"
+        ],
+        "expected_symbols": [
+          "ContextBuilder"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_preserves_rank_order",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:26:44",
+            "score": 1.095224380493164
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "__init__",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:27:37",
+            "score": 1.0091267824172974
+          },
+          {
+            "file_path": "tests/test_prompt_builder.py",
+            "symbol": "test_prompt_handles_empty_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_prompt_builder.py:71:81",
+            "score": 0.9663196206092834
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_deduplicates_by_id",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:47:64",
+            "score": 0.8364336490631104
+          },
+          {
+            "file_path": "tests/test_context_builder.py",
+            "symbol": "test_context_builder_respects_character_budget",
+            "id": "CodeGraphRAG-benchmark:tests/test_context_builder.py:103:118",
+            "score": 0.7738085985183716
+          }
+        ]
+      },
+      {
+        "query": "What does the application service orchestrate?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "CodeGraphRAGService"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_citation_metrics.py",
+            "symbol": "make_context",
+            "id": "CodeGraphRAG-benchmark:tests/test_citation_metrics.py:25:32",
+            "score": -5.221165180206299
+          },
+          {
+            "file_path": "tests/test_generation_metrics.py",
+            "symbol": "test_answer_relevance",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_metrics.py:37:44",
+            "score": -5.2933030128479
+          },
+          {
+            "file_path": "tests/test_generation_metrics.py",
+            "symbol": "test_context_relevance",
+            "id": "CodeGraphRAG-benchmark:tests/test_generation_metrics.py:56:66",
+            "score": -5.732208251953125
+          },
+          {
+            "file_path": "application/__init__.py",
+            "symbol": "application/__init__.py",
+            "id": "CodeGraphRAG-benchmark:application/__init__.py:1:4",
+            "score": -6.7090654373168945
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "create_app",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:create_app",
+            "score": -8.428375244140625
+          }
+        ]
+      },
+      {
+        "query": "Which component provides grounded answers?",
+        "query_type": "functional",
+        "expected_files": [
+          "generation/generator.py",
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "AnswerGenerator",
+          "CodeGraphRAGService"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_openai_llm.py",
+            "symbol": "test_openai_llm_uses_responses_api_client",
+            "id": "CodeGraphRAG-benchmark:tests/test_openai_llm.py:18:20",
+            "score": 0.2120783030986786
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "answer",
+            "id": "CodeGraphRAG-benchmark:application/service.py:156:169",
+            "score": 0.17525865137577057
+          },
+          {
+            "file_path": "generation/generator.py",
+            "symbol": "answer_query",
+            "id": "CodeGraphRAG-benchmark:generation/generator.py:39:71",
+            "score": -1.0361528396606445
+          },
+          {
+            "file_path": "tests/test_openai_llm.py",
+            "symbol": "create",
+            "id": "CodeGraphRAG-benchmark:tests/test_openai_llm.py:8:11",
+            "score": -1.5667176246643066
+          },
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "PromptBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:6:77",
+            "score": -1.6762795448303223
+          }
+        ]
+      },
+      {
+        "query": "How are code search results represented?",
+        "query_type": "conceptual",
+        "expected_files": [
+          "retrieval/models.py"
+        ],
+        "expected_symbols": [
+          "RetrievalResult"
+        ],
+        "results": [
+          {
+            "file_path": "tests/test_search.py",
+            "symbol": "test_search_code",
+            "id": "CodeGraphRAG-benchmark:tests/test_search.py:43:60",
+            "score": 0.4141107499599457
+          },
+          {
+            "file_path": "retrieval/bm25.py",
+            "symbol": "search_bm25",
+            "id": "CodeGraphRAG-benchmark:retrieval/bm25.py:220:264",
+            "score": -2.3870341777801514
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "search",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:search",
+            "score": -2.5397777557373047
+          },
+          {
+            "file_path": "retrieval/search.py",
+            "symbol": "search_code",
+            "id": "CodeGraphRAG-benchmark:retrieval/search.py:6:62",
+            "score": -2.770082473754883
+          },
+          {
+            "file_path": "vector_store/qdrant_store.py",
+            "symbol": "search",
+            "id": "CodeGraphRAG-benchmark:vector_store/qdrant_store.py:110:187",
+            "score": -2.9197452068328857
+          }
+        ]
+      },
+      {
+        "query": "Which component stores code embeddings?",
+        "query_type": "functional",
+        "expected_files": [
+          "vector_store/qdrant_store.py"
+        ],
+        "expected_symbols": [
+          "QdrantStore"
+        ],
+        "results": [
+          {
+            "file_path": "vector_store/indexer.py",
+            "symbol": "index_chunks",
+            "id": "CodeGraphRAG-benchmark:vector_store/indexer.py:5:35",
+            "score": 2.831519365310669
+          },
+          {
+            "file_path": "embeddings/embedder.py",
+            "symbol": "embed",
+            "id": "CodeGraphRAG-benchmark:embeddings/embedder.py:11:20",
+            "score": -0.040096186101436615
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "CodeGraphRAG-benchmark:application/service.py:46:169",
+            "score": -0.7278141975402832
+          },
+          {
+            "file_path": "application/service.py",
+            "symbol": "CodeGraphRAGService",
+            "id": "repo:CodeGraphRAG-benchmark:application/service.py:class:CodeGraphRAGService",
+            "score": -0.7278141975402832
+          },
+          {
+            "file_path": "embeddings/embedder.py",
+            "symbol": "CodeEmbedder",
+            "id": "CodeGraphRAG-benchmark:embeddings/embedder.py:7:31",
+            "score": -0.7903778553009033
+          }
+        ]
+      },
+      {
+        "query": "How does the system expose repository indexing?",
+        "query_type": "functional",
+        "expected_files": [
+          "api/main.py",
+          "application/service.py"
+        ],
+        "expected_symbols": [
+          "create_app",
+          "CodeGraphRAGService.index_repository"
+        ],
+        "results": [
+          {
+            "file_path": "generation/prompt.py",
+            "symbol": "PromptBuilder",
+            "id": "CodeGraphRAG-benchmark:generation/prompt.py:6:77",
+            "score": 1.3038119077682495
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:30:127",
+            "score": 0.5959595441818237
+          },
+          {
+            "file_path": "evaluation/scaling_benchmark.py",
+            "symbol": "main",
+            "id": "repo:CodeGraphRAG-benchmark:evaluation/scaling_benchmark.py:function:main",
+            "score": 0.5959595441818237
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "CodeGraphRAG-benchmark:api/main.py:37:45",
+            "score": -0.3159202039241791
+          },
+          {
+            "file_path": "api/main.py",
+            "symbol": "index_repository",
+            "id": "repo:CodeGraphRAG-benchmark:api/main.py:function:index_repository",
+            "score": -0.3377976417541504
+          }
+        ]
+      }
+    ]
+  },
+  "note": "Raw top-five retrieval results. Expected files and symbols are displayed separately to help diagnose retrieval failures and relevance-label mismatches."
+}

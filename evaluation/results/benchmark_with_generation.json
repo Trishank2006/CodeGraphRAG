@@ -1,0 +1,846 @@
+{
+  "benchmark": {
+    "dataset_version": "v1",
+    "query_count": 31,
+    "timestamp": "2026-10-20T13:49:16.422292+00:00",
+    "repository_version": "unknown"
+  },
+  "configuration": {
+    "dataset_version": "v1",
+    "top_k": 5,
+    "rrf_k": 60,
+    "rerank_top_k": 10,
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "reranker_model": "./models/ms-marco-MiniLM-L6-v2",
+    "llm_model": "gpt-5",
+    "max_context_items": 10,
+    "max_context_characters": 12000,
+    "repository_version": "unknown",
+    "benchmark_timestamp": "2026-10-20T13:35:29.218548+00:00"
+  },
+  "retrieval": {
+    "metrics": [
+      {
+        "name": "Dense",
+        "hit_rate": 0.7096774193548387,
+        "precision": 0.1548387096774194,
+        "recall": 0.7096774193548387,
+        "mrr": 0.5016513056835638,
+        "ndcg": 0.5446760829069441
+      },
+      {
+        "name": "BM25",
+        "hit_rate": 0.41935483870967744,
+        "precision": 0.08387096774193549,
+        "recall": 0.41935483870967744,
+        "mrr": 0.2895929339477727,
+        "ndcg": 0.3027442622720199
+      },
+      {
+        "name": "Dense + BM25 (RRF)",
+        "hit_rate": 0.6774193548387096,
+        "precision": 0.14193548387096774,
+        "recall": 0.6612903225806451,
+        "mrr": 0.41214717182459115,
+        "ndcg": 0.4603525714804046
+      },
+      {
+        "name": "Dense + BM25 + Graph",
+        "hit_rate": 0.6774193548387096,
+        "precision": 0.14193548387096774,
+        "recall": 0.6612903225806451,
+        "mrr": 0.41569496811432294,
+        "ndcg": 0.4640024809244516
+      },
+      {
+        "name": "Dense + BM25 + Graph + Reranker",
+        "hit_rate": 0.5483870967741935,
+        "precision": 0.13709677419354838,
+        "recall": 0.5483870967741935,
+        "mrr": 0.35245775729646694,
+        "ndcg": 0.39099646604976385
+      }
+    ],
+    "query_count": 31,
+    "top_k": 5
+  },
+  "generation": {
+    "status": "evaluated",
+    "query_count": 31,
+    "evaluated_count": 31,
+    "average": {
+      "faithfulness": 0.4297567900992367,
+      "answer_relevance": 0.7842293906810035,
+      "context_relevance": 0.7663594470046082
+    },
+    "per_query": [
+      {
+        "query": "Where is the repository indexing pipeline implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.3877551020408163,
+          "answer_relevance": 0.7142857142857143,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is the REST API application created?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.5,
+          "answer_relevance": 0.8571428571428571,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is the CLI entry point defined?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.6363636363636364,
+          "answer_relevance": 1.0,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is hybrid retrieval configured?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.5542168674698795,
+          "answer_relevance": 0.8,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is BM25 retrieval implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.8496732026143791,
+          "answer_relevance": 1.0,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is reciprocal rank fusion implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.5384615384615384,
+          "answer_relevance": 0.8333333333333334,
+          "context_relevance": 0.6666666666666666
+        }
+      },
+      {
+        "query": "Where is the cross-encoder reranker implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.5151515151515151,
+          "answer_relevance": 0.6666666666666666,
+          "context_relevance": 0.6666666666666666
+        }
+      },
+      {
+        "query": "Where is the context builder implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.4411764705882353,
+          "answer_relevance": 0.8333333333333334,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is the prompt builder implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.265625,
+          "answer_relevance": 0.5,
+          "context_relevance": 0.6666666666666666
+        }
+      },
+      {
+        "query": "Where is the LLM abstraction defined?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.45098039215686275,
+          "answer_relevance": 0.8333333333333334,
+          "context_relevance": 0.3333333333333333
+        }
+      },
+      {
+        "query": "Where is the OpenAI LLM provider implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.39705882352941174,
+          "answer_relevance": 0.8571428571428571,
+          "context_relevance": 0.7142857142857143
+        }
+      },
+      {
+        "query": "Where is answer generation orchestrated?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.38461538461538464,
+          "answer_relevance": 0.8,
+          "context_relevance": 0.8
+        }
+      },
+      {
+        "query": "Where are generated-answer citations represented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.30434782608695654,
+          "answer_relevance": 0.6,
+          "context_relevance": 0.4
+        }
+      },
+      {
+        "query": "Where is the repository indexer implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.6078431372549019,
+          "answer_relevance": 0.6666666666666666,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is Qdrant persistence implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.24731182795698925,
+          "answer_relevance": 0.6,
+          "context_relevance": 0.6
+        }
+      },
+      {
+        "query": "Where is source-code parsing performed?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.381294964028777,
+          "answer_relevance": 1.0,
+          "context_relevance": 0.4
+        }
+      },
+      {
+        "query": "Where is repository cloning implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.4793388429752066,
+          "answer_relevance": 1.0,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is graph retrieval implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.35398230088495575,
+          "answer_relevance": 1.0,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is graph grounding implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.6842105263157895,
+          "answer_relevance": 0.6,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is Neo4j persistence implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.4444444444444444,
+          "answer_relevance": 0.4,
+          "context_relevance": 0.6
+        }
+      },
+      {
+        "query": "Where are graph queries defined?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.39814814814814814,
+          "answer_relevance": 1.0,
+          "context_relevance": 0.8
+        }
+      },
+      {
+        "query": "Where are graph health checks implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.4166666666666667,
+          "answer_relevance": 1.0,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Where is repository-level graph management implemented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.5851063829787234,
+          "answer_relevance": 1.0,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "What component combines dense and lexical retrieval?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.17073170731707318,
+          "answer_relevance": 0.8571428571428571,
+          "context_relevance": 0.42857142857142855
+        }
+      },
+      {
+        "query": "What is the purpose of RRF in the retrieval pipeline?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.35106382978723405,
+          "answer_relevance": 0.7777777777777778,
+          "context_relevance": 0.6666666666666666
+        }
+      },
+      {
+        "query": "What does the context builder control?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.1443850267379679,
+          "answer_relevance": 0.5,
+          "context_relevance": 0.6666666666666666
+        }
+      },
+      {
+        "query": "What does the application service orchestrate?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.475,
+          "answer_relevance": 0.5,
+          "context_relevance": 1.0
+        }
+      },
+      {
+        "query": "Which component provides grounded answers?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.3356643356643357,
+          "answer_relevance": 0.8,
+          "context_relevance": 0.4
+        }
+      },
+      {
+        "query": "How are code search results represented?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.341991341991342,
+          "answer_relevance": 1.0,
+          "context_relevance": 0.8333333333333334
+        }
+      },
+      {
+        "query": "Which component stores code embeddings?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.3235294117647059,
+          "answer_relevance": 0.6,
+          "context_relevance": 0.4
+        }
+      },
+      {
+        "query": "How does the system expose repository indexing?",
+        "status": "evaluated",
+        "has_answer": true,
+        "has_context": true,
+        "metrics": {
+          "faithfulness": 0.3563218390804598,
+          "answer_relevance": 0.7142857142857143,
+          "context_relevance": 0.7142857142857143
+        }
+      }
+    ]
+  },
+  "citation": {
+    "status": "not_evaluated",
+    "validity_status": "not_evaluated",
+    "coverage_status": "evaluated",
+    "query_count": 31,
+    "evaluated_count": 0,
+    "coverage_evaluated_count": 31,
+    "average": {
+      "citation_validity_rate": 0.0,
+      "citation_coverage": 0.04143107956119575
+    },
+    "per_query": [
+      {
+        "query": "Where is the repository indexing pipeline implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0375
+        }
+      },
+      {
+        "query": "Where is the REST API application created?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.02
+        }
+      },
+      {
+        "query": "Where is the CLI entry point defined?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is hybrid retrieval configured?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.028985507246376812
+        }
+      },
+      {
+        "query": "Where is BM25 retrieval implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.03759398496240601
+        }
+      },
+      {
+        "query": "Where is reciprocal rank fusion implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.1794871794871795
+        }
+      },
+      {
+        "query": "Where is the cross-encoder reranker implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.038461538461538464
+        }
+      },
+      {
+        "query": "Where is the context builder implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.1111111111111111
+        }
+      },
+      {
+        "query": "Where is the prompt builder implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the LLM abstraction defined?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.075
+        }
+      },
+      {
+        "query": "Where is the OpenAI LLM provider implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.05263157894736842
+        }
+      },
+      {
+        "query": "Where is answer generation orchestrated?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.01020408163265306
+        }
+      },
+      {
+        "query": "Where are generated-answer citations represented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "Where is the repository indexer implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.024691358024691357
+        }
+      },
+      {
+        "query": "Where is Qdrant persistence implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.025
+        }
+      },
+      {
+        "query": "Where is source-code parsing performed?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.049586776859504134
+        }
+      },
+      {
+        "query": "Where is repository cloning implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.02830188679245283
+        }
+      },
+      {
+        "query": "Where is graph retrieval implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.052083333333333336
+        }
+      },
+      {
+        "query": "Where is graph grounding implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.04081632653061224
+        }
+      },
+      {
+        "query": "Where is Neo4j persistence implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.04477611940298507
+        }
+      },
+      {
+        "query": "Where are graph queries defined?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.02127659574468085
+        }
+      },
+      {
+        "query": "Where are graph health checks implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.061224489795918366
+        }
+      },
+      {
+        "query": "Where is repository-level graph management implemented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.060240963855421686
+        }
+      },
+      {
+        "query": "What component combines dense and lexical retrieval?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0
+        }
+      },
+      {
+        "query": "What is the purpose of RRF in the retrieval pipeline?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.04819277108433735
+        }
+      },
+      {
+        "query": "What does the context builder control?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.01910828025477707
+        }
+      },
+      {
+        "query": "What does the application service orchestrate?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.0625
+        }
+      },
+      {
+        "query": "Which component provides grounded answers?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.04032258064516129
+        }
+      },
+      {
+        "query": "How are code search results represented?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.009345794392523364
+        }
+      },
+      {
+        "query": "Which component stores code embeddings?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.07407407407407407
+        }
+      },
+      {
+        "query": "How does the system expose repository indexing?",
+        "status": "coverage_evaluated",
+        "validity_status": "not_evaluated",
+        "metrics": {
+          "citation_validity_rate": 0.0,
+          "citation_coverage": 0.03184713375796178
+        }
+      }
+    ]
+  },
+  "latency": {
+    "iterations": 3,
+    "stages": {
+      "generation": {
+        "iterations": 31,
+        "average_ms": 24045.242235483227,
+        "min_ms": 8883.126400003675,
+        "max_ms": 131933.9270000055
+      }
+    }
+  },
+  "context_efficiency": {
+    "10": {
+      "sample_count": 1,
+      "average_characters": 0.0,
+      "average_chunks": 0.0,
+      "average_tokens": 0.0,
+      "max_characters": 0,
+      "max_tokens": 0
+    },
+    "20": {
+      "sample_count": 1,
+      "average_characters": 0.0,
+      "average_chunks": 0.0,
+      "average_tokens": 0.0,
+      "max_characters": 0,
+      "max_tokens": 0
+    },
+    "30": {
+      "sample_count": 1,
+      "average_characters": 0.0,
+      "average_chunks": 0.0,
+      "average_tokens": 0.0,
+      "max_characters": 0,
+      "max_tokens": 0
+    }
+  },
+  "ablation": {
+    "stages": [
+      {
+        "name": "Dense",
+        "recall": 0.7096774193548387,
+        "mrr": 0.5016513056835638,
+        "ndcg": 0.5446760829069441,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "BM25",
+        "recall": 0.41935483870967744,
+        "mrr": 0.2895929339477727,
+        "ndcg": 0.3027442622720199,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 (RRF)",
+        "recall": 0.6612903225806451,
+        "mrr": 0.41214717182459115,
+        "ndcg": 0.4603525714804046,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph",
+        "recall": 0.6612903225806451,
+        "mrr": 0.41569496811432294,
+        "ndcg": 0.4640024809244516,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph + Reranker",
+        "recall": 0.5483870967741935,
+        "mrr": 0.35245775729646694,
+        "ndcg": 0.39099646604976385,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      }
+    ],
+    "table": [
+      {
+        "name": "Dense",
+        "recall": 0.7096774193548387,
+        "mrr": 0.5016513056835638,
+        "ndcg": 0.5446760829069441,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "BM25",
+        "recall": 0.41935483870967744,
+        "mrr": 0.2895929339477727,
+        "ndcg": 0.3027442622720199,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 (RRF)",
+        "recall": 0.6612903225806451,
+        "mrr": 0.41214717182459115,
+        "ndcg": 0.4603525714804046,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph",
+        "recall": 0.6612903225806451,
+        "mrr": 0.41569496811432294,
+        "ndcg": 0.4640024809244516,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      },
+      {
+        "name": "Dense + BM25 + Graph + Reranker",
+        "recall": 0.5483870967741935,
+        "mrr": 0.35245775729646694,
+        "ndcg": 0.39099646604976385,
+        "faithfulness": 0.0,
+        "citation_accuracy": 0.0,
+        "latency_ms": 0.0
+      }
+    ]
+  }
+}
