@@ -234,7 +234,7 @@ The summary reports file, entity, chunk, graph-node, and graph-edge counts.
 
 ### Repository names
 
-Indexing under an existing repository name replaces that repository's vector and graph data once new chunks have been generated successfully. If no chunks are generated, the existing index is preserved.
+Indexing under an existing repository name replaces that repository's vector and graph data after chunks, embeddings, and the new in-memory BM25 index have been prepared successfully. If parsing, chunk generation, embedding, or BM25 index construction fails, the existing index is preserved. The persistent vector and graph replacement is not a single cross-store transaction; a storage failure during replacement can still leave the two stores inconsistent.
 
 Use a distinct repository name for each separate experiment to avoid unintentionally replacing another index.
 
@@ -331,7 +331,7 @@ Metrics are computed at `k = 5`.
 - **MRR@5:** reciprocal rank of the first relevant result, or zero if none appears in the top five, averaged across queries.
 - **nDCG@5:** ranking-quality metric that rewards relevant results appearing higher in the list.
 
-Each query's expected files and symbols define relevance. The dataset averages 1.03 expected files and 0.98 expected symbols per query. Because each query has a relatively small set of expected targets, Precision@5 should be interpreted alongside Hit@5 and Recall@5.
+Relevance is selected by query type: `symbol_lookup` queries are scored against `expected_symbols`, while other query types are scored against `expected_files`. The unused target field for a given query is descriptive metadata and does not contribute to that query's retrieval metrics. The dataset averages 1.03 expected files and 0.98 expected symbols per query. Because each query has a relatively small set of expected targets, Precision@5 should be interpreted alongside Hit@5 and Recall@5.
 
 ### Findings
 
