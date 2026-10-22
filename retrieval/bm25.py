@@ -7,6 +7,8 @@ from retrieval.models import RetrievalResult
 
 
 TOKEN_PATTERN = re.compile(r"[A-Za-z0-9_./:-]+")
+CAMEL_BOUNDARY = re.compile(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])")
+SEPARATORS = re.compile(r"[_./:-]+")
 
 # Higher weights prioritize exact identifiers and repository paths.
 FIELD_WEIGHTS = {
@@ -18,17 +20,25 @@ FIELD_WEIGHTS = {
 
 
 def _tokenize(text: str) -> list[str]:
-    """Preserve complete identifiers and split them into components."""
-    raw_tokens = TOKEN_PATTERN.findall(text.lower())
+    """Preserve identifiers and index snake_case, paths, and CamelCase parts."""
     tokens: list[str] = []
 
-    for token in raw_tokens:
-        tokens.append(token)
+    for raw in TOKEN_PATTERN.findall(text):
+        tokens.append(raw.lower())
+        parts = [part for part in SEPARATORS.split(raw) if part]
+        if len(parts) > 1:
+            tokens.extend(part.lower() for part in parts)
 
-        parts = re.split(r"[_./:-]+", token)
-        tokens.extend(part for part in parts if part)
+        for part in parts:
+            pieces = [
+                piece for piece in CAMEL_BOUNDARY.split(part) if piece
+            ]
+            if len(pieces) > 1:
+                tokens.extend(piece.lower() for piece in pieces)
 
-    return tokens
+    # A simple word such as "context" is emitted once, not as both a
+    # complete identifier and an identical one-part component.
+    return list(dict.fromkeys(tokens))
 
 
 class BM25Retriever:
