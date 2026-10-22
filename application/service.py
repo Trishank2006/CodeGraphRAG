@@ -26,7 +26,6 @@ from retrieval.config import RetrievalConfig
 from retrieval.pipeline import HybridRetrievalPipeline
 from retrieval.reranker import CrossEncoderReranker
 from retrieval.search import search_code
-from vector_store.indexer import index_chunks
 from vector_store.qdrant_store import QdrantStore
 from vector_store.repository_indexer import build_repository_chunks
 
@@ -130,23 +129,28 @@ class CodeGraphRAGService:
             GraphBuilder(repository).build_from_parsed_files(parsed_files)
         )
 
-        # Replace only this repository's existing data.
+        # Complete expensive/failure-prone embedding work before touching
+        # the currently active index. A model download failure, GPU OOM, or
+        # embedding exception therefore leaves the old index intact.
+        embeddings = self.embedder.embed(
+            [chunk["content"] for chunk in chunks]
+        )
+
+        # Replace only this repository's existing data after preparation.
         self.vector_store.create_collection()
-        self.vector_store.delete_repository(repository)
         self.graph_store.create_constraints()
         self.graph_store.replace_repository(
             repository,
             graph_nodes,
             graph_edges,
         )
+        self.vector_store.delete_repository(repository)
+        self.vector_store.upsert_chunks(chunks, embeddings)
 
-        index_chunks(
-            chunks,
-            embedder=self.embedder,
-            store=self.vector_store,
-        )
-
-        self.bm25_retriever.index(chunks)
+        # Build BM25 in a temporary instance before swapping it into service.
+        new_bm25 = BM25Retriever()
+        new_bm25.index(chunks)
+        self.bm25_retriever = new_bm25
         self._is_indexed = True
         self._repository_name = repository
 
