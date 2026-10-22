@@ -1,8 +1,9 @@
 from __future__ import annotations
-
+import ast
 from collections import defaultdict
 from dataclasses import dataclass, field
 import logging
+import ast
 
 from graph.models import GraphEdge, GraphNode
 from graph.schema import NodeType, RelationType
@@ -176,6 +177,8 @@ class _DefinitionIndex:
     owner_class: dict[str, CodeEntity] = field(default_factory=dict)
     # File path -> repository files it imports.
     imported_files: dict[str, set[str]] = field(default_factory=dict)
+        # File -> (receiver expression, constructor class name).
+    instance_types: dict[str, dict[str, str]] = field(default_factory=dict)
 
     @classmethod
     def build(cls, parsed_files: list[ParsedFile]) -> _DefinitionIndex:
@@ -204,6 +207,13 @@ class _DefinitionIndex:
                     imported |= module_lookup.get(module, set())
             index.imported_files[pf.file_path] = imported
 
+            for pf in parsed_files:
+                index.instance_types[pf.file_path] = (
+                    _extract_instance_types(pf.source_code)
+                    if pf.language == "python"
+                    else {}
+            )
+
         return index
 
     def resolve_call(
@@ -221,15 +231,45 @@ class _DefinitionIndex:
         if receiver in SELF_RECEIVERS:
             return _unique(self._methods_of(owner, name)) if owner else None
 
+
         if receiver:
-            # Class-level calls such as ApplicationSettings.from_environment().
+            # Resolve self.attribute.method() using constructor assignments.
+            if receiver.startswith(("self.", "cls.")):
+                receiver_owner = self.owner_class.get(caller_id)
+                if receiver_owner is None:
+                    return None
+
+                attribute = receiver.split(".", 1)[1]
+                types_by_class = self.instance_types.get(
+                    parsed_file.file_path, {}
+                )
+                class_name = types_by_class.get(
+                    receiver_owner.name, {}
+                ).get(attribute)
+
+                if class_name is not None:
+                    class_tiers = [
+                        [e for e in tier if e.type == "class"]
+                        for tier in self._visible_tiers(parsed_file, class_name)
+                    ]
+                    receiver_class = _closest(class_tiers)
+                    if receiver_class is None:
+                        return None
+
+                    return _unique(self._methods_of(receiver_class, name))
+
+                return None
+
+            # Preserve class-level calls such as User.create().
             receiver_class = _closest([
                 [e for e in tier if e.type == "class"]
                 for tier in self._visible_tiers(parsed_file, receiver)
             ])
             if receiver_class is None:
                 return None
+
             return _unique(self._methods_of(receiver_class, name))
+
 
         tiers: list[list[CodeEntity]] = []
         if caller is not None:
@@ -277,6 +317,76 @@ class _DefinitionIndex:
             for e in self.by_file_and_name.get((owner.file_path, name), [])
             if self.owner_class.get(e.id) is owner
         ]
+
+
+def _extract_instance_types(source_code: str) -> dict[str, dict[str, str]]:
+    """Extract simple Python instance-attribute constructor assignments."""
+    if not source_code.strip():
+        return {}
+
+    try:
+        tree = ast.parse(source_code)
+    except SyntaxError:
+        return {}
+
+    result: dict[str, dict[str, str]] = {}
+    conflicts: set[tuple[str, str]] = set()
+
+    class Visitor(ast.NodeVisitor):
+        def __init__(self):
+            self.class_stack: list[str] = []
+
+        def visit_ClassDef(self, node):
+            self.class_stack.append(node.name)
+            for statement in node.body:
+                self.visit(statement)
+            self.class_stack.pop()
+
+        def visit_FunctionDef(self, node):
+            for statement in node.body:
+                self.visit(statement)
+
+        visit_AsyncFunctionDef = visit_FunctionDef
+
+        def visit_Assign(self, node):
+            self._record(node.targets, node.value)
+            self.generic_visit(node)
+
+        def visit_AnnAssign(self, node):
+            self._record([node.target], node.value)
+            self.generic_visit(node)
+
+        def _record(self, targets, value):
+            if (
+                not self.class_stack
+                or not isinstance(value, ast.Call)
+                or not isinstance(value.func, ast.Name)
+            ):
+                return
+
+            for target in targets:
+                if not (
+                    isinstance(target, ast.Attribute)
+                    and isinstance(target.value, ast.Name)
+                    and target.value.id in {"self", "cls"}
+                ):
+                    continue
+
+                key = (self.class_stack[-1], target.attr)
+                class_name = value.func.id
+
+                if key in conflicts:
+                    continue
+
+                previous = result.setdefault(key[0], {}).get(key[1])
+                if previous is not None and previous != class_name:
+                    result[key[0]].pop(key[1], None)
+                    conflicts.add(key)
+                else:
+                    result[key[0]][key[1]] = class_name
+
+    Visitor().visit(tree)
+    return result
 
 
 def _contains(outer: CodeEntity, inner: CodeEntity) -> bool:

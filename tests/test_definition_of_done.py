@@ -47,5 +47,5 @@ class PaymentService:
     ]
     call_targets = {edge.target_id for edge in call_edges}
 
-    assert "repo:ecommerce:symbol:process_payment" in call_targets
-    assert "repo:ecommerce:symbol:save" in call_targets
+    assert "repo:ecommerce:symbol:payment_service.process_payment" in call_targets
+    assert "repo:ecommerce:symbol:database.save" in call_targets

@@ -258,3 +258,67 @@ def test_relationship_with_missing_source_creates_no_placeholder():
 
     assert not any(n.id.endswith("symbol:foo") for n in nodes)
     assert not edges
+
+
+# --- Instance attribute receiver resolution -------------------------------
+
+def test_instance_attribute_receiver_resolves_to_correct_class_method():
+    graph_store = entity(
+        "graph/neo4j_store.py", "Neo4jStore", kind="class", start=0, end=200
+    )
+    graph_replace = entity(
+        "graph/neo4j_store.py", "replace_repository", start=100, end=130
+    )
+    vector_store = entity(
+        "vector_store/qdrant_store.py",
+        "QdrantStore",
+        kind="class",
+        start=0,
+        end=200,
+    )
+    vector_replace = entity(
+        "vector_store/qdrant_store.py", "replace_repository", start=80, end=110
+    )
+    service = entity(
+        "application/service.py", "CodeGraphRAGService",
+        kind="class", start=0, end=250,
+    )
+    index = entity(
+        "application/service.py", "index_repository", start=100, end=150
+    )
+
+    # Receiver assignments need to be represented by the parsed source.
+    service_file = parse_source_code(
+        file_path="application/service.py",
+        content=(
+            "from graph.neo4j_store import Neo4jStore\n"
+            "from vector_store.qdrant_store import QdrantStore\n"
+            "class CodeGraphRAGService:\n"
+            "    def __init__(self):\n"
+            "        self.graph_store = Neo4jStore()\n"
+            "        self.vector_store = QdrantStore()\n"
+            "    def index_repository(self):\n"
+            "        self.graph_store.replace_repository()\n"
+            "        self.vector_store.replace_repository()\n"
+        ),
+        language="python",
+    )
+
+    graph_file = parsed_file(
+        "graph/neo4j_store.py", [graph_store, graph_replace]
+    )
+    vector_file = parsed_file(
+        "vector_store/qdrant_store.py", [vector_store, vector_replace]
+    )
+
+    nodes, edges = build_graph(graph_file, vector_file, service_file)
+
+    service_calls = {
+        edge.target_id.removeprefix(PREFIX)
+        for edge in edges
+        if edge.type.value == "CALLS"
+        and edge.source_id.endswith("function:index_repository")
+    }
+
+    assert graph_replace.id in service_calls
+    assert vector_replace.id in service_calls

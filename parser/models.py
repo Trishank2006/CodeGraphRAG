@@ -19,3 +19,4 @@ class ParsedFile(BaseModel):
     language: str
     entities: List[CodeEntity]
     relationships: List[CodeRelationship]
+    source_code: str = ""

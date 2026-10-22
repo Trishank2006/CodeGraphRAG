@@ -22,7 +22,7 @@ LANGUAGE_REGISTRY = {
 }
 
 QUERY_REGISTRY = {
-   "python": """
+    "python": """
         (class_definition name: (identifier) @class.name)
         (function_definition name: (identifier) @function.name)
         (import_statement name: (dotted_name) @import.name)
@@ -67,86 +67,149 @@ QUERY_REGISTRY = {
         (struct_item name: (type_identifier) @class.name)
         (function_item name: (identifier) @function.name)
         (call_expression function: (identifier) @call.target)
-    """
+    """,
 }
+
+# Parent node type -> field holding the receiver in obj.method().
+RECEIVER_FIELDS = {
+    "attribute": "object",          # Python
+    "member_expression": "object",  # JavaScript
+    "method_invocation": "object",  # Java
+}
+MAX_RECEIVER_LENGTH = 80
+UNKNOWN_RECEIVER = "<expr>"
+
+
+def _node_text(node) -> str:
+    text = node.text
+    if isinstance(text, bytes):
+        return text.decode("utf8")
+    return text or ""
+
+
+def _call_receiver(target_node) -> str:
+    """Return the receiver of a method call (``self`` in ``self.run()``), or ''."""
+    parent = target_node.parent
+    field_name = RECEIVER_FIELDS.get(parent.type) if parent is not None else None
+    if field_name is None:
+        return ""
+
+    receiver = parent.child_by_field_name(field_name)
+    if receiver is None:
+        return ""
+
+    text = " ".join(_node_text(receiver).split())
+    if not text or len(text) > MAX_RECEIVER_LENGTH:
+        return UNKNOWN_RECEIVER
+    return text
+
+
+def _innermost_function(entities: list[CodeEntity], line: int) -> CodeEntity | None:
+    """Return the smallest function whose line range contains ``line``."""
+    containing = [
+        entity
+        for entity in entities
+        if entity.type == "function"
+        and entity.start_line <= line <= entity.end_line
+    ]
+    return min(
+        containing,
+        key=lambda entity: entity.end_line - entity.start_line,
+        default=None,
+    )
+
 
 def parse_source_code(file_path: str, content: str, language: str) -> ParsedFile:
     if language not in LANGUAGE_REGISTRY or language not in QUERY_REGISTRY:
         return ParsedFile(file_path=file_path, language=language, entities=[], relationships=[])
 
     ts_lang = LANGUAGE_REGISTRY[language]
-    query_string = QUERY_REGISTRY[language]
-    
     parser = Parser(ts_lang)
-    query = Query(ts_lang, query_string)
+    query = Query(ts_lang, QUERY_REGISTRY[language])
 
     tree = parser.parse(bytes(content, "utf8"))
-    query_cursor = QueryCursor(query)
-    captures = query_cursor.captures(tree.root_node)
+    captures = QueryCursor(query).captures(tree.root_node)
 
-    entities = []
-    relationships = []
+    entities: list[CodeEntity] = []
+    relationships: list[CodeRelationship] = []
+    entity_ids: set[str] = set()
 
-    # 1. Collect entities (Classes and Functions)
+
+
+    # 1. Collect entities (classes and functions).
+    # Sort captures by source position so duplicate names receive stable IDs.
+    entity_captures = []
     for capture_name, nodes in captures.items():
-        if capture_name in ("class.name", "function.name"):
-            for node in nodes:
-                entity_type = "class" if "class" in capture_name else "function"
-                name_text = node.text
-                name = name_text.decode('utf8') if isinstance(name_text, bytes) else name_text
-                parent_node = node.parent if node.parent else node
-                
-                entity_id = f"{file_path}:{entity_type}:{name}"
-                entities.append(CodeEntity(
-                    id=entity_id,
-                    type=entity_type,
-                    name=name,
-                    file_path=file_path,
-                    start_line=parent_node.start_point[0],
-                    end_line=parent_node.end_point[0]
-                ))
-                # Generate CONTAINS edge: File -> Entity
-                relationships.append(CodeRelationship(
-                    source_id=file_path,
-                    target_id=entity_id,
-                    type="CONTAINS"
-                ))
+        if capture_name not in ("class.name", "function.name"):
+            continue
 
-    # 2. Extract IMPORTS
-    import_captures = captures.get("import.name", []) + captures.get("import.module", [])
-    for node in import_captures:
-        raw_name = node.text
-        import_name = raw_name.decode('utf8') if isinstance(raw_name, bytes) else raw_name
-        relationships.append(CodeRelationship(
-            source_id=file_path,
-            target_id=f"module:{import_name.strip()}",
-            type="IMPORTS"
+        entity_type = (
+            "class" if capture_name == "class.name" else "function"
+        )
+        for node in nodes:
+            parent_node = node.parent if node.parent else node
+            entity_captures.append(
+                (parent_node.start_point[0], node.start_point[1],
+                 entity_type, node, parent_node)
+            )
+
+    entity_captures.sort(key=lambda item: (item[0], item[1]))
+
+    for _, _, entity_type, node, parent_node in entity_captures:
+        name = _node_text(node).strip()
+        start_line = parent_node.start_point[0]
+
+        entity_id = f"{file_path}:{entity_type}:{name}"
+        if entity_id in entity_ids:
+            entity_id = f"{entity_id}@{start_line}"
+        entity_ids.add(entity_id)
+
+        entities.append(CodeEntity(
+            id=entity_id,
+            type=entity_type,
+            name=name,
+            file_path=file_path,
+            start_line=start_line,
+            end_line=parent_node.end_point[0],
         ))
 
-    # 3. Extract CALLS (Attributing invocation to the enclosing function)
-    call_captures = captures.get("call.target", [])
-    for call_node in call_captures:
-        raw_name = call_node.text
-        callee_name = raw_name.decode('utf8') if isinstance(raw_name, bytes) else raw_name
-        call_line = call_node.start_point[0]
-
-        # Find enclosing function
-        caller_entity = None
-        for entity in entities:
-            if entity.type == "function" and entity.start_line <= call_line <= entity.end_line:
-                caller_entity = entity
-                break
-
-        caller_id = caller_entity.id if caller_entity else file_path
+        # CONTAINS edge: File -> Entity
         relationships.append(CodeRelationship(
-            source_id=caller_id,
-            target_id=f"symbol:{callee_name}",
-            type="CALLS"
+            source_id=file_path,
+            target_id=entity_id,
+            type="CONTAINS",
+        ))
+
+
+
+    # 2. Extract IMPORTS
+    import_nodes = captures.get("import.name", []) + captures.get("import.module", [])
+    for node in import_nodes:
+        relationships.append(CodeRelationship(
+            source_id=file_path,
+            target_id=f"module:{_node_text(node).strip()}",
+            type="IMPORTS",
+        ))
+
+    # 3. Extract CALLS, attributed to the innermost enclosing function.
+    #    The receiver is kept (symbol:self.search vs symbol:pipeline.search)
+    #    so GraphBuilder can resolve the call to the right definition.
+    for call_node in captures.get("call.target", []):
+        callee_name = _node_text(call_node)
+        receiver = _call_receiver(call_node)
+        target = f"{receiver}.{callee_name}" if receiver else callee_name
+
+        caller = _innermost_function(entities, call_node.start_point[0])
+        relationships.append(CodeRelationship(
+            source_id=caller.id if caller else file_path,
+            target_id=f"symbol:{target}",
+            type="CALLS",
         ))
 
     return ParsedFile(
-        file_path=file_path, 
-        language=language, 
-        entities=entities, 
-        relationships=relationships
+        file_path=file_path,
+        language=language,
+        entities=entities,
+        relationships=relationships,
+        source_code=content,
     )

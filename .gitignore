@@ -108,3 +108,5 @@ sample_repo/
 shop_system/
 
 models/
+
+*.checkpoint.json
