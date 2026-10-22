@@ -17,6 +17,7 @@ from generation.openai_client import OpenAILLM
 from generation.prompt import PromptBuilder
 from graph.builder import GraphBuilder
 from graph.grounding import GraphGroundingService
+from graph.health import check_graph_health
 from graph.neo4j_store import Neo4jStore
 from graph.retrieval import GraphRetriever
 from ingestion.file_discovery import discover_files
@@ -119,6 +120,19 @@ class CodeGraphRAGService:
             self._injected_bm25 = retriever
             if self._repository_name is not None:
                 self._bm25_by_repository[self._repository_name] = retriever
+
+    def check_dependencies(self) -> dict[str, dict]:
+        """Report whether Neo4j and Qdrant are reachable."""
+        graph = check_graph_health(self.graph_store)
+
+        try:
+            with self._lock:
+                self.vector_store.ping()
+            vectors = {"status": "healthy"}
+        except Exception as exc:
+            vectors = {"status": "unhealthy", "error": str(exc)}
+
+        return {"neo4j": graph, "qdrant": vectors}
 
     def close(self) -> None:
         """Close all resources owned by the service."""

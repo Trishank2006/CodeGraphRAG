@@ -237,6 +237,10 @@ class QdrantStore:
 
         return filtered_results
 
+    def ping(self) -> None:
+        """Raise if the local store can't be read."""
+        self.client.get_collections()
+
     def close(self) -> None:
         """Close the Qdrant client."""
         self.client.close()
