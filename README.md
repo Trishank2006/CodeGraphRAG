@@ -1,4 +1,4 @@
-![tests](https://github.com/Trishank2006/CodeGraphRAG/actions/workflows/tests.yml/badge.svg)
+﻿![tests](https://github.com/Trishank2006/CodeGraphRAG/actions/workflows/tests.yml/badge.svg)
 
 # CodeGraphRAG
 
@@ -26,7 +26,7 @@ ollama pull qwen2.5:3b        # download the local model
 python cli.py ask . "Where is BM25 tokenization implemented?" --name codegraphrag
 ```
 
-On Windows PowerShell, activate with `..venv\Scripts\Activate.ps1` and copy with `Copy-Item .env.example .env`.
+On Windows PowerShell, activate with `..venvScriptsActivate.ps1` and copy with `Copy-Item .env.example .env`.
 
 The first run indexes the repository, then answers with citations. Later questions reuse the index. Each step is explained under [Installation](#installation).
 
@@ -138,7 +138,7 @@ cd CodeGraphRAG
 
 ```powershell
 python -m venv .venv
-..venv\Scripts\Activate.ps1
+..venvScriptsActivate.ps1
 ```
 
 **macOS / Linux**
@@ -252,7 +252,7 @@ python cli.py ask "/path/to/your/repository" "Where is authentication implemente
 On Windows PowerShell, use a Windows path:
 
 ```powershell
-python cli.py ask "C:\path\to\your\repository" "Where is authentication implemented?" --name my-repository
+python cli.py ask "C:pathtoyourrepository" "Where is authentication implemented?" --name my-repository
 ```
 
 `ask` indexes the repository only if no index exists for that name. Otherwise it answers from the existing index. After changing the code, add `--reindex` to refresh it.
@@ -357,11 +357,23 @@ Tree-sitter grammars are included for Python, JavaScript, TypeScript, Java, C, C
 Calls are linked to a definition only when the target is unambiguous:
 
 - **All languages:** functions defined in the same file, and helpers nested inside the calling function.
-- **Python:** `self.method()` calls, class-level calls such as `Settings.from_environment()`, and functions from imported modules, including relative imports.
+- **Python:** `self.method()` calls, class-level calls such as `Settings.from_environment()`, and functions from imported modules, including relative imports. Instance-attribute calls such as `self.graph_store.replace_repository()` can also resolve when constructor assignments identify the receiver class.
 - **Java and C++:** bare calls to methods of the enclosing class.
 - **Go and Java:** definitions in the same package (directory).
 
 Anything else, including built-ins, third-party libraries, calls through variables, and ambiguous names, stays an unresolved placeholder rather than a guessed edge.
+
+## Call-graph benchmark
+
+Run the dedicated call-graph benchmark with:
+
+```bash
+python -m evaluation.call_graph_benchmark
+```
+
+The latest verified run covered 23 benchmark cases and 70 labeled call edges, with **100% precision and 100% recall** on those labeled edges. The run also retained 95 unresolved call-target placeholders rather than guessing targets. These results describe the benchmark's labeled cases only; they do not imply perfect call resolution for arbitrary repositories.
+
+Parser entity IDs are assigned deterministically in source order, so duplicate function names receive stable IDs based on their occurrence in the file.
 
 ## Retrieval benchmark
 
@@ -447,16 +459,16 @@ Graph edges: 1168
 
 **Citations returned**
 
-1. `application/service.py`: `_dense_search`, lines 268Ã¢â‚¬â€œ278
-2. `retrieval/pipeline.py`: `__init__`, lines 82Ã¢â‚¬â€œ99
-3. `retrieval/hybrid.py`: `__init__`, lines 22Ã¢â‚¬â€œ32
-4. `retrieval/config.py`: `RetrievalConfig`, lines 7Ã¢â‚¬â€œ73
-5. `application/service.py`: `search`, lines 280Ã¢â‚¬â€œ305
-6. `retrieval/search.py`: `search_code`, lines 6Ã¢â‚¬â€œ64
-7. `retrieval/hybrid.py`: `search`, lines 34Ã¢â‚¬â€œ88
-8. `application/service.py`: `__init__`, lines 61Ã¢â‚¬â€œ104
-9. `retrieval/pipeline.py`: `search`, lines 101Ã¢â‚¬â€œ136
-10. `vector_store/qdrant_store.py`: `search`, lines 173Ã¢â‚¬â€œ238
+1. `application/service.py`: `_dense_search`, lines 268â€“278
+2. `retrieval/pipeline.py`: `__init__`, lines 82â€“99
+3. `retrieval/hybrid.py`: `__init__`, lines 22â€“32
+4. `retrieval/config.py`: `RetrievalConfig`, lines 7â€“73
+5. `application/service.py`: `search`, lines 280â€“305
+6. `retrieval/search.py`: `search_code`, lines 6â€“64
+7. `retrieval/hybrid.py`: `search`, lines 34â€“88
+8. `application/service.py`: `__init__`, lines 61â€“104
+9. `retrieval/pipeline.py`: `search`, lines 101â€“136
+10. `vector_store/qdrant_store.py`: `search`, lines 173â€“238
 
 **Manual correctness check:** The answer is partly correct. Citation [8] points to the right place: `CodeGraphRAGService.__init__` reads `CODEGRAPHRAG_RETRIEVAL_MODE` and falls back to `"dense"`. The line number is wrong, though. The fallback is on line 88; line 63 is the method's `settings` parameter.
 
@@ -508,13 +520,13 @@ Two tests are opt-in live integration tests, which are skipped unless enabled:
 - `tests/test_live_neo4j.py` requires `CODEGRAPHRAG_RUN_LIVE_TESTS=1` and a running Neo4j instance.
 - `tests/test_live_end_to_end.py` requires `CODEGRAPHRAG_RUN_LIVE_TESTS=1`, `OPENAI_API_KEY`, and `OPENAI_BASE_URL`, plus a running Neo4j instance and LLM endpoint.
 
-Both live tests have passed against a local Neo4j instance and a local Ollama model. CI runs without live services, so it skips them.
+Both live tests have passed against a local Neo4j instance and a local Ollama model. CI runs without live services, so it skips them. The latest verified local test run completed with 386 passed and 2 skipped.
 
 ## Limitations and future work
 
 - **Benchmark scope:** The retrieval benchmark covers one repository and 100 author-written lookup queries. It does not ask relational questions such as "what calls this function?", so it can't show the value of graph retrieval. Adding relational queries and other repositories is the next evaluation step.
 - **Generation evaluation:** Answer quality, faithfulness, citation validity, and citation coverage have not been formally evaluated.
-- **Cross-file call resolution:** Python imports and Go and Java packages are resolved. JavaScript, TypeScript, Rust, C, and C++ cross-file calls remain unresolved placeholders, because the parser does not yet capture imports for those languages.
+- **Call resolution:** Resolution is conservative. Python receiver calls are supported when constructor assignments identify the receiver class, but many dynamic, external, ambiguous, and cross-file calls remain unresolved placeholders. JavaScript, TypeScript, Rust, C, and C++ cross-file calls remain limited because the parser does not yet capture imports for those languages.
 - **Neo4j dependency:** Neo4j is required for indexing and answer generation, even in dense retrieval mode.
 - **Reranking:** The tested general-purpose cross-encoder reduced ranking quality. A code-specific reranker needs evaluation.
 - **Stale indexes:** `ask` reuses an existing index. After code changes, use `--reindex`.
@@ -523,3 +535,6 @@ Both live tests have passed against a local Neo4j instance and a local Ollama mo
 ## License
 
 This project is licensed under the MIT License. See [`LICENSE`](LICENSE) for the full text.
+
+
+
