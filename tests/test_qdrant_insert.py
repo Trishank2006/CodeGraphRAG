@@ -1,6 +1,17 @@
-import uuid
+from vector_store.qdrant_store import QdrantStore, point_id_for
 
-from vector_store.qdrant_store import QdrantStore
+
+def _chunk(chunk_id, repository="test-repository"):
+    return {
+        "chunk_id": chunk_id,
+        "repository": repository,
+        "file_path": f"src/{chunk_id}.py",
+        "language": "python",
+        "symbol": chunk_id,
+        "start_line": 1,
+        "end_line": 2,
+        "content": f"def {chunk_id}():\n    pass",
+    }
 
 
 def test_upsert_chunks(tmp_path):
@@ -42,10 +53,7 @@ def test_upsert_chunks(tmp_path):
 
     store.upsert_chunks(chunks, embeddings)
 
-    point_ids = [
-        str(uuid.uuid5(uuid.NAMESPACE_URL, chunk["chunk_id"]))
-        for chunk in chunks
-    ]
+    point_ids = [point_id_for(chunk) for chunk in chunks]
 
     result = store.client.retrieve(
         collection_name="test_collection",
@@ -59,3 +67,35 @@ def test_upsert_chunks(tmp_path):
     assert result[0].payload["symbol"] == "process_payment"
     assert result[1].payload["chunk_id"] == "chunk-2"
     assert result[1].payload["symbol"] == "create_user"
+
+    store.close()
+
+
+def test_replace_repository_prunes_stale_points_and_isolates_repositories(tmp_path):
+    store = QdrantStore(
+        path=str(tmp_path / "qdrant"),
+        collection_name="test_collection",
+        vector_size=3,
+    )
+    store.create_collection()
+
+    # Same chunk ID "a" in two repositories must not collide.
+    store.upsert_chunks(
+        [_chunk("a"), _chunk("b"), _chunk("a", repository="other")],
+        [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+    )
+
+    store.replace_repository(
+        "test-repository",
+        [_chunk("a"), _chunk("c")],
+        [[1.0, 0.0, 0.0], [0.0, 0.0, 1.0]],
+    )
+
+    remaining = {
+        chunk["chunk_id"]
+        for chunk in store.load_repository_chunks("test-repository")
+    }
+    assert remaining == {"a", "c"}  # "b" was stale and is gone
+    assert store.count_repository("other") == 1
+
+    store.close()

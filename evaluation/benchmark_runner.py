@@ -938,6 +938,7 @@ def main() -> None:
         summary = service.index_repository(
             args.repository,
             repository_name=args.repository_name,
+            exclude=("evaluation", "tests"),
         )
 
         print()

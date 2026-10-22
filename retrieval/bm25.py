@@ -1,12 +1,19 @@
-
 import math
 import re
+import threading
 from collections import Counter
 
 from retrieval.models import RetrievalResult
 
 
 TOKEN_PATTERN = re.compile(r"[A-Za-z0-9_./:-]+")
+SEPARATOR_PATTERN = re.compile(r"[_./:-]+")
+
+# Splits CamelCase and acronym boundaries:
+# BM25Retriever -> BM25 | Retriever, LLMClient -> LLM | Client.
+CAMEL_CASE_BOUNDARY = re.compile(
+    r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])"
+)
 
 # Higher weights prioritize exact identifiers and repository paths.
 FIELD_WEIGHTS = {
@@ -18,21 +25,36 @@ FIELD_WEIGHTS = {
 
 
 def _tokenize(text: str) -> list[str]:
-    """Preserve complete identifiers and split them into components."""
-    raw_tokens = TOKEN_PATTERN.findall(text.lower())
+    """Keep whole identifiers, then add snake_case, path, and CamelCase parts.
+
+    Each part is added once, so a plain word such as ``context`` is not
+    double-counted.
+    """
     tokens: list[str] = []
 
-    for token in raw_tokens:
-        tokens.append(token)
+    for raw_token in TOKEN_PATTERN.findall(text):
+        tokens.append(raw_token.lower())
 
-        parts = re.split(r"[_./:-]+", token)
-        tokens.extend(part for part in parts if part)
+        parts = [part for part in SEPARATOR_PATTERN.split(raw_token) if part]
+        if len(parts) > 1:
+            tokens.extend(part.lower() for part in parts)
+
+        for part in parts:
+            pieces = [
+                piece for piece in CAMEL_CASE_BOUNDARY.split(part) if piece
+            ]
+            if len(pieces) > 1:
+                tokens.extend(piece.lower() for piece in pieces)
 
     return tokens
 
 
 class BM25Retriever:
-    """In-memory field-aware BM25 retriever for code chunks."""
+    """In-memory field-aware BM25 retriever for code chunks.
+
+    ``index`` builds a complete new index before swapping it in under a
+    lock, so concurrent searches never see a half-built index.
+    """
 
     def __init__(
         self,
@@ -63,12 +85,12 @@ class BM25Retriever:
             not math.isfinite(weight) or weight < 0
             for weight in self.field_weights.values()
         ):
-            raise ValueError(
-                "field weights must be finite and non-negative"
-            )
+            raise ValueError("field weights must be finite and non-negative")
 
         if not any(self.field_weights.values()):
             raise ValueError("at least one field weight must be positive")
+
+        self._lock = threading.RLock()
 
         self.chunks: list[dict] = []
 
@@ -83,38 +105,30 @@ class BM25Retriever:
         # symbol and path matches.
         self.field_documents: dict[str, list[list[str]]] = {}
         self.field_lengths: dict[str, list[int]] = {}
-        self.field_term_frequencies: dict[
-            str, list[dict[str, int]]
-        ] = {}
-        self.field_document_frequencies: dict[
-            str, dict[str, int]
-        ] = {}
+        self.field_term_frequencies: dict[str, list[dict[str, int]]] = {}
+        self.field_document_frequencies: dict[str, dict[str, int]] = {}
         self.field_average_lengths: dict[str, float] = {}
 
     def index(self, chunks: list[dict]) -> None:
         """Build aggregate and field-specific indexes from code chunks."""
-        self.chunks = list(chunks)
-
-        self.documents = []
-        self.document_lengths = []
-        self.term_frequencies = []
-        self.document_frequencies = {}
-
+        new_chunks = list(chunks)
         fields = tuple(FIELD_WEIGHTS)
 
-        self.field_documents = {field: [] for field in fields}
-        self.field_lengths = {field: [] for field in fields}
-        self.field_term_frequencies = {
-            field: [] for field in fields
+        documents: list[list[str]] = []
+        document_lengths: list[int] = []
+        term_frequencies: list[dict[str, int]] = []
+        document_frequencies: dict[str, int] = {}
+
+        field_documents: dict[str, list[list[str]]] = {f: [] for f in fields}
+        field_lengths: dict[str, list[int]] = {f: [] for f in fields}
+        field_term_frequencies: dict[str, list[dict[str, int]]] = {
+            f: [] for f in fields
         }
-        self.field_document_frequencies = {
-            field: {} for field in fields
-        }
-        self.field_average_lengths = {
-            field: 0.0 for field in fields
+        field_document_frequencies: dict[str, dict[str, int]] = {
+            f: {} for f in fields
         }
 
-        for chunk in self.chunks:
+        for chunk in new_chunks:
             field_text = {
                 "symbol": str(chunk.get("symbol") or ""),
                 "file_path": str(chunk.get("file_path") or ""),
@@ -124,48 +138,56 @@ class BM25Retriever:
 
             combined_tokens: list[str] = []
 
-            for field, text in field_text.items():
+            for field_name, text in field_text.items():
                 tokens = _tokenize(text)
                 combined_tokens.extend(tokens)
-
                 frequencies = Counter(tokens)
 
-                self.field_documents[field].append(tokens)
-                self.field_lengths[field].append(len(tokens))
-                self.field_term_frequencies[field].append(
-                    dict(frequencies)
-                )
+                field_documents[field_name].append(tokens)
+                field_lengths[field_name].append(len(tokens))
+                field_term_frequencies[field_name].append(dict(frequencies))
 
-                df = self.field_document_frequencies[field]
-
+                df = field_document_frequencies[field_name]
                 for token in frequencies:
                     df[token] = df.get(token, 0) + 1
 
             # Preserve aggregate index data for existing callers/tests.
             aggregate_frequencies = Counter(combined_tokens)
-
-            self.documents.append(combined_tokens)
-            self.document_lengths.append(len(combined_tokens))
-            self.term_frequencies.append(
-                dict(aggregate_frequencies)
-            )
+            documents.append(combined_tokens)
+            document_lengths.append(len(combined_tokens))
+            term_frequencies.append(dict(aggregate_frequencies))
 
             for token in aggregate_frequencies:
-                self.document_frequencies[token] = (
-                    self.document_frequencies.get(token, 0) + 1
+                document_frequencies[token] = (
+                    document_frequencies.get(token, 0) + 1
                 )
 
-        self.average_document_length = (
-            sum(self.document_lengths) / len(self.document_lengths)
-            if self.document_lengths
+        average_document_length = (
+            sum(document_lengths) / len(document_lengths)
+            if document_lengths
             else 0.0
         )
-
-        for field in fields:
-            lengths = self.field_lengths[field]
-            self.field_average_lengths[field] = (
-                sum(lengths) / len(lengths) if lengths else 0.0
+        field_average_lengths = {
+            f: (
+                sum(field_lengths[f]) / len(field_lengths[f])
+                if field_lengths[f]
+                else 0.0
             )
+            for f in fields
+        }
+
+        with self._lock:
+            self.chunks = new_chunks
+            self.documents = documents
+            self.document_lengths = document_lengths
+            self.term_frequencies = term_frequencies
+            self.document_frequencies = document_frequencies
+            self.average_document_length = average_document_length
+            self.field_documents = field_documents
+            self.field_lengths = field_lengths
+            self.field_term_frequencies = field_term_frequencies
+            self.field_document_frequencies = field_document_frequencies
+            self.field_average_lengths = field_average_lengths
 
     def _idf(self, token: str) -> float:
         """Calculate aggregate BM25 inverse document frequency."""
@@ -235,8 +257,7 @@ class BM25Retriever:
     ) -> float:
         """Combine field-specific BM25 scores using configured weights."""
         return sum(
-            weight
-            * self._score_field(query_tokens, field, document_index)
+            weight * self._score_field(query_tokens, field, document_index)
             for field, weight in self.field_weights.items()
             if weight > 0
         )
@@ -250,7 +271,7 @@ class BM25Retriever:
         if top_k < 0:
             raise ValueError("top_k must be non-negative")
 
-        if not query or not query.strip() or not self.chunks or top_k == 0:
+        if not query or not query.strip() or top_k == 0:
             return []
 
         # Preserve order while preventing duplicate query terms from
@@ -262,29 +283,28 @@ class BM25Retriever:
 
         scored_results: list[RetrievalResult] = []
 
-        for index, chunk in enumerate(self.chunks):
-            score = self._score_document(query_tokens, index)
+        with self._lock:
+            for index, chunk in enumerate(self.chunks):
+                score = self._score_document(query_tokens, index)
 
-            if score <= 0:
-                continue
+                if score <= 0:
+                    continue
 
-            scored_results.append(
-                RetrievalResult(
-                    id=chunk["chunk_id"],
-                    source="bm25",
-                    score=score,
-                    repository=chunk["repository"],
-                    file_path=chunk["file_path"],
-                    language=chunk["language"],
-                    symbol=chunk["symbol"],
-                    start_line=chunk["start_line"],
-                    end_line=chunk["end_line"],
-                    content=chunk["content"],
+                scored_results.append(
+                    RetrievalResult(
+                        id=chunk["chunk_id"],
+                        source="bm25",
+                        score=score,
+                        repository=chunk["repository"],
+                        file_path=chunk["file_path"],
+                        language=chunk["language"],
+                        symbol=chunk["symbol"],
+                        start_line=chunk["start_line"],
+                        end_line=chunk["end_line"],
+                        content=chunk["content"],
+                    )
                 )
-            )
 
-        scored_results.sort(
-            key=lambda result: (-result.score, result.id)
-        )
+        scored_results.sort(key=lambda result: (-result.score, result.id))
 
         return scored_results[:top_k]

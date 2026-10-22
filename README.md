@@ -4,19 +4,20 @@
 
 CodeGraphRAG indexes source-code repositories, retrieves relevant code chunks, and generates answers with source-file and line-range citations. It supports dense vector search, BM25 lexical search, graph retrieval over a Neo4j code graph, reciprocal rank fusion (RRF), and optional cross-encoder reranking.
 
-Dense retrieval is the default. On the project's 100-query benchmark, it outperformed every tested combined pipeline on Hit@5, Recall@5, MRR@5, and nDCG@5. These results apply to the tested repository and configuration, not necessarily to other codebases.
+Dense retrieval is the default. On the project's 100-query benchmark, hybrid retrieval (dense + BM25 + graph, fused with RRF) scored slightly higher than dense alone: Hit@5 of 0.93 versus 0.90, with similar gains on MRR@5 and nDCG@5. That is a difference of three queries, so treat it as a modest improvement. Hybrid retrieval is one setting away; see [Retrieval modes](#retrieval). These results apply to the tested repository and configuration, not necessarily to other codebases.
 
 ## Features
 
 - Tree-sitter parsing and AST-aware code chunking.
 - Dense semantic retrieval with `BAAI/bge-small-en-v1.5`.
-- BM25 lexical retrieval.
-- A code graph of definitions, imports, and calls, stored in Neo4j.
+- Identifier-aware BM25 lexical retrieval that splits `snake_case`, `CamelCase`, and file paths.
+- A code graph of definitions, imports, and calls, stored in Neo4j, with conservative call resolution.
 - Hybrid retrieval combining dense, BM25, and graph results with reciprocal rank fusion.
 - Optional cross-encoder reranking.
-- LLM-generated answers with source citations.
-- Local inference through Ollama or hosted OpenAI-compatible APIs.
-- CLI for indexing repositories and asking questions.
+- LLM-generated answers with source citations, grounded in graph context from Neo4j.
+- Local inference through Ollama, or any hosted OpenAI-compatible API.
+- CLI and REST API for indexing repositories and asking questions.
+- Queries against existing indexes without re-indexing.
 - Retrieval benchmarking with per-query diagnostics.
 
 ## Architecture
@@ -41,9 +42,9 @@ Embedding Generation      Code Graph Construction
 Local Qdrant Store              Neo4j
 ```
 
-The parser extracts code entities and their relationships, including definitions, imports, and calls.
+The parser extracts code entities and their relationships, including definitions, imports, and calls. Calls are linked to their definitions only when the target can be determined without guessing; see [Supported languages](#supported-languages).
 
-### Default retrieval: dense
+### Default retrieval and answer generation
 
 ```text
 Question
@@ -52,7 +53,7 @@ Question
 Dense Vector Retrieval (Qdrant)
    |
    v
-Retrieved Code Context
+Retrieved Code Context  <---  Graph Grounding (Neo4j)
    |
    v
 LLM Answer Generation
@@ -60,6 +61,8 @@ LLM Answer Generation
    v
 Answer + Source Citations
 ```
+
+Dense mode retrieves chunks from Qdrant only. Neo4j is still used at answer time, to add graph context to the retrieved code. Overlapping chunks from the same file are de-duplicated before they reach the LLM.
 
 ### Hybrid retrieval
 
@@ -76,9 +79,13 @@ Dense Retrieval + BM25 + Graph Retrieval (Neo4j)
           Retrieved Code Context
 ```
 
-Select hybrid mode with `CODEGRAPHRAG_RETRIEVAL_MODE=hybrid`.
+Select hybrid mode with `CODEGRAPHRAG_RETRIEVAL_MODE=hybrid`. The BM25 index lives in memory and is rebuilt from Qdrant automatically after a restart. The normal application path does not use reranking; see [Reranking](#reranking).
 
-The normal application path does not use reranking by default. See [Reranking](#reranking) for details.
+### Re-indexing safety
+
+Indexing parses, chunks, embeds, and validates everything before writing to either store. Neo4j then replaces the repository's graph in a single transaction. After that, Qdrant writes the new points before deleting stale ones, so the repository is never empty during the swap.
+
+If indexing fails before the writes, the previous index is untouched. If the Neo4j write fails, it rolls back and the vectors are untouched. If the Qdrant write fails after Neo4j succeeds, the graph is newer than the vectors, but the old vectors remain searchable; running `index` again restores consistency.
 
 ## Requirements
 
@@ -88,7 +95,7 @@ The normal application path does not use reranking by default. See [Reranking](#
 - Ollama for local inference, or an API key for a hosted OpenAI-compatible provider.
 - Internet access on first run to download model weights, unless they are already cached.
 
-The development machine had 16 GB RAM and an NVIDIA RTX 3050 with 4 GB VRAM. Resource requirements depend on repository size, model choice, and the inference configuration.
+The development machine had 16 GB RAM and an NVIDIA RTX 3050 with 4 GB VRAM. Resource requirements depend on repository size, model choice, and inference configuration.
 
 ## Installation
 
@@ -222,7 +229,7 @@ On Windows PowerShell, use a Windows path:
 python cli.py ask "C:\path\to\your\repository" "Where is authentication implemented?" --name my-repository
 ```
 
-The `ask` command indexes the repository before answering, so you do not need to run `index` first. However, each invocation repeats the indexing work, which can add latency for larger repositories.
+`ask` indexes the repository only if no index exists for that name. Otherwise it answers from the existing index. After changing the code, add `--reindex` to refresh it.
 
 ### Index without asking
 
@@ -232,11 +239,19 @@ python cli.py index "/path/to/your/repository" --name my-repository
 
 The summary reports file, entity, chunk, graph-node, and graph-edge counts.
 
+### Exclude directories
+
+Both commands accept `--exclude`, which skips a directory or file relative to the repository root. It can be repeated:
+
+```bash
+python cli.py index "/path/to/your/repository" --name my-repository --exclude tests --exclude docs
+```
+
+`--exclude` only takes effect when indexing runs. With `ask`, combine it with `--reindex` if an index already exists.
+
 ### Repository names
 
-Indexing under an existing repository name replaces that repository's vector and graph data once new chunks have been generated successfully. If no chunks are generated, the existing index is preserved.
-
-Use a distinct repository name for each separate experiment to avoid unintentionally replacing another index.
+The repository name defaults to the directory name. Indexing under an existing name replaces that repository's vector and graph data. Each repository's data is stored separately, so indexing one never affects another.
 
 ### CLI help
 
@@ -246,9 +261,30 @@ python cli.py index --help
 python cli.py ask --help
 ```
 
+## REST API
+
+Start the API server:
+
+```bash
+uvicorn api.main:app
+```
+
+| Method | Path | Body | Purpose |
+|---|---|---|---|
+| `GET` | `/health` | | Liveness check |
+| `POST` | `/repositories/index` | `repository_path`, optional `repository_name`, `exclude` | Index a repository |
+| `POST` | `/search` | `query`, optional `repository_name` | Retrieve code chunks |
+| `POST` | `/answers` | `query`, optional `repository_name` | Generate a cited answer |
+
+Without `repository_name`, queries go to the most recently indexed repository. Interactive documentation is available at `/docs` while the server runs.
+
+Only directories inside the allowed root can be indexed. Set it with `CODEGRAPHRAG_API_REPOSITORY_ROOT`; it defaults to the server's working directory. Paths outside it return `403`.
+
+The API has no authentication, so keep it bound to localhost. Run it as a single process: the embedded Qdrant store can only be opened by one process at a time. `/health` reports that the server is running; it does not yet check Neo4j or Qdrant.
+
 ## Configuration
 
-Settings are provided through environment variables and can be placed in `.env`.
+Settings are provided through environment variables and can be placed in `.env`. They are read once when the service starts.
 
 ### Retrieval
 
@@ -274,42 +310,38 @@ Settings are provided through environment variables and can be placed in `.env`.
 | `CODEGRAPHRAG_NEO4J_USER` | `neo4j` | Neo4j username. |
 | `CODEGRAPHRAG_NEO4J_PASSWORD` | Required | Neo4j password. |
 
-Qdrant runs in local embedded mode, so a separate Qdrant server is not required by the current configuration. Keep `data/qdrant` between runs to retain stored vectors.
+Qdrant runs in local embedded mode, so a separate Qdrant server is not required. Keep `data/qdrant` between runs to retain stored vectors.
 
-The embedding model `BAAI/bge-small-en-v1.5` downloads on first use if it is not already cached.
+The embedding model `BAAI/bge-small-en-v1.5` downloads on first use if it is not already cached. If you change the embedding model, its vector size must match the Qdrant collection; indexing checks this before writing anything.
 
-Neo4j is required during service initialization and indexing, even in dense mode, although the dense retrieval path does not query the graph for retrieval.
+Neo4j is required for indexing and for answer generation in every retrieval mode.
 
-## Reranking
+### Reranking
 
-The normal CLI path does not use a reranker by default. Setting `CODEGRAPHRAG_RERANKER_MODEL` alone does not enable reranking.
+The normal CLI path does not use a reranker. Setting `CODEGRAPHRAG_RERANKER_MODEL` alone does not enable reranking.
 
-The benchmark runner constructs `CrossEncoderReranker` explicitly. In application code, a reranker can also be passed when constructing `CodeGraphRAGService`.
-
-When active, the benchmark configuration reranks the fused candidate pool, which contains up to 30 candidates by default, and retains up to 10. The evaluation metrics are then computed at the top five results.
+The benchmark runner constructs `CrossEncoderReranker` explicitly. In application code, a reranker can be passed when constructing `CodeGraphRAGService`; it applies in hybrid mode. It reranks the fused candidates (up to 30 by default) and keeps up to 10.
 
 ## Supported languages
 
-Tree-sitter grammars are included for:
+Tree-sitter grammars are included for Python, JavaScript, TypeScript, Java, C, C++, Go, and Rust. Code entity and graph-relationship extraction is supported for these languages.
 
-- Python
-- JavaScript
-- TypeScript
-- Java
-- C
-- C++
-- Go
-- Rust
+Calls are linked to a definition only when the target is unambiguous:
 
-Code entity and graph-relationship extraction is supported for these languages.
+- **All languages:** functions defined in the same file, and helpers nested inside the calling function.
+- **Python:** `self.method()` calls, class-level calls such as `Settings.from_environment()`, and functions from imported modules, including relative imports.
+- **Java and C++:** bare calls to methods of the enclosing class.
+- **Go and Java:** definitions in the same package (directory).
+
+Anything else, including built-ins, third-party libraries, calls through variables, and ambiguous names, stays an unresolved placeholder rather than a guessed edge.
 
 ## Retrieval benchmark
 
 ### Methodology
 
-The benchmark runs 100 manually verified queries against CodeGraphRAG's own source code. The reported run indexed 57 files into 201 chunks.
+The benchmark runs 100 manually verified queries against CodeGraphRAG's own source code. The `evaluation/` and `tests/` directories are excluded from the benchmark index. The reported run indexed 57 files into 240 chunks.
 
-Each query in [`evaluation/dataset.py`](evaluation/dataset.py) includes expected files, expected symbols, and a reference answer. The project author wrote the queries for this codebase, so this is a single-repository self-retrieval benchmark rather than an independent evaluation.
+Each query in [`evaluation/dataset.py`](evaluation/dataset.py) includes expected files, expected symbols, and a reference answer. The project author wrote the queries for this codebase, so this is a single-repository self-retrieval benchmark rather than an independent evaluation. All queries are lookups ("Where is X implemented?"); none ask about relationships between code.
 
 Metrics are computed at `k = 5`.
 
@@ -317,11 +349,13 @@ Metrics are computed at `k = 5`.
 
 | Retrieval strategy | Hit@5 | Precision@5 | Recall@5 | MRR@5 | nDCG@5 |
 |---|---:|---:|---:|---:|---:|
-| Dense | **0.9000** | 0.1840 | **0.8950** | **0.7647** | **0.7887** |
-| BM25 | 0.7400 | 0.1500 | 0.7350 | 0.5766 | 0.6051 |
-| Dense + BM25 (RRF) | 0.8300 | 0.1700 | 0.8250 | 0.7032 | 0.7203 |
-| Dense + BM25 + Graph | 0.8300 | 0.1700 | 0.8250 | 0.7020 | 0.7203 |
-| Dense + BM25 + Graph + Reranker | 0.8200 | **0.1847** | 0.8150 | 0.5862 | 0.6364 |
+| Dense | 0.9000 | **0.2000** | 0.8950 | 0.7564 | 0.7880 |
+| BM25 | 0.8900 | 0.1800 | 0.8900 | 0.7504 | 0.7774 |
+| Dense + BM25 (RRF) | **0.9300** | 0.1900 | **0.9250** | 0.7924 | 0.8202 |
+| Dense + BM25 + Graph | **0.9300** | 0.1900 | **0.9250** | **0.7926** | **0.8222** |
+| Dense + BM25 + Graph + Reranker | 0.8100 | 0.2322 | 0.8050 | 0.5823 | 0.6387 |
+
+The reranked configuration has the highest Precision@5 but ranks worse on every other metric.
 
 ### Metric definitions
 
@@ -331,34 +365,30 @@ Metrics are computed at `k = 5`.
 - **MRR@5:** reciprocal rank of the first relevant result, or zero if none appears in the top five, averaged across queries.
 - **nDCG@5:** ranking-quality metric that rewards relevant results appearing higher in the list.
 
-Each query's expected files and symbols define relevance. The dataset averages 1.03 expected files and 0.98 expected symbols per query. Because each query has a relatively small set of expected targets, Precision@5 should be interpreted alongside Hit@5 and Recall@5.
+Each query's expected files and symbols define relevance. The dataset averages 1.03 expected files and 0.98 expected symbols per query, so Precision@5 is low by construction. Read it alongside Hit@5 and Recall@5.
 
 ### Findings
 
-- Dense retrieval achieved the highest Hit@5, Recall@5, MRR@5, and nDCG@5 among the tested configurations.
-- Adding BM25 through RRF lowered Hit@5 from 0.90 to 0.83.
-- Adding graph retrieval made no difference to Hit@5, Recall@5, or nDCG@5 compared with Dense + BM25. MRR@5 changed from 0.7032 to 0.7020.
-- The tested general-purpose reranker lowered MRR@5 from 0.7020 to 0.5862. It reranked up to 30 fused candidates and retained 10, with metrics computed on the top five.
-- The reranked configuration had Precision@5 of 0.1847, compared with 0.1840 for dense retrieval. This small difference does not offset the lower scores on the other reported ranking metrics.
-- Dense retrieval is therefore the default. A code-specific reranker is a candidate for future evaluation.
+- **Hybrid retrieval scored highest.** Fusing dense and BM25 results with RRF reached Hit@5 0.93, MRR@5 0.792, and nDCG@5 0.820, compared with 0.90, 0.756, and 0.788 for dense alone. The Hit@5 difference is three queries out of 100.
+- **Identifier-aware tokenization mattered most.** An earlier version of this benchmark, before BM25 split `CamelCase` identifiers, measured BM25 at Hit@5 0.74 and MRR@5 0.577. With the fix, BM25 reaches 0.89 and 0.750. The corpus differed slightly between runs (201 chunks then, 240 now), so treat this comparison as approximate.
+- **Graph retrieval was neutral.** Adding it to RRF changed MRR@5 by 0.0002 and nDCG@5 by 0.002. Lookup queries don't need code relationships, so this benchmark can't measure what graph retrieval is designed for.
+- **The general-purpose reranker hurt ranking.** The `cross-encoder/ms-marco-MiniLM-L-6-v2` reranker lowered Hit@5 to 0.81 and MRR@5 to 0.582. It is not used in the normal application path. A code-specific reranker is a candidate for future evaluation.
 
 These findings apply to this dataset and configuration. Results may differ on other repositories, languages, and query sets.
 
 ### Reproduce the benchmark
 
-Use a dedicated repository name so the benchmark does not replace another index:
-
 ```bash
 python -m evaluation.benchmark_runner --repository . --repository-name codegraphrag-benchmark --top-k 5 --output evaluation/results/benchmark-local.json
 ```
 
-This command evaluates retrieval only. To evaluate answer generation as well, configure an LLM and add `--evaluate-generation`.
+Use a dedicated repository name so the benchmark does not replace another index. This command evaluates retrieval only. To evaluate answer generation as well, configure an LLM and add `--evaluate-generation`.
 
-The reported results do not establish answer-generation quality, faithfulness, or citation accuracy. For a meaningful comparison, keep the dataset, retrieval configuration, model settings, and evaluation procedure consistent across runs.
+The reported results do not establish answer-generation quality, faithfulness, or citation accuracy.
 
 ## Example output
 
-The following output was captured from a local run using Qwen2.5 3B.
+The following output was captured from a local run using Qwen2.5 3B, on an earlier version of the project. Current indexing produces different counts.
 
 **Question**
 
@@ -395,22 +425,25 @@ Graph edges:  1275
 
 **Manual correctness check:** The answer is partly correct. The default retrieval mode (`dense`) is selected in `application/service.py`. However, the default `top_k` value of 20 is defined in `retrieval/config.py`, not in `service.py`. That configuration file appears in the returned citations, but the model attributed the value to the wrong file.
 
-This example demonstrates why generated answers and citations require verification. Generation and citation quality have not been formally evaluated beyond this manual check.
+This example shows why generated answers and citations require verification. Generation and citation quality have not been formally evaluated beyond this manual check.
 
 ## Project layout
 
 | Path | Purpose |
 |---|---|
+| `api/` | FastAPI REST API |
 | `application/` | Application configuration and service orchestration |
 | `ingestion/` | Repository file discovery, language detection, and ingestion |
 | `parser/` | Tree-sitter parsing and code entity/relationship extraction |
 | `chunking/` | Code chunk construction |
 | `embeddings/` | Embedding model integration |
 | `vector_store/` | Qdrant persistence and indexing |
-| `graph/` | Graph construction, Neo4j storage, traversal, and retrieval |
+| `graph/` | Graph construction, call resolution, Neo4j storage, traversal, and retrieval |
 | `retrieval/` | Dense, BM25, hybrid, fusion, and reranking components |
 | `generation/` | Context construction, prompting, and answer generation |
 | `evaluation/` | Dataset, benchmark runners, metrics, and results |
+| `docs/` | Additional documentation |
+| `scripts/` | Utility scripts |
 | `tests/` | Automated tests |
 | `cli.py` | Command-line entry point |
 | `compose.yaml` | Local Neo4j service |
@@ -426,21 +459,22 @@ python -m pytest -rs -q
 
 The `-rs` flag prints the reason for each skipped test.
 
-The latest reported development run passed **324 tests, with 2 skipped**. Both skipped tests are opt-in live integration tests:
+The suite has 355 tests. Two are opt-in live integration tests, which are skipped unless enabled:
 
-- `tests/test_live_end_to_end.py` requires `CODEGRAPHRAG_RUN_LIVE_TESTS=1`, `OPENAI_API_KEY`, and `OPENAI_BASE_URL`.
 - `tests/test_live_neo4j.py` requires `CODEGRAPHRAG_RUN_LIVE_TESTS=1` and a running Neo4j instance.
+- `tests/test_live_end_to_end.py` requires `CODEGRAPHRAG_RUN_LIVE_TESTS=1`, `OPENAI_API_KEY`, and `OPENAI_BASE_URL`, plus a running Neo4j instance and LLM endpoint.
 
-Test counts describe that development run and may change as the codebase evolves.
+In the latest development run, all 355 tests passed against live Neo4j and a local Ollama model. Test counts describe that run and may change as the codebase evolves.
 
 ## Limitations and future work
 
-- **Index reuse:** `ask` re-indexes the repository before every answer. Querying an existing index without re-indexing is not yet supported by this workflow.
-- **Neo4j dependency:** Neo4j is required for service initialization and indexing, even in dense mode.
+- **Benchmark scope:** The benchmark covers one repository and 100 author-written lookup queries. It does not test relational questions such as "what calls this function?", so graph retrieval's value is unmeasured. Adding relational queries and other repositories is the next evaluation step.
 - **Generation evaluation:** Answer quality, faithfulness, citation validity, and citation coverage have not been formally evaluated.
-- **Reranking:** The tested general-purpose cross-encoder reduced ranking quality on most reported metrics. A code-specific reranker needs evaluation.
-- **Benchmark scope:** The benchmark covers one repository and 100 author-written queries. Broader evaluation is needed before generalizing the findings.
-- **Language coverage:** Code entity and relationship extraction is limited to the listed Tree-sitter-supported languages.
+- **Cross-file call resolution:** Python imports and Go and Java packages are resolved. JavaScript, TypeScript, Rust, C, and C++ cross-file calls remain unresolved placeholders, because the parser does not yet capture imports for those languages.
+- **Neo4j dependency:** Neo4j is required for indexing and answer generation, even in dense retrieval mode.
+- **Reranking:** The tested general-purpose cross-encoder reduced ranking quality. A code-specific reranker needs evaluation.
+- **Stale indexes:** `ask` reuses an existing index. After code changes, use `--reindex`.
+- **API deployment:** The API has no authentication, must run as a single process, and its health check does not yet verify Neo4j or Qdrant.
 
 ## License
 
