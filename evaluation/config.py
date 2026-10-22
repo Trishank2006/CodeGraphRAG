@@ -9,6 +9,11 @@ from datetime import datetime, timezone
 from typing import Any
 
 
+DEFAULT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+DEFAULT_RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+DEFAULT_LLM_MODEL = "qwen2.5:3b"
+
+
 def get_repository_version() -> str:
     """Return the current Git revision, or 'unknown' if unavailable."""
     try:
@@ -59,9 +64,9 @@ class EvaluationConfig:
     rrf_k: int = 60
     rerank_top_k: int = 10
 
-    embedding_model: str = "BAAI/bge-small-en-v1.5"
-    reranker_model: str = "./models/ms-marco-MiniLM-L6-v2"
-    llm_model: str = "qwen2.5:3b"
+    embedding_model: str = DEFAULT_EMBEDDING_MODEL
+    reranker_model: str = DEFAULT_RERANKER_MODEL
+    llm_model: str = DEFAULT_LLM_MODEL
 
     max_context_items: int = 10
     max_context_characters: int = 12000
@@ -82,9 +87,7 @@ class EvaluationConfig:
             raise ValueError("rerank_top_k must be greater than 0")
 
         if self.max_context_items <= 0:
-            raise ValueError(
-                "max_context_items must be greater than 0"
-            )
+            raise ValueError("max_context_items must be greater than 0")
 
         if self.max_context_characters <= 0:
             raise ValueError(
@@ -98,16 +101,23 @@ class EvaluationConfig:
         repository_version: str | None = None,
         **kwargs: Any,
     ) -> "EvaluationConfig":
-        """Create configuration with timestamp and Git metadata."""
+        """Create configuration with environment overrides and Git metadata."""
         dirty, diff_hash = get_git_working_tree_metadata()
 
-        llm_model = os.getenv(
-            "CODEGRAPHRAG_OPENAI_MODEL",
-            os.getenv("OPENAI_MODEL", "qwen2.5:3b"),
+        llm_model = (
+            os.getenv("CODEGRAPHRAG_OPENAI_MODEL")
+            or os.getenv("OPENAI_MODEL")
+            or DEFAULT_LLM_MODEL
+        )
+
+        reranker_model = os.getenv(
+            "CODEGRAPHRAG_RERANKER_MODEL",
+            DEFAULT_RERANKER_MODEL,
         )
 
         return cls(
             llm_model=llm_model,
+            reranker_model=reranker_model,
             repository_version=(
                 repository_version or get_repository_version()
             ),

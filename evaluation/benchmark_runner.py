@@ -181,6 +181,9 @@ class BenchmarkRunner:
 
             if evaluated:
                 evaluated_metrics.append(metrics)
+            else:
+                # None means unavailable; 0.0 remains a measured score.
+                metrics = {key: None for key in metrics}
 
             per_query.append(
                 {
@@ -207,6 +210,8 @@ class BenchmarkRunner:
             status = "partially_evaluated"
 
         averages = average_generation_metrics(evaluated_metrics)
+        if evaluated_count == 0:
+            averages = {key: None for key in averages}
 
         return {
             "status": status,
@@ -333,6 +338,12 @@ class BenchmarkRunner:
                 answer=answer,
             )
 
+            # Preserve zero only when a metric was actually evaluated.
+            if not validity_evaluated:
+                citation_metrics["citation_validity_rate"] = None
+            if not coverage_evaluated:
+                citation_metrics["citation_coverage"] = None
+
             if coverage_evaluated:
                 coverage_values.append(
                     citation_metrics["citation_coverage"]
@@ -381,7 +392,7 @@ class BenchmarkRunner:
         average_coverage = (
             sum(coverage_values) / len(coverage_values)
             if coverage_values
-            else 0.0
+            else None
         )
 
         return {
@@ -400,7 +411,7 @@ class BenchmarkRunner:
                     )
                     / validity_evaluated_count
                     if validity_evaluated_count
-                    else 0.0
+                    else None
                 ),
                 "citation_coverage": average_coverage,
             },
@@ -891,6 +902,8 @@ def main() -> None:
         max_context_characters=base_config.max_context_characters,
         repository_version=base_config.repository_version,
         benchmark_timestamp=base_config.benchmark_timestamp,
+        git_working_tree_dirty=base_config.git_working_tree_dirty,
+        tracked_diff_sha256=base_config.tracked_diff_sha256,
     )
 
     runner = BenchmarkRunner(
@@ -937,16 +950,19 @@ def main() -> None:
 
         print("Running retrieval benchmark...")
 
-        answers = None
-        contexts = None
-        citations_by_query = None
-        latency_stages = None
-
         
         answers = None
         contexts = None
         citations_by_query = None
         latency_stages = None
+        context_chunks_by_query = None
+
+        if args.evaluate_generation:
+            answers = {}
+            contexts = {}
+            citations_by_query = {}
+            latencies_by_query = {}
+            context_chunks_by_query = {}
 
         if args.evaluate_generation:
             answers = {}

@@ -16,17 +16,22 @@ class Neo4jStore:
         driver: Optional[Driver] = None,
     ):
         uri = uri or os.getenv(
-            "NEO4J_URI",
-            "bolt://localhost:17687",
+            "CODEGRAPHRAG_NEO4J_URI",
+            "bolt://localhost:7687",
         )
         user = user or os.getenv(
-            "NEO4J_USER",
+            "CODEGRAPHRAG_NEO4J_USER",
             "neo4j",
         )
         password = password or os.getenv(
-            "NEO4J_PASSWORD",
-            "password",
+            "CODEGRAPHRAG_NEO4J_PASSWORD"
         )
+
+        if driver is None and not password:
+            raise RuntimeError(
+                "CODEGRAPHRAG_NEO4J_PASSWORD must be set in your .env "
+                "file or environment before connecting to Neo4j."
+            )
 
         self.driver = driver or GraphDatabase.driver(
             uri,

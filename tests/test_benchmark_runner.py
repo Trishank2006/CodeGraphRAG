@@ -151,7 +151,8 @@ def test_citation_benchmark_without_citations():
     assert result["coverage_status"] == "not_evaluated"
     assert result["evaluated_count"] == 0
     assert result["coverage_evaluated_count"] == 0
-    assert result["average"]["citation_validity_rate"] == 0.0
+    assert result["average"]["citation_validity_rate"] is None
+    assert result["average"]["citation_coverage"] is None
 
 
 def test_citation_benchmark_marks_coverage_as_evaluated_when_supplied():
