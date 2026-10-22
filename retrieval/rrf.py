@@ -1,6 +1,42 @@
+
 from dataclasses import replace
 
 from retrieval.models import RetrievalResult
+
+
+def _merge_duplicate_results(
+    existing: RetrievalResult,
+    incoming: RetrievalResult,
+) -> RetrievalResult:
+    """Merge metadata for the same document without losing useful content."""
+
+    def choose_text(first: str, second: str) -> str:
+        first = first or ""
+        second = second or ""
+        return second if len(second.strip()) > len(first.strip()) else first
+
+    def choose_int(first: int, second: int) -> int:
+        return first if first > 0 else second
+
+    return replace(
+        existing,
+        source=existing.source,
+        repository=(
+            existing.repository
+            if existing.repository != "default_repo"
+            else incoming.repository
+        ),
+        file_path=existing.file_path or incoming.file_path,
+        language=(
+            existing.language
+            if existing.language and existing.language != "unknown"
+            else incoming.language
+        ),
+        symbol=existing.symbol or incoming.symbol,
+        start_line=choose_int(existing.start_line, incoming.start_line),
+        end_line=choose_int(existing.end_line, incoming.end_line),
+        content=choose_text(existing.content, incoming.content),
+    )
 
 
 def reciprocal_rank_fusion(
@@ -9,26 +45,16 @@ def reciprocal_rank_fusion(
     top_k: int | None = None,
 ) -> list[RetrievalResult]:
     """
-    Combine ranked retrieval results using Reciprocal Rank Fusion (RRF).
+    Combine ranked retrieval lists using Reciprocal Rank Fusion.
 
-    RRF score:
-        score(d) = sum(1 / (k + rank(d)))
-
-    Rank is 1-based within each input result list.
-
-    Results with the same `id` are deduplicated. Their sources are
-    combined into a deterministic `+`-separated source string.
-
-    Args:
-        result_lists: Ranked result lists from different retrievers.
-        k: RRF constant. Larger values reduce the effect of rank position.
-        top_k: Maximum number of fused results to return.
-
-    Returns:
-        Fused and deterministically ordered RetrievalResult objects.
+    Documents are deduplicated by exact ID. Duplicate results contribute
+    once per input list, while useful metadata is merged across sources.
     """
     if k < 0:
         raise ValueError("k must be non-negative")
+
+    if top_k is not None and top_k < 0:
+        raise ValueError("top_k must be non-negative")
 
     scores: dict[str, float] = {}
     merged_results: dict[str, RetrievalResult] = {}
@@ -38,46 +64,45 @@ def reciprocal_rank_fusion(
         seen_in_list: set[str] = set()
 
         for rank, result in enumerate(results, start=1):
-            # Do not count the same document twice within one retriever.
-            if result.id in seen_in_list:
+            result_id = result.id
+
+            if not result_id or result_id in seen_in_list:
                 continue
 
-            seen_in_list.add(result.id)
-
-            scores[result.id] = scores.get(result.id, 0.0) + (
+            seen_in_list.add(result_id)
+            scores[result_id] = scores.get(result_id, 0.0) + (
                 1.0 / (k + rank)
             )
 
-            if result.id not in merged_results:
-                merged_results[result.id] = result
+            if result_id not in merged_results:
+                merged_results[result_id] = result
+            else:
+                merged_results[result_id] = _merge_duplicate_results(
+                    merged_results[result_id],
+                    result,
+                )
 
-            source_list = sources.setdefault(result.id, [])
-            if result.source not in source_list:
-                source_list.append(result.source)
+            source_list = sources.setdefault(result_id, [])
+            for source in (result.source or "").split("+"):
+                if source and source not in source_list:
+                    source_list.append(source)
 
     fused_results: list[RetrievalResult] = []
 
     for result_id, result in merged_results.items():
-        combined_source = "+".join(sources[result_id])
-
         fused_results.append(
             replace(
                 result,
-                source=combined_source,
+                source="+".join(sources[result_id]),
                 score=scores[result_id],
             )
         )
 
-    # Deterministic ordering:
-    # 1. Highest RRF score first
-    # 2. ID alphabetically for ties
     fused_results.sort(
         key=lambda result: (-result.score, result.id)
     )
 
     if top_k is not None:
-        if top_k < 0:
-            raise ValueError("top_k must be non-negative")
         fused_results = fused_results[:top_k]
 
     return fused_results

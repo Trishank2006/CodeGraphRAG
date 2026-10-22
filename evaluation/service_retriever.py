@@ -1,29 +1,17 @@
 from __future__ import annotations
 
-from typing import Callable, Dict, List
+from typing import Callable
 
 from application.service import CodeGraphRAGService
-from retrieval.models import RetrievalResult
-from retrieval.search import search_code
-from retrieval.pipeline import HybridRetrievalPipeline
-from retrieval.config import RetrievalConfig
 from graph.retrieval import GraphRetriever
+from retrieval.config import RetrievalConfig
+from retrieval.models import RetrievalResult
+from retrieval.pipeline import HybridRetrievalPipeline
+from retrieval.search import search_code
 
 
 class ServiceRetriever:
-    """
-    Adapter between CodeGraphRAGService and the Phase 7
-    evaluation framework.
-
-    Provides independent retrieval configurations:
-
-    1. Dense
-    2. BM25
-    3. Dense + BM25
-    4. Dense + BM25 + Graph
-    5. Hybrid + RRF
-    6. Hybrid + RRF + Reranker
-    """
+    """Adapter between CodeGraphRAGService and benchmark configurations."""
 
     def __init__(
         self,
@@ -33,135 +21,22 @@ class ServiceRetriever:
         self.service = service
         self.config = config or RetrievalConfig()
 
-    def dense(self, query: str) -> List[RetrievalResult]:
+    def dense(self, query: str) -> list[RetrievalResult]:
         """Dense vector retrieval only."""
-        return search_code(
-            query=query,
-            top_k=self.config.dense_top_k,
-            embedder=self.service.embedder,
-            store=self.service.vector_store,
-        )
+        return self._dense_search(query, self.config.dense_top_k)
 
-    def bm25(self, query: str) -> List[RetrievalResult]:
+    def bm25(self, query: str) -> list[RetrievalResult]:
         """BM25 retrieval only."""
         return self.service.bm25_retriever.search_bm25(
             query,
             top_k=self.config.bm25_top_k,
         )
 
-    def dense_bm25(self, query: str) -> List[RetrievalResult]:
-        """
-        Dense + BM25 retrieval using RRF fusion.
-
-        Graph and reranking are disabled.
-        """
-        pipeline = HybridRetrievalPipeline(
-            dense_search=self._dense_search,
-            bm25_retriever=self.service.bm25_retriever,
-            graph_search=None,
-            reranker=None,
-            config=RetrievalConfig(
-                dense_top_k=self.config.dense_top_k,
-                bm25_top_k=self.config.bm25_top_k,
-                graph_top_k=0,
-                rrf_top_k=self.config.rrf_top_k,
-                rerank_top_k=self.config.rerank_top_k,
-                rrf_k=self.config.rrf_k,
-            ),
-        )
-
-        return pipeline.search(query)
-
-    def dense_bm25_graph(self, query: str) -> List[RetrievalResult]:
-        """
-        Dense + BM25 + Graph retrieval.
-
-        Reranking is disabled.
-        """
-        graph_retriever = GraphRetriever(self.service.graph_store)
-
-        pipeline = HybridRetrievalPipeline(
-            dense_search=self._dense_search,
-            bm25_retriever=self.service.bm25_retriever,
-            graph_search=lambda q, k: graph_retriever.search(
-                q,
-                top_k=k,
-            ),
-            reranker=None,
-            config=RetrievalConfig(
-                dense_top_k=self.config.dense_top_k,
-                bm25_top_k=self.config.bm25_top_k,
-                graph_top_k=self.config.graph_top_k,
-                rrf_top_k=self.config.rrf_top_k,
-                rerank_top_k=self.config.rerank_top_k,
-                rrf_k=self.config.rrf_k,
-            ),
-        )
-
-        return pipeline.search(query)
-
-    def hybrid_rrf(self, query: str) -> List[RetrievalResult]:
-        """
-        Hybrid Dense + BM25 + RRF retrieval.
-
-        Graph and reranking are disabled.
-
-        Note:
-        RRF is the fusion mechanism used by the hybrid pipeline.
-        """
-        pipeline = HybridRetrievalPipeline(
-            dense_search=self._dense_search,
-            bm25_retriever=self.service.bm25_retriever,
-            graph_search=None,
-            reranker=None,
-            config=RetrievalConfig(
-                dense_top_k=self.config.dense_top_k,
-                bm25_top_k=self.config.bm25_top_k,
-                graph_top_k=0,
-                rrf_top_k=self.config.rrf_top_k,
-                rerank_top_k=self.config.rerank_top_k,
-                rrf_k=self.config.rrf_k,
-            ),
-        )
-
-        return pipeline.search(query)
-
-    def hybrid_rrf_reranker(
-        self,
-        query: str,
-    ) -> List[RetrievalResult]:
-        """
-        Full retrieval pipeline:
-
-        Dense + BM25 + Graph + RRF + Reranker.
-        """
-        graph_retriever = GraphRetriever(self.service.graph_store)
-
-        pipeline = HybridRetrievalPipeline(
-            dense_search=self._dense_search,
-            bm25_retriever=self.service.bm25_retriever,
-            graph_search=lambda q, k: graph_retriever.search(
-                q,
-                top_k=k,
-            ),
-            reranker=self.service.reranker,
-            config=RetrievalConfig(
-                dense_top_k=self.config.dense_top_k,
-                bm25_top_k=self.config.bm25_top_k,
-                graph_top_k=self.config.graph_top_k,
-                rrf_top_k=self.config.rrf_top_k,
-                rerank_top_k=self.config.rerank_top_k,
-                rrf_k=self.config.rrf_k,
-            ),
-        )
-
-        return pipeline.search(query)
-
     def _dense_search(
         self,
         query: str,
         top_k: int,
-    ) -> List[RetrievalResult]:
+    ) -> list[RetrievalResult]:
         """Internal dense retrieval callback."""
         return search_code(
             query=query,
@@ -170,29 +45,81 @@ class ServiceRetriever:
             store=self.service.vector_store,
         )
 
-    def as_retrievers(
+    def _hybrid_pipeline(
         self,
-    ) -> Dict[str, Callable]:
-        """
-        Return benchmark-ready retrieval functions.
-        """
+        *,
+        include_graph: bool,
+        include_reranker: bool,
+    ) -> HybridRetrievalPipeline:
+        """Build a hybrid pipeline with selected components."""
+        graph_search = None
+
+        if include_graph:
+            graph_retriever = GraphRetriever(self.service.graph_store)
+
+            graph_search = lambda query, top_k: graph_retriever.search(
+                query,
+                top_k=top_k,
+            )
+
+        return HybridRetrievalPipeline(
+            dense_search=self._dense_search,
+            bm25_retriever=self.service.bm25_retriever,
+            graph_search=graph_search,
+            reranker=(
+                self.service.reranker if include_reranker else None
+            ),
+            config=RetrievalConfig(
+                dense_top_k=self.config.dense_top_k,
+                bm25_top_k=self.config.bm25_top_k,
+                graph_top_k=(
+                    self.config.graph_top_k if include_graph else 0
+                ),
+                rrf_top_k=self.config.rrf_top_k,
+                rerank_top_k=self.config.rerank_top_k,
+                rrf_k=self.config.rrf_k,
+                fusion_weight=self.config.fusion_weight,
+            ),
+        )
+
+    def dense_bm25(self, query: str) -> list[RetrievalResult]:
+        """Dense + BM25 using RRF, without graph or reranking."""
+        return self._hybrid_pipeline(
+            include_graph=False,
+            include_reranker=False,
+        ).search(query)
+
+    def dense_bm25_graph(self, query: str) -> list[RetrievalResult]:
+        """Dense + BM25 + graph, without reranking."""
+        return self._hybrid_pipeline(
+            include_graph=True,
+            include_reranker=False,
+        ).search(query)
+
+    def dense_bm25_graph_reranker(
+        self,
+        query: str,
+    ) -> list[RetrievalResult]:
+        """Dense + BM25 + graph + reranking."""
+        return self._hybrid_pipeline(
+            include_graph=True,
+            include_reranker=True,
+        ).search(query)
+
+    def as_retrievers(self) -> dict[str, Callable]:
+        """Return distinct benchmark configurations."""
         return {
-            "Dense": lambda example: self.dense(
+            "Dense": lambda example: self.dense(example.query),
+            "BM25": lambda example: self.bm25(example.query),
+            "Dense + BM25 (RRF)": lambda example: self.dense_bm25(
                 example.query
             ),
-            "BM25": lambda example: self.bm25(
+            "Dense + BM25 + Graph": lambda example: self.dense_bm25_graph(
                 example.query
             ),
-            "Dense + BM25": lambda example: self.dense_bm25(
-                example.query
-            ),
-            "Dense + BM25 + Graph": lambda example: (
-                self.dense_bm25_graph(example.query)
-            ),
-            "Hybrid + RRF": lambda example: self.hybrid_rrf(
-                example.query
-            ),
-            "Hybrid + RRF + Reranker": lambda example: (
-                self.hybrid_rrf_reranker(example.query)
+            "Dense + BM25 + Graph + Reranker": (
+                lambda example: self.dense_bm25_graph_reranker(
+                    example.query
+                )
             ),
         }

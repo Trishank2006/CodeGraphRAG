@@ -1,8 +1,11 @@
+
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from pathlib import Path
 
+from application.config import ApplicationSettings
 from embeddings.embedder import CodeEmbedder
 from generation.context import ContextBuilder
 from generation.generator import AnswerGenerator
@@ -19,14 +22,13 @@ from ingestion.language_detection import detect_language
 from ingestion.metadata import extract_metadata
 from parser.core_parser import parse_source_code
 from retrieval.bm25 import BM25Retriever
+from retrieval.config import RetrievalConfig
 from retrieval.pipeline import HybridRetrievalPipeline
 from retrieval.reranker import CrossEncoderReranker
 from retrieval.search import search_code
 from vector_store.indexer import index_chunks
 from vector_store.qdrant_store import QdrantStore
 from vector_store.repository_indexer import build_repository_chunks
-
-from application.config import ApplicationSettings
 
 
 class RepositoryNotIndexedError(RuntimeError):
@@ -69,11 +71,16 @@ class CodeGraphRAGService:
         )
         self.llm_client = llm_client
         self.bm25_retriever = bm25_retriever or BM25Retriever()
-        self.reranker = reranker or CrossEncoderReranker()
+        self.reranker = reranker
         self._is_indexed = False
+        self._repository_name: str | None = None
 
     def close(self) -> None:
-        self.graph_store.close()
+        """Close all resources owned by the service."""
+        try:
+            self.graph_store.close()
+        finally:
+            self.vector_store.close()
 
     def index_repository(
         self,
@@ -83,7 +90,9 @@ class CodeGraphRAGService:
         """Parse and persist a checked-out source repository."""
         root = Path(repository_path).resolve()
         if not root.is_dir():
-            raise NotADirectoryError(f"Repository path is not a directory: {root}")
+            raise NotADirectoryError(
+                f"Repository path is not a directory: {root}"
+            )
 
         repository = repository_name or root.name
         files: list[dict] = []
@@ -91,7 +100,10 @@ class CodeGraphRAGService:
         entities_by_file: dict[str, list] = {}
 
         for source_path in discover_files(str(root)):
-            metadata = extract_metadata(str(source_path), repository=repository)
+            metadata = extract_metadata(
+                str(source_path),
+                repository=repository,
+            )
             relative_path = source_path.relative_to(root).as_posix()
             metadata["file_path"] = relative_path
             metadata["language"] = detect_language(str(source_path))
@@ -105,17 +117,38 @@ class CodeGraphRAGService:
             parsed_files.append(parsed)
             entities_by_file[relative_path] = parsed.entities
 
+        
         chunks = build_repository_chunks(files, entities_by_file)
-        graph_nodes, graph_edges = GraphBuilder(repository).build_from_parsed_files(
-            parsed_files
+
+        if not chunks:
+            raise ValueError(
+                "No code chunks were generated; "
+                "existing repository index was preserved."
+            )
+
+        graph_nodes, graph_edges = (
+            GraphBuilder(repository).build_from_parsed_files(parsed_files)
         )
 
+        # Replace only this repository's existing data.
+        self.vector_store.create_collection()
+        self.vector_store.delete_repository(repository)
         self.graph_store.create_constraints()
-        self.graph_store.insert_nodes(graph_nodes)
-        self.graph_store.insert_edges(graph_edges)
-        index_chunks(chunks, embedder=self.embedder, store=self.vector_store)
+        self.graph_store.replace_repository(
+            repository,
+            graph_nodes,
+            graph_edges,
+        )
+
+        index_chunks(
+            chunks,
+            embedder=self.embedder,
+            store=self.vector_store,
+        )
+
         self.bm25_retriever.index(chunks)
         self._is_indexed = True
+        self._repository_name = repository
 
         return IndexSummary(
             repository=repository,
@@ -132,32 +165,62 @@ class CodeGraphRAGService:
                 "Index a repository before searching or generating an answer"
             )
 
+   
+    
     def search(self, query: str):
-        """Run dense, BM25, and graph retrieval followed by reranking."""
+        """Search densely by default; enable hybrid retrieval via environment."""
         self._require_index()
 
         def dense_search(text: str, top_k: int):
             return search_code(
                 query=text,
                 top_k=top_k,
+                repository=self._repository_name,
                 embedder=self.embedder,
                 store=self.vector_store,
             )
 
+        # Dense retrieval is the default production path.
+        retrieval_mode = os.getenv(
+            "CODEGRAPHRAG_RETRIEVAL_MODE", "dense"
+        ).strip().lower()
+
+        config = RetrievalConfig.from_env()
+
+        if retrieval_mode == "dense":
+            return dense_search(query, config.dense_top_k)
+
+        if retrieval_mode != "hybrid":
+            raise ValueError(
+                "CODEGRAPHRAG_RETRIEVAL_MODE must be 'dense' or 'hybrid'"
+            )
+
         graph_retriever = GraphRetriever(self.graph_store)
+
         pipeline = HybridRetrievalPipeline(
             dense_search=dense_search,
             bm25_retriever=self.bm25_retriever,
-            graph_search=lambda text, top_k: graph_retriever.search(text, top_k=top_k),
+            graph_search=lambda text, top_k: graph_retriever.search(
+                text,
+                top_k=top_k,
+                repository=self._repository_name,
+            ),
             reranker=self.reranker,
+            config=config,
         )
+
         return pipeline.search(query)
+
+
 
     def answer(self, query: str) -> GeneratedAnswer:
         """Generate an evidence-grounded answer using the configured LLM provider."""
         self._require_index()
-        llm_client = self.llm_client or OpenAILLM(model=self.settings.openai_model)
+        llm_client = self.llm_client or OpenAILLM(
+            model=self.settings.openai_model
+        )
         grounding = GraphGroundingService(self.graph_store)
+
         generator = AnswerGenerator(
             retrieval_pipeline=self,
             context_builder=ContextBuilder(
@@ -166,4 +229,5 @@ class CodeGraphRAGService:
             prompt_builder=PromptBuilder(),
             llm_client=llm_client,
         )
+
         return generator.answer_query(query)

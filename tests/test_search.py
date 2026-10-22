@@ -13,12 +13,14 @@ class FakeStore:
         self,
         query_vector,
         top_k,
+        repository=None,
         language=None,
         file_path=None,
         path_prefix=None,
     ):
         assert query_vector == [1.0, 0.0, 0.0]
         assert top_k == 5
+        assert repository is None
         assert language == "python"
         assert file_path is None
         assert path_prefix == "src/payment/"

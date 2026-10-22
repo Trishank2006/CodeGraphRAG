@@ -1,3 +1,4 @@
+
 from unittest.mock import MagicMock
 
 from graph.builder import GraphBuilder
@@ -17,8 +18,8 @@ def test_graph_builder_creates_reference_nodes_for_calls_and_imports():
     nodes, _ = GraphBuilder("repo").build_from_parsed_files([parsed])
     node_ids = {node.id for node in nodes}
 
-    assert "module:external_lib" in node_ids
-    assert "symbol:execute" in node_ids
+    assert "repo:repo:module:external_lib" in node_ids
+    assert "repo:repo:symbol:execute" in node_ids
 
 
 def test_neo4j_store_uses_queryable_node_label_and_repository_metadata():
@@ -42,7 +43,7 @@ def test_neo4j_store_uses_queryable_node_label_and_repository_metadata():
 
     query = session.run.call_args.args[0]
     payload = session.run.call_args.kwargs["batch"]
-    assert "MERGE (n {id: data.id})" in query
-    assert "SET n:Node" in query
+
+    assert "MERGE (n:Node {id: data.id})" in query
     assert "n.repository" in query
     assert payload[0]["properties"]["repository"] == "repo"

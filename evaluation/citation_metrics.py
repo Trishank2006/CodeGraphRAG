@@ -159,33 +159,38 @@ def citation_coverage(
     answer: str,
 ) -> float:
     """
-    Estimate how much of an answer is covered by cited files.
+    Estimate lexical citation coverage of an answer.
 
-    A token is considered covered when it occurs in at least one cited
-    file path. This metric is intentionally lightweight and deterministic.
+    A word is considered covered when it appears in the file path
+    or symbol information represented by a citation.
+
+    This is a lightweight proxy, not proof that a citation supports
+    the semantic meaning of a claim.
     """
-    if not answer.strip():
-        return 0.0
-
-    if not citations:
+    if not answer.strip() or not citations:
         return 0.0
 
     answer_tokens = {
-        token.lower().strip(".,;:!?()[]{}\"'")
+        token.lower().strip(".,;:!?()[]{}\"'`")
         for token in answer.split()
-        if len(token.strip(".,;:!?()[]{}\"'")) > 2
+        if len(token.strip(".,;:!?()[]{}\"'`")) > 2
     }
 
     if not answer_tokens:
         return 0.0
 
-    cited_paths = " ".join(
+    cited_text = " ".join(
         citation.file_path.lower()
         for citation in citations
     )
 
+    cited_tokens = {
+        token.strip(".,;:!?()[]{}\"'`")
+        for token in cited_text.split()
+    }
+
     covered = sum(
-        token in cited_paths
+        token in cited_tokens
         for token in answer_tokens
     )
 

@@ -68,6 +68,7 @@ class AnswerGenerator:
         return GeneratedAnswer(
             answer=answer,
             citations=tuple(citations),
+            context=tuple(context.items),
         )
 
     @staticmethod

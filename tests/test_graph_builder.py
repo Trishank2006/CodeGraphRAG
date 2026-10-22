@@ -1,3 +1,4 @@
+
 from parser.models import ParsedFile, CodeEntity, CodeRelationship
 from graph.builder import GraphBuilder
 from graph.schema import NodeType, RelationType
@@ -33,11 +34,16 @@ def test_graph_builder_transforms_ast_to_nodes_and_edges():
     file_node = next(n for n in nodes if n.label == NodeType.FILE)
     func_node = next(n for n in nodes if n.label == NodeType.FUNCTION)
 
-    assert file_node.id == "file:src/payment.py"
-    assert func_node.id == entity.id
+    # IDs are scoped to the repository to prevent cross-repository collisions.
+    assert file_node.id == "repo:test_repo:file:src/payment.py"
+    assert func_node.id == (
+        "repo:test_repo:src/payment.py:function:process_payment"
+    )
     assert func_node.name == "process_payment"
     assert func_node.start_line == 10
 
-    assert edges[0].source_id == "file:src/payment.py"
-    assert edges[0].target_id == entity.id
+    assert edges[0].source_id == "repo:test_repo:file:src/payment.py"
+    assert edges[0].target_id == (
+        "repo:test_repo:src/payment.py:function:process_payment"
+    )
     assert edges[0].type == RelationType.CONTAINS
