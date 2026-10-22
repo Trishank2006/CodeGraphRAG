@@ -8,6 +8,28 @@ CodeGraphRAG indexes source-code repositories, retrieves relevant code chunks, a
 
 Dense retrieval is the default. On the project's 100-query benchmark, hybrid retrieval (dense + BM25 + graph, fused with RRF) scored slightly higher than dense alone: Hit@5 of 0.93 versus 0.90, with similar gains on MRR@5 and nDCG@5. That is a difference of three queries, so treat it as a modest improvement. Hybrid retrieval is one setting away; see [Retrieval configuration](#retrieval). These results apply to the tested repository and configuration, not necessarily to other codebases.
 
+## Quickstart
+
+Requires Python, Git, Docker, and [Ollama](https://ollama.com/).
+
+```bash
+git clone https://github.com/Trishank2006/CodeGraphRAG.git
+cd CodeGraphRAG
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+cp .env.example .env          # then set CODEGRAPHRAG_NEO4J_PASSWORD in .env
+docker compose up -d          # start Neo4j
+ollama pull qwen2.5:3b        # download the local model
+
+python cli.py ask . "Where is BM25 tokenization implemented?" --name codegraphrag
+```
+
+On Windows PowerShell, activate with `.\.venv\Scripts\Activate.ps1` and copy with `Copy-Item .env.example .env`.
+
+The first run indexes the repository, then answers with citations. Later questions reuse the index. Each step is explained under [Installation](#installation).
+
 ## Features
 
 - Tree-sitter parsing and AST-aware code chunking.
@@ -23,6 +45,8 @@ Dense retrieval is the default. On the project's 100-query benchmark, hybrid ret
 - Retrieval benchmarking with per-query diagnostics.
 
 ## Architecture
+
+For more detail on the service, indexing phases, and code graph, see [`docs/architecture.md`](docs/architecture.md).
 
 ### Indexing
 
@@ -183,13 +207,13 @@ Add one of the following configurations to `.env`.
 
 ### Option A: Local inference with Ollama
 
-Install [Ollama](https://ollama.com/), start it, and download a model:
+`.env.example` already contains the Ollama settings, so if you copied it in step 4, you only need to install [Ollama](https://ollama.com/), start it, and download the model:
 
 ```bash
 ollama pull qwen2.5:3b
 ```
 
-Configure the OpenAI-compatible API endpoint:
+For reference, these are the settings it uses:
 
 ```dotenv
 OPENAI_BASE_URL=http://localhost:11434/v1
@@ -339,6 +363,8 @@ Anything else, including built-ins, third-party libraries, calls through variabl
 
 ## Retrieval benchmark
 
+Benchmark history, the checks performed, and the areas not yet measured are recorded in [`docs/benchmarks.md`](docs/benchmarks.md).
+
 ### Methodology
 
 The benchmark runs 100 manually verified queries against CodeGraphRAG's own source code. The `evaluation/` and `tests/` directories are excluded from the benchmark index. The reported run indexed 57 files into 240 chunks.
@@ -390,7 +416,7 @@ The reported results do not establish answer-generation quality, faithfulness, o
 
 ## Example output
 
-The following output was captured from a local run using Qwen2.5 3B, on an earlier version of the project. Current indexing produces different counts.
+The following output was captured from a local run using Qwen2.5 3B.
 
 **Question**
 
@@ -399,33 +425,40 @@ The following output was captured from a local run using Qwen2.5 3B, on an earli
 **Command**
 
 ```bash
-python cli.py ask "." "Where is the dense retrieval default configured?" --name codegraphrag-local-test
+python cli.py ask "." "Where is the dense retrieval default configured?" --name codegraphrag-local-test --reindex
 ```
 
 **Indexing summary**
 
 ```text
-Repository:   codegraphrag-local-test
-Files:        57
-Entities:     196
-Chunks:       201
-Graph nodes:  570
-Graph edges:  1275
+Repository: codegraphrag-local-test
+Files: 57
+Entities: 235
+Chunks: 240
+Graph nodes: 574
+Graph edges: 1168
 ```
 
 **Generated answer**
 
-> The dense retrieval default is configured in the `application/service.py` file at lines 174–181. The configuration specifies a `top_k` value of 20 by default.
+> The dense retrieval default is configured in the `application/service.py` file at line 63. [8]
 
 **Citations returned**
 
-- `retrieval/pipeline.py` — `__init__`, lines 82–99
-- `retrieval/hybrid.py` — `__init__`, lines 22–32
-- `application/service.py` — `dense_search`, lines 174–181
-- `application/service.py` — `search`, lines 170–212
-- `retrieval/config.py` — `RetrievalConfig`, lines 7–73
+1. `application/service.py`: `_dense_search`, lines 268–278
+2. `retrieval/pipeline.py`: `__init__`, lines 82–99
+3. `retrieval/hybrid.py`: `__init__`, lines 22–32
+4. `retrieval/config.py`: `RetrievalConfig`, lines 7–73
+5. `application/service.py`: `search`, lines 280–305
+6. `retrieval/search.py`: `search_code`, lines 6–64
+7. `retrieval/hybrid.py`: `search`, lines 34–88
+8. `application/service.py`: `__init__`, lines 61–104
+9. `retrieval/pipeline.py`: `search`, lines 101–136
+10. `vector_store/qdrant_store.py`: `search`, lines 173–238
 
-**Manual correctness check:** The answer is partly correct. The default retrieval mode (`dense`) is selected in `application/service.py`. However, the default `top_k` value of 20 is defined in `retrieval/config.py`, not in `service.py`. That configuration file appears in the returned citations, but the model attributed the value to the wrong file.
+**Manual correctness check:** The answer is partly correct. Citation [8] points to the right place: `CodeGraphRAGService.__init__` reads `CODEGRAPHRAG_RETRIEVAL_MODE` and falls back to `"dense"`. The line number is wrong, though. The fallback is on line 88; line 63 is the method's `settings` parameter.
+
+No two citations overlap: overlapping chunks from the same file are removed before the context reaches the LLM.
 
 This example shows why generated answers and citations require verification. Generation and citation quality have not been formally evaluated beyond this manual check.
 
