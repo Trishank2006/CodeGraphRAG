@@ -1,10 +1,12 @@
+![tests](https://github.com/Trishank2006/CodeGraphRAG/actions/workflows/tests.yml/badge.svg)
+
 # CodeGraphRAG
 
 **A code RAG system for benchmarking dense, lexical, and graph-based retrieval.**
 
 CodeGraphRAG indexes source-code repositories, retrieves relevant code chunks, and generates answers with source-file and line-range citations. It supports dense vector search, BM25 lexical search, graph retrieval over a Neo4j code graph, reciprocal rank fusion (RRF), and optional cross-encoder reranking.
 
-Dense retrieval is the default. On the project's 100-query benchmark, hybrid retrieval (dense + BM25 + graph, fused with RRF) scored slightly higher than dense alone: Hit@5 of 0.93 versus 0.90, with similar gains on MRR@5 and nDCG@5. That is a difference of three queries, so treat it as a modest improvement. Hybrid retrieval is one setting away; see [Retrieval modes](#retrieval). These results apply to the tested repository and configuration, not necessarily to other codebases.
+Dense retrieval is the default. On the project's 100-query benchmark, hybrid retrieval (dense + BM25 + graph, fused with RRF) scored slightly higher than dense alone: Hit@5 of 0.93 versus 0.90, with similar gains on MRR@5 and nDCG@5. That is a difference of three queries, so treat it as a modest improvement. Hybrid retrieval is one setting away; see [Retrieval configuration](#retrieval). These results apply to the tested repository and configuration, not necessarily to other codebases.
 
 ## Features
 
@@ -441,10 +443,11 @@ This example shows why generated answers and citations require verification. Gen
 | `graph/` | Graph construction, call resolution, Neo4j storage, traversal, and retrieval |
 | `retrieval/` | Dense, BM25, hybrid, fusion, and reranking components |
 | `generation/` | Context construction, prompting, and answer generation |
-| `evaluation/` | Dataset, benchmark runners, metrics, and results |
-| `docs/` | Additional documentation |
+| `evaluation/` | Datasets, benchmark runners, metrics, and results |
+| `docs/` | Architecture notes (`architecture.md`) and benchmark notes (`benchmarks.md`) |
 | `scripts/` | Utility scripts |
 | `tests/` | Automated tests |
+| `.github/workflows/` | Continuous integration |
 | `cli.py` | Command-line entry point |
 | `compose.yaml` | Local Neo4j service |
 | `.env.example` | Example environment configuration |
@@ -457,18 +460,18 @@ Run the test suite with:
 python -m pytest -rs -q
 ```
 
-The `-rs` flag prints the reason for each skipped test.
+The `-rs` flag prints the reason for each skipped test. GitHub Actions runs the suite on every pull request and on every push to `main`.
 
-The suite has 355 tests. Two are opt-in live integration tests, which are skipped unless enabled:
+Two tests are opt-in live integration tests, which are skipped unless enabled:
 
 - `tests/test_live_neo4j.py` requires `CODEGRAPHRAG_RUN_LIVE_TESTS=1` and a running Neo4j instance.
 - `tests/test_live_end_to_end.py` requires `CODEGRAPHRAG_RUN_LIVE_TESTS=1`, `OPENAI_API_KEY`, and `OPENAI_BASE_URL`, plus a running Neo4j instance and LLM endpoint.
 
-In the latest development run, all 355 tests passed against live Neo4j and a local Ollama model. Test counts describe that run and may change as the codebase evolves.
+Both live tests have passed against a local Neo4j instance and a local Ollama model. CI runs without live services, so it skips them.
 
 ## Limitations and future work
 
-- **Benchmark scope:** The benchmark covers one repository and 100 author-written lookup queries. It does not test relational questions such as "what calls this function?", so graph retrieval's value is unmeasured. Adding relational queries and other repositories is the next evaluation step.
+- **Benchmark scope:** The retrieval benchmark covers one repository and 100 author-written lookup queries. It does not ask relational questions such as "what calls this function?", so it can't show the value of graph retrieval. Adding relational queries and other repositories is the next evaluation step.
 - **Generation evaluation:** Answer quality, faithfulness, citation validity, and citation coverage have not been formally evaluated.
 - **Cross-file call resolution:** Python imports and Go and Java packages are resolved. JavaScript, TypeScript, Rust, C, and C++ cross-file calls remain unresolved placeholders, because the parser does not yet capture imports for those languages.
 - **Neo4j dependency:** Neo4j is required for indexing and answer generation, even in dense retrieval mode.
