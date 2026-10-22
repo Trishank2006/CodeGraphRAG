@@ -36,9 +36,10 @@ def _tokenize(text: str) -> list[str]:
             if len(pieces) > 1:
                 tokens.extend(piece.lower() for piece in pieces)
 
-    # A simple word such as "context" is emitted once, not as both a
-    # complete identifier and an identical one-part component.
-    return list(dict.fromkeys(tokens))
+    # Plain words are not duplicated because one-part components are only
+    # emitted when separators or CamelCase actually split the identifier.
+    # Preserve repeated words across the input so BM25 term frequency remains valid.
+    return tokens
 
 
 class BM25Retriever:
