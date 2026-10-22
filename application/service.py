@@ -129,12 +129,14 @@ class CodeGraphRAGService:
             GraphBuilder(repository).build_from_parsed_files(parsed_files)
         )
 
-        # Complete expensive/failure-prone embedding work before touching
+        # Complete expensive/failure-prone preparation before touching
         # the currently active index. A model download failure, GPU OOM, or
-        # embedding exception therefore leaves the old index intact.
+        # embedding/index-building exception therefore leaves the old index intact.
         embeddings = self.embedder.embed(
             [chunk["content"] for chunk in chunks]
         )
+        new_bm25 = BM25Retriever()
+        new_bm25.index(chunks)
 
         # Replace only this repository's existing data after preparation.
         self.vector_store.create_collection()
@@ -147,9 +149,6 @@ class CodeGraphRAGService:
         self.vector_store.delete_repository(repository)
         self.vector_store.upsert_chunks(chunks, embeddings)
 
-        # Build BM25 in a temporary instance before swapping it into service.
-        new_bm25 = BM25Retriever()
-        new_bm25.index(chunks)
         self.bm25_retriever = new_bm25
         self._is_indexed = True
         self._repository_name = repository
