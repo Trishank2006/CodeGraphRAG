@@ -29,6 +29,7 @@ QUERY_REGISTRY = {
         (import_statement (dotted_name) @import.name)
         (aliased_import name: (dotted_name) @import.name)
         (import_from_statement module_name: (dotted_name) @import.module)
+        (import_from_statement module_name: (relative_import) @import.module)
         (call function: (identifier) @call.target)
         (call function: (attribute attribute: (identifier) @call.target))
     """,
