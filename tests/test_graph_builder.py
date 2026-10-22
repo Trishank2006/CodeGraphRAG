@@ -47,3 +47,103 @@ def test_graph_builder_transforms_ast_to_nodes_and_edges():
         "repo:test_repo:src/payment.py:function:process_payment"
     )
     assert edges[0].type == RelationType.CONTAINS
+
+
+def test_graph_builder_resolves_call_to_local_definition():
+    caller = CodeEntity(
+        id="src/a.py:function:caller",
+        type="function",
+        name="caller",
+        file_path="src/a.py",
+        start_line=1,
+        end_line=5,
+    )
+    target = CodeEntity(
+        id="src/a.py:function:search",
+        type="function",
+        name="search",
+        file_path="src/a.py",
+        start_line=7,
+        end_line=10,
+    )
+    parsed_file = ParsedFile(
+        file_path="src/a.py",
+        language="python",
+        entities=[caller, target],
+        relationships=[
+            CodeRelationship(
+                source_id=caller.id,
+                target_id="symbol:search",
+                type="CALLS",
+            )
+        ],
+    )
+
+    nodes, edges = GraphBuilder("test_repo").build_from_parsed_files(
+        [parsed_file]
+    )
+
+    assert any(
+        edge.source_id.endswith("src/a.py:function:caller")
+        and edge.target_id.endswith("src/a.py:function:search")
+        and edge.type == RelationType.CALLS
+        for edge in edges
+    )
+    assert not any(
+        node.label == NodeType.SYMBOL and node.name == "search"
+        for node in nodes
+    )
+
+
+def test_graph_builder_keeps_ambiguous_call_as_reference_node():
+    caller = CodeEntity(
+        id="src/caller.py:function:caller",
+        type="function",
+        name="caller",
+        file_path="src/caller.py",
+        start_line=1,
+        end_line=5,
+    )
+    first = CodeEntity(
+        id="src/a.py:function:search",
+        type="function",
+        name="search",
+        file_path="src/a.py",
+        start_line=1,
+        end_line=2,
+    )
+    second = CodeEntity(
+        id="src/b.py:function:search",
+        type="function",
+        name="search",
+        file_path="src/b.py",
+        start_line=1,
+        end_line=2,
+    )
+    parsed_files = [
+        ParsedFile(file_path="src/caller.py", language="python",
+                   entities=[caller], relationships=[
+                       CodeRelationship(source_id=caller.id,
+                                       target_id="symbol:search", type="CALLS")
+                   ]),
+        ParsedFile(file_path="src/a.py", language="python",
+                   entities=[first], relationships=[]),
+        ParsedFile(file_path="src/b.py", language="python",
+                   entities=[second], relationships=[]),
+    ]
+
+    nodes, edges = GraphBuilder("test_repo").build_from_parsed_files(
+        parsed_files
+    )
+
+    assert any(
+        node.label == NodeType.SYMBOL
+        and node.name == "search"
+        and node.properties.get("reference") is True
+        for node in nodes
+    )
+    assert any(
+        edge.target_id == "repo:test_repo:symbol:search"
+        and edge.type == RelationType.CALLS
+        for edge in edges
+    )
