@@ -298,6 +298,7 @@ uvicorn api.main:app
 | Method | Path | Body | Purpose |
 |---|---|---|---|
 | `GET` | `/health` | | Liveness check |
+| `GET` | `/ready` | | Checks Neo4j and Qdrant; returns `503` if either is unavailable |
 | `POST` | `/repositories/index` | `repository_path`, optional `repository_name`, `exclude` | Index a repository |
 | `POST` | `/search` | `query`, optional `repository_name` | Retrieve code chunks |
 | `POST` | `/answers` | `query`, optional `repository_name` | Generate a cited answer |
@@ -306,7 +307,7 @@ Without `repository_name`, queries go to the most recently indexed repository. I
 
 Only directories inside the allowed root can be indexed. Set it with `CODEGRAPHRAG_API_REPOSITORY_ROOT`; it defaults to the server's working directory. Paths outside it return `403`.
 
-The API has no authentication, so keep it bound to localhost. Run it as a single process: the embedded Qdrant store can only be opened by one process at a time. `/health` reports that the server is running; it does not yet check Neo4j or Qdrant.
+The API has no authentication, so keep it bound to localhost. Run it as a single process: the embedded Qdrant store can only be opened by one process at a time. `/health` only reports that the server process is running; `/ready` checks Neo4j and Qdrant and returns `503` if either is unavailable.
 
 ## Configuration
 
@@ -335,6 +336,7 @@ Settings are provided through environment variables and can be placed in `.env`.
 | `CODEGRAPHRAG_NEO4J_URI` | `bolt://localhost:7687` | Neo4j Bolt URI. |
 | `CODEGRAPHRAG_NEO4J_USER` | `neo4j` | Neo4j username. |
 | `CODEGRAPHRAG_NEO4J_PASSWORD` | Required | Neo4j password. |
+| `CODEGRAPHRAG_NEO4J_DATABASE` | Server default | Neo4j database name. |
 
 Qdrant runs in local embedded mode, so a separate Qdrant server is not required. Keep `data/qdrant` between runs to retain stored vectors.
 
@@ -487,6 +489,12 @@ This example shows why generated answers and citations require verification. Gen
 
 ## Testing
 
+Install the test dependencies first:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
 Run the test suite with:
 
 ```bash
@@ -510,7 +518,7 @@ Both live tests have passed against a local Neo4j instance and a local Ollama mo
 - **Neo4j dependency:** Neo4j is required for indexing and answer generation, even in dense retrieval mode.
 - **Reranking:** The tested general-purpose cross-encoder reduced ranking quality. A code-specific reranker needs evaluation.
 - **Stale indexes:** `ask` reuses an existing index. After code changes, use `--reindex`.
-- **API deployment:** The API has no authentication, must run as a single process, and its health check does not yet verify Neo4j or Qdrant.
+- **API deployment:** The API has no authentication and must run as a single process.
 
 ## License
 

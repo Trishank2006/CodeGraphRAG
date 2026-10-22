@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from application.service import (
@@ -61,6 +62,27 @@ def create_app(
     @app.get("/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
+
+    @app.get("/ready")
+    def ready() -> JSONResponse:
+        try:
+            checks = get_service().check_dependencies()
+        except Exception as exc:
+            return JSONResponse(
+                status_code=503,
+                content={"status": "unavailable", "error": str(exc)},
+            )
+
+        healthy = all(
+            check.get("status") == "healthy" for check in checks.values()
+        )
+        return JSONResponse(
+            status_code=200 if healthy else 503,
+            content={
+                "status": "ready" if healthy else "unavailable",
+                "checks": checks,
+            },
+        )
 
     @app.post("/repositories/index")
     def index_repository(request: IndexRequest) -> dict[str, Any]:

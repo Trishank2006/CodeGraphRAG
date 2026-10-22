@@ -1,10 +1,9 @@
-
 import os
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
-from neo4j import GraphDatabase, Driver
+from neo4j import Driver, GraphDatabase
 
-from graph.models import GraphNode, GraphEdge
+from graph.models import GraphEdge, GraphNode
 
 
 class Neo4jStore:
@@ -14,6 +13,7 @@ class Neo4jStore:
         user: Optional[str] = None,
         password: Optional[str] = None,
         driver: Optional[Driver] = None,
+        database: Optional[str] = None,
     ):
         uri = uri or os.getenv(
             "CODEGRAPHRAG_NEO4J_URI",
@@ -33,10 +33,18 @@ class Neo4jStore:
                 "file or environment before connecting to Neo4j."
             )
 
+        # None means the server's default database.
+        self.database = (
+            database or os.getenv("CODEGRAPHRAG_NEO4J_DATABASE") or None
+        )
+
         self.driver = driver or GraphDatabase.driver(
             uri,
             auth=(user, password),
         )
+
+    def _session(self):
+        return self.driver.session(database=self.database)
 
     def close(self):
         if self.driver:
@@ -47,7 +55,7 @@ class Neo4jStore:
         query: str,
         parameters: Optional[Dict[str, Any]] = None,
     ) -> List[Dict[str, Any]]:
-        with self.driver.session() as session:
+        with self._session() as session:
             result = session.run(query, parameters or {})
             return [record.data() for record in result]
 
@@ -57,7 +65,7 @@ class Neo4jStore:
             "FOR (n:Node) REQUIRE n.id IS UNIQUE"
         )
 
-        with self.driver.session() as session:
+        with self._session() as session:
             session.run(query)
 
     @staticmethod
@@ -159,7 +167,7 @@ class Neo4jStore:
         node_payload = self._node_payload(nodes)
         edge_payload = self._edge_payload(edges)
 
-        with self.driver.session() as session:
+        with self._session() as session:
             session.execute_write(
                 self._write_repository,
                 repository,
@@ -188,7 +196,7 @@ class Neo4jStore:
             n.reference = coalesce(data.properties.reference, false)
         """
 
-        with self.driver.session() as session:
+        with self._session() as session:
             session.run(query, batch=self._node_payload(nodes))
 
     def insert_edges(self, edges: List[GraphEdge]):
@@ -203,5 +211,5 @@ class Neo4jStore:
         MERGE (source)-[:RELATION {type: data.type}]->(target)
         """
 
-        with self.driver.session() as session:
+        with self._session() as session:
             session.run(query, batch=self._edge_payload(edges))

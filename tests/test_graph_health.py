@@ -7,7 +7,8 @@ def test_graph_health_healthy():
     mock_store.database = "neo4j"
     mock_store.execute_query.side_effect = [
         [{"ping": 1}],
-        [{"node_count": 42, "rel_count": 84}],
+            [{"node_count": 42}],
+            [{"rel_count": 84}],
     ]
 
     res = check_graph_health(mock_store)
