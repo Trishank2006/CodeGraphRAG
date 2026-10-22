@@ -26,6 +26,30 @@ class GraphBuilder:
         edges: List[GraphEdge] = []
         seen_node_ids = set()
 
+        # Resolve parser-emitted name-only call references against definitions.
+        # Prefer a definition in the calling file; otherwise resolve only a
+        # repository-unique name. Ambiguous/external names remain placeholders.
+        definitions_by_name: dict[str, list[tuple[str, str]]] = {}
+        for parsed_file in parsed_files:
+            for entity in parsed_file.entities:
+                definitions_by_name.setdefault(entity.name, []).append(
+                    (entity.file_path, entity.id)
+                )
+
+        def resolve_reference(reference_id: str, file_path: str) -> str:
+            if not reference_id.startswith("symbol:"):
+                return reference_id
+            name = reference_id.removeprefix("symbol:")
+            candidates = definitions_by_name.get(name, [])
+            local = [entity_id for path, entity_id in candidates if path == file_path]
+            if len(local) == 1:
+                return local[0]
+            if len(local) > 1:
+                return reference_id
+            if len(candidates) == 1:
+                return candidates[0][1]
+            return reference_id
+
         def add_reference_node(
             reference_id: str,
             file_path: str,
@@ -110,12 +134,17 @@ class GraphBuilder:
                     else rel.source_id
                 )
 
+                target_id = resolve_reference(
+                    rel.target_id,
+                    pf.file_path,
+                )
+
                 if (
-                    rel.target_id.startswith("module:")
-                    or rel.target_id.startswith("symbol:")
+                    target_id.startswith("module:")
+                    or target_id.startswith("symbol:")
                 ):
                     add_reference_node(
-                        rel.target_id,
+                        target_id,
                         pf.file_path,
                         pf.language,
                     )
@@ -123,7 +152,7 @@ class GraphBuilder:
                 edges.append(
                     GraphEdge(
                         source_id=self._scoped_id(source_id),
-                        target_id=self._scoped_id(rel.target_id),
+                        target_id=self._scoped_id(target_id),
                         type=RelationType(rel.type),
                     )
                 )
